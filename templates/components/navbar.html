@@ -1,0 +1,77 @@
+{% comment %} 
+    <nav class="bg-blue-600 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="#" class="text-2xl font-bold tracking-wide">MyBrand</a>
+                </div>
+
+                <!-- Menu for larger screens -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#" class="hover:text-blue-300">Home</a>
+                    <a href="#" class="hover:text-blue-300">About</a>
+                    <a href="#" class="hover:text-blue-300">Services</a>
+                    <a href="#" class="hover:text-blue-300">Contact</a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="flex items-center md:hidden">
+                    <button id="menu-btn" class="focus:outline-none">
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden">
+            <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700">Home</a>
+            <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700">About</a>
+            <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700">Services</a>
+            <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700">Contact</a>
+        </div>
+    </nav>
+
+    <script>
+        // Toggle mobile menu visibility
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
+
+
+ {% endcomment %}
+ <nav class="bg-blue-600 text-white shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <a href="#" class="text-2xl font-bold tracking-wide">MyBrand</a>
+            <div class="hidden md:flex space-x-8">
+                <a href="#welcome" class="hover:text-blue-300">Welcome</a>
+                <a href="#memories" class="hover:text-blue-300">Memories</a>
+                <a href="#events" class="hover:text-blue-300">Events</a>
+                <a href="#contact" class="hover:text-blue-300">Contact</a>
+                <a href="{% url "login" %}" class="hover:text-blue-300">Login</a>
+            </div>
+            <div class="md:hidden">
+                <button id="menu-btn">
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden">
+        <a href="#welcome" class="block px-4 py-2 text-sm hover:bg-blue-700">Welcome</a>
+        <a href="#memories" class="block px-4 py-2 text-sm hover:bg-blue-700">Memories</a>
+        <a href="#events" class="block px-4 py-2 text-sm hover:bg-blue-700">Events</a>
+        <a href="#contact" class="block px-4 py-2 text-sm hover:bg-blue-700">Contact</a>
+        <a href="{% url "login" %}" class="block px-4 py-2 text-sm hover:bg-blue-700">Login</a>
+    </div>
+</nav>

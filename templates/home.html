@@ -1,0 +1,79 @@
+{% extends "index.html" %}
+
+
+{% block content %}
+
+<section id="welcome" class="bg-blue-500 text-white text-center py-16">
+    <h1 class="text-4xl font-bold">Welcome to MyBrand</h1>
+    <p class="mt-4 text-lg">Your journey to unforgettable experiences starts here.</p>
+    <button class="mt-6 px-6 py-2 bg-white text-blue-500 rounded-lg font-semibold hover:bg-blue-100">Get Started</button>
+</section>
+
+<!-- Memories Section -->
+<section id="memories" class="py-16 bg-blue-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-bold text-blue-600">Memories</h2>
+        <p class="mt-4 text-gray-600">Relive the moments that matter most to you.</p>
+        <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="https://via.placeholder.com/300x200" alt="Memory" class="w-full">
+                <div class="p-4">
+                    <h3 class="font-bold text-lg">Memory Title</h3>
+                    <p class="mt-2 text-gray-600">A brief description of this memory.</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="https://via.placeholder.com/300x200" alt="Memory" class="w-full">
+                <div class="p-4">
+                    <h3 class="font-bold text-lg">Memory Title</h3>
+                    <p class="mt-2 text-gray-600">A brief description of this memory.</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="https://via.placeholder.com/300x200" alt="Memory" class="w-full">
+                <div class="p-4">
+                    <h3 class="font-bold text-lg">Memory Title</h3>
+                    <p class="mt-2 text-gray-600">A brief description of this memory.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Events Section -->
+<section id="events" class="py-16 bg-blue-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-bold text-blue-600">Events</h2>
+        <p class="mt-4 text-gray-600">Join our upcoming events and create new memories.</p>
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-bold text-blue-500">Event Title</h3>
+                <p class="mt-2 text-gray-600">Details about this event and why you should join.</p>
+                <button class="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Learn More</button>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-bold text-blue-500">Event Title</h3>
+                <p class="mt-2 text-gray-600">Details about this event and why you should join.</p>
+                <button class="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Learn More</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-16 bg-blue-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-bold text-blue-600">Contact Us</h2>
+        <p class="mt-4 text-gray-600">We’d love to hear from you. Get in touch with us!</p>
+        <form class="mt-8 max-w-2xl mx-auto">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <input type="text" placeholder="Your Name" class="p-4 border border-gray-300 rounded-lg">
+                <input type="email" placeholder="Your Email" class="p-4 border border-gray-300 rounded-lg">
+            </div>
+            <textarea placeholder="Your Message" class="mt-4 p-4 w-full border border-gray-300 rounded-lg" rows="5"></textarea>
+            <button type="submit" class="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Send Message</button>
+        </form>
+    </div>
+</section>
+
+{% endblock content %}
