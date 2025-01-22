@@ -1,0 +1,31 @@
+{% extends "index.html" %}
+
+
+{% block content %}
+
+<div class="bg-gray-100 p-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ">
+        {% for certi_objs in certi_obj %}
+        <a 
+            href="{% url 'certificate' certi_objs.hash %}"
+            class="my-3 block bg-white border border-gray-200 shadow-lg rounded-lg p-6 hover:shadow-xl hover:scale-105 transform transition duration-300"
+        >
+            <h2 class="text-xl font-bold text-blue-600">Certificate of {{certi_objs.certificate_for}}</h2>
+            <p class="text-gray-700 mt-2">
+                Awarded to: <span class="font-medium text-gray-900">{{certi_objs.user.first_name}} {{certi_objs.user.last_name}}</span>
+            </p>
+            <p class="text-gray-700 mt-1">
+                Issue Date: <span class="font-medium text-gray-900">{{ certi_objs.issue_date|date:"F d, Y" }}</span>
+            </p>
+            <div class="text-right mt-4">
+                <span class="inline-block bg-blue-600 text-white font-semibold py-1 px-4 rounded-lg text-sm">
+                View Certificate
+                </span>
+            </div>
+        </a>
+        {% endfor %}
+</div>
+</div>
+
+
+{% endblock content %}
