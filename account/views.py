@@ -4,15 +4,22 @@ from django.contrib.auth.models import User
 from . import models
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
 # Create your views here.
+
+
+
+
 def loginpage(request):
+    if request.user.is_authenticated:
+        return redirect('home')
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
         
         if not User.objects.filter(username = username).exists():
             messages.success(request, "Username Doesn't exists!")
-            return redirect('register')
+            return redirect('login')
 
         user_obj = authenticate(username = username, password = password)
         if not user_obj:
@@ -24,6 +31,8 @@ def loginpage(request):
     return render(request , 'login.html')
 
 def registrationpage(request):
+    if request.user.is_authenticated:
+        return redirect('home')
     if request.method == "POST":
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -57,10 +66,12 @@ def registrationpage(request):
         if password != re_password:
             messages.error(request, "Passwords doesn't not match")
             return redirect('register')
-        
+       
         user_obj = User.objects.create(first_name = first_name, last_name = last_name, username = username,email = email)
         user_obj.set_password(password)
         user_obj.save()
+        group = Group.objects.get(name='STUDENT')
+        group.user_set.add(user_obj)
         models.UserExtra.objects.create(user = user_obj, uu_id = uuid, course = course, section = section)
         messages.success(request, 'Your Account has been Created!')
         return redirect('register')
