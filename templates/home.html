@@ -2,7 +2,7 @@
 
 
 {% block content %}
-
+{% load static %}
 <section id="welcome" class="bg-blue-500 text-white text-center py-16">
     <h1 class="text-4xl font-bold">Welcome to Prerogative Pointers</h1>
     <p class="mt-4 text-lg">Your journey to unforgettable experiences starts here.</p>
@@ -16,21 +16,21 @@
         <p class="mt-4 text-gray-600">Relive the moments that matter most to you.</p>
         <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="https://via.placeholder.com/300x200" alt="Memory" class="w-full">
+                <img src="{% static 'gallary.jpg' %}" alt="Memory" class="w-full">
                 <div class="p-4">
                     <h3 class="font-bold text-lg">Memory Title</h3>
                     <p class="mt-2 text-gray-600">A brief description of this memory.</p>
                 </div>
             </div>
             <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="https://via.placeholder.com/300x200" alt="Memory" class="w-full">
+                <img src="{% static 'gallary.jpg' %}" alt="Memory" class="w-full">
                 <div class="p-4">
                     <h3 class="font-bold text-lg">Memory Title</h3>
                     <p class="mt-2 text-gray-600">A brief description of this memory.</p>
                 </div>
             </div>
             <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="https://via.placeholder.com/300x200" alt="Memory" class="w-full">
+                <img src="{% static 'gallary.jpg' %}" alt="Memory" class="w-full">
                 <div class="p-4">
                     <h3 class="font-bold text-lg">Memory Title</h3>
                     <p class="mt-2 text-gray-600">A brief description of this memory.</p>
@@ -41,24 +41,43 @@
 </section>
 
 <!-- Events Section -->
-<section id="events" class="py-16 bg-blue-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-3xl font-bold text-blue-600">Events</h2>
-        <p class="mt-4 text-gray-600">Join our upcoming events and create new memories.</p>
-        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <h3 class="text-lg font-bold text-blue-500">Event Title</h3>
-                <p class="mt-2 text-gray-600">Details about this event and why you should join.</p>
-                <button class="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Learn More</button>
+<main class="container mx-auto px-6 py-10">
+    <h1 class="text-3xl text-center mb-2 md:text-4xl font-bold text-blue-600">Ongoing Events</h1> 
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for events in event %}
+            <div class="bg-white border border-gray-200 shadow-lg rounded-lg p-6 hover:shadow-xl hover:scale-105 transform transition duration-300">
+                <h2 class="text-xl font-bold text-blue-600">{{ events.title }}</h2>
+                <p class="text-gray-700 mt-2">Date: <span class="font-medium text-gray-900">{{ events.start_date }}</span></p>
+                <p class="text-gray-700 mt-1">Location: <span class="font-medium text-gray-900">{{ events.location }}</span></p>
+                
+                <!-- Registration Status Badge -->
+                <div class="mt-4">
+                    {% if events.registration_open %}
+                        <span class="inline-block bg-green-600 text-white font-semibold py-1 px-3 rounded-full text-sm">
+                            Registration Open
+                        </span>
+                    {% else %}
+                        <span class="inline-block bg-red-600 text-white font-semibold py-1 px-3 rounded-full text-sm">
+                            Registration Closed
+                        </span>
+                    {% endif %}
+                </div>
+        
+                <p class="text-gray-700 mt-4">
+                    {{ events.description }}
+                </p>
+        
+                <div class="text-right mt-4">
+                    <a href="{% url 'event' events.slug %}" class="inline-block bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-blue-700">
+                        View Details
+                    </a>
+                </div>
             </div>
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <h3 class="text-lg font-bold text-blue-500">Event Title</h3>
-                <p class="mt-2 text-gray-600">Details about this event and why you should join.</p>
-                <button class="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Learn More</button>
-            </div>
-        </div>
+            
+        {% endfor %}
     </div>
-</section>
+   <span class="float-right"><a href="events" class="text-blue-600">more</a></span>
+</main>
 
 <!-- Contact Section -->
 <section id="contact" class="py-16 bg-blue-50">

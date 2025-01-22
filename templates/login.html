@@ -11,6 +11,13 @@
         
         <!-- Login Form -->
         <form action="#" method="POST">
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
             <!-- Username -->   
              {% csrf_token %}
             <div class="mb-4">

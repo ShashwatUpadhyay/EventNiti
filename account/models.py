@@ -8,7 +8,7 @@ class UserExtra(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     course = models.CharField(max_length=10)
     section = models.CharField(max_length=10)
-    uu_id = models.CharField(max_length=20)
+    uu_id = models.CharField(max_length=30)
     roll_number = models.CharField(max_length=20)
     
     @property
@@ -24,7 +24,7 @@ class UserExtra(models.Model):
         return self.user.email
     
     def __str__(self):
-        return str(self.user.username)
+        return str(self.user.first_name + " " + self.user.last_name)
     
     def save(self, *args, **kwargs):
         if not self.uid:

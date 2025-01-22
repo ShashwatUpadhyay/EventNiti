@@ -1,0 +1,120 @@
+{% extends "index.html" %}
+
+
+{% block content %}
+
+<div class="bg-gray-100">
+
+    <!-- Page Header -->
+    <header class="bg-blue-600 py-6 shadow-md">
+        <div class="container mx-auto px-6 text-center">
+            <h1 class="text-3xl md:text-4xl font-bold text-white">Event Registration</h1>
+            <p class="text-blue-200 text-sm md:text-base mt-2">Register for an exciting event</p>
+        </div>
+    </header>
+
+    <!-- Registration Form Section -->
+    <main class="container mx-auto px-6 py-10">
+        <div class="bg-white shadow-lg rounded-lg p-8 max-w-3xl mx-auto">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800 text-center">Register for the Event</h2>
+            <p class="text-gray-600 text-center mt-2 mb-8">Fill out the form below to register for the event</p>
+
+            <form action="#" method="POST" class="space-y-6">
+                {% csrf_token %}
+                <!-- UUID Input -->
+                <div>
+                    <label for="uuid"  class="block text-sm font-medium text-gray-700">UUID</label>
+                    <input 
+                        type="text" 
+                        id="uuid" 
+                        name="uuid" 
+                        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Enter your UUID" 
+                        {% if  user_obj.uu_id %} value='{{ user_obj.uu_id }}' {% endif %}
+                        required
+                    >
+                </div>
+
+                <!-- Full Name Input -->
+                <div>
+                    <label for="full_name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                    <input 
+                        type="text" 
+                        id="full_name" 
+                        name="full_name" 
+                        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Enter your full name"
+                        {% if user_obj.full_name %} value='{{ user_obj.full_name }}' {% endif %} 
+                        required
+                    >
+                </div>
+
+                <!-- Email Input -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Enter your email" 
+                        {% if user_obj.email %} value='{{ user_obj.email }}' {% endif %}
+                        required
+                    >
+                </div>
+
+                <!-- Course Dropdown -->
+                <div>
+                    <label for="course" class="block text-sm font-medium text-gray-700">Course</label>
+                    <select 
+                    name = "course" 
+                        id="course" 
+                        name="course" 
+                        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        required
+                    >
+                        <option value="" disabled {% if not user_obj %}selected{% endif %}>Select your course</option>
+                        <option {% if user_obj.cource == 'BCA' %}selected{% endif %} value="BCA">BCA</option>
+                        <option {% if user_obj.cource == 'BCA-IBM' %}selected{% endif %} value="BCA-IBM">BCA-IBM</option>
+                        <option {% if user_obj.cource == 'BTECH' %}selected{% endif %} value="BTECH">BTECH</option>
+                        <option {% if user_obj.cource == 'BTECH-IBM' %}selected{% endif %} value="BTECH-IBM">BTECH-IBM</option>
+                        <option {% if user_obj.cource == 'BBA' %}selected{% endif %} value="BBA">BBA</option>
+                        <option {% if user_obj.cource == 'BBA-IBM' %}selected{% endif %} value="BBA-IBM">BBA-IBM</option>
+                        <option {% if user_obj.cource == 'DIPLOMA CS' %}selected{% endif %} value="DIPLOMA CS">DIPLOMA CS</option>
+                    </select>
+                </div>
+
+                <!-- Section Dropdown -->
+                <div>
+                    <label for="section" class="block text-sm font-medium text-gray-700">Section</label>
+                    <select 
+                        id="section" 
+                        name="section" 
+                        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        required
+                    >
+                        <option value="" disabled {% if user_obj.section == '' %}selected{% endif %}selected>Select your section</option>
+                        <option {% if user_obj.section == 'A' %}selected{% endif %} value="A">A</option>
+                        <option {% if user_obj.section == 'B' %}selected{% endif %}value="B">B</option>
+                        <option {% if user_obj.section == 'C' %}selected{% endif %} value="C">C</option>
+                        <option {% if user_obj.section == 'D' %}selected{% endif %} value="D">D</option>
+                        <option {% if user_obj.section == 'E' %}selected{% endif %} value="E">E</option>
+                    </select>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button 
+                        type="submit" 
+                        class="bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        Register
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+</div>
+
+{% endblock content %}
