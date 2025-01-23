@@ -18,6 +18,7 @@
                     <a href="{% url "register" %}" class="hover:text-blue-300">Register</a>
                     {% else %}
                     <a href="{% url "certificates" %}" class="hover:text-blue-300">Certificates</a>
+                    <a href="{% url "myticket" %}" class="hover:text-blue-300">Ticket</a>
                     <a href="{% url "logout" %}" class="text-red-400">Logout</a>
                     {% endif %}
 
@@ -46,6 +47,7 @@
             <a href="{% url "register" %}" class="block px-4 py-2 text-sm hover:bg-blue-700">Register</a>
             {% else  %}
             <a href="{% url "certificates" %}" class="block px-4 py-2 text-sm hover:bg-blue-700">Certificates</a>
+            <a href="{% url "myticket" %}" class="block px-4 py-2 text-sm hover:bg-blue-700">Ticket</a>
             <a href="{% url "logout" %}" class="block px-4 py-2 text-sm text-red-400">Logout</a>
             {% endif %}
         </div>

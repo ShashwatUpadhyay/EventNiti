@@ -1,0 +1,22 @@
+{% extends "index.html" %}
+
+
+{% block content %}
+
+
+    <div class="flex items-center">
+        {% if submission %}
+        <div class="max-w-xl mx-auto my-10 p-5 bg-green-100 text-green-800 border-l-4 border-green-600 rounded-lg shadow-lg">
+            {% comment %} <h2 class="text-3xl font-bold mb-2">Attendence Marked</h2> {% endcomment %}
+            <p class="text-xl">{{msg}}</p>
+          </div>
+{% else %}
+
+<div class="max-w-xl mx-auto my-10 p-5 bg-red-100 text-red-800 border-l-4 border-red-600 rounded-lg shadow-lg">
+    {% comment %} <h2 class="text-3xl font-bold mb-2">Failed</h2> {% endcomment %}
+    <p class="text-xl">{{msg}}</p>
+  </div>
+      {% endif %}
+    </div>
+
+{% endblock content %}

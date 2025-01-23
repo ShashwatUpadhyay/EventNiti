@@ -10,6 +10,7 @@ class UserExtra(models.Model):
     section = models.CharField(max_length=10)
     uu_id = models.CharField(max_length=30)
     roll_number = models.CharField(max_length=20)
+    year = models.CharField(max_length=5)
     
     @property
     def full_name(self):

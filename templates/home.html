@@ -8,9 +8,16 @@
     <p class="mt-4 text-lg">Your journey to unforgettable experiences starts here.</p>
     <button class="mt-6 px-6 py-2 bg-white text-blue-500 rounded-lg font-semibold hover:bg-blue-100">Get Started</button>
 </section>
-
+{% if messages %}
+<ul class="messages text-red-600 text-lg text-center">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 <!-- Memories Section -->
 <section id="memories" class="py-16 bg-blue-50">
+   
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-3xl font-bold text-blue-600">Memories</h2>
         <p class="mt-4 text-gray-600">Relive the moments that matter most to you.</p>
@@ -42,7 +49,7 @@
 
 <!-- Events Section -->
 <main class="container mx-auto px-6 py-10">
-    <h1 class="text-3xl text-center mb-2 md:text-4xl font-bold text-blue-600">Ongoing Events</h1> 
+    <h1 class="text-3xl text-center mb-2 md:text-4xl font-bold text-blue-600">Upcomming Events</h1> 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     {% for events in event %}
             <div class="bg-white border border-gray-200 shadow-lg rounded-lg p-6 hover:shadow-xl hover:scale-105 transform transition duration-300">
@@ -76,7 +83,7 @@
             
         {% endfor %}
     </div>
-   <span class="float-right"><a href="events" class="text-blue-600">more</a></span>
+   <span class="float-right"><a href="{% url "events" %}" class="text-blue-600">more</a></span>
 </main>
 
 <!-- Contact Section -->

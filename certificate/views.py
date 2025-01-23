@@ -41,7 +41,7 @@ def certificate(request,hash):
     except Exception as e:
         return HttpResponse(f'No certificate with code: {hash}')
         
-    return render(request ,'certificate.html', {'certi_obj':certi_obj,'qr_code_base64': generate_qr_code_base64('https://6d2l0fhf-8000.inc1.devtunnels.ms/certificate/'+certi_obj.hash)})
+    return render(request ,'certificate.html', {'certi_obj':certi_obj,'qr_code_base64': generate_qr_code_base64('https://9319j0b7-8000.inc1.devtunnels.ms/certificate/'+certi_obj.hash)})
 
 @login_required(login_url='login')
 def certificates(request):

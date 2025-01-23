@@ -73,14 +73,14 @@
                         class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         required
                     >
-                        <option value="" disabled {% if not user_obj %}selected{% endif %}>Select your course</option>
-                        <option {% if user_obj.cource == 'BCA' %}selected{% endif %} value="BCA">BCA</option>
-                        <option {% if user_obj.cource == 'BCA-IBM' %}selected{% endif %} value="BCA-IBM">BCA-IBM</option>
-                        <option {% if user_obj.cource == 'BTECH' %}selected{% endif %} value="BTECH">BTECH</option>
-                        <option {% if user_obj.cource == 'BTECH-IBM' %}selected{% endif %} value="BTECH-IBM">BTECH-IBM</option>
-                        <option {% if user_obj.cource == 'BBA' %}selected{% endif %} value="BBA">BBA</option>
-                        <option {% if user_obj.cource == 'BBA-IBM' %}selected{% endif %} value="BBA-IBM">BBA-IBM</option>
-                        <option {% if user_obj.cource == 'DIPLOMA CS' %}selected{% endif %} value="DIPLOMA CS">DIPLOMA CS</option>
+                        <option value="" disabled {% if not user_obj.course %}selected{% endif %}>Select your course</option>
+                        <option {% if user_obj.course == 'BCA' %}selected{% endif %} value="BCA">BCA</option>
+                        <option {% if user_obj.course == 'BCA-IBM' %}selected{% endif %} value="BCA-IBM">BCA-IBM</option>
+                        <option {% if user_obj.course == 'BTECH' %}selected{% endif %} value="BTECH">BTECH</option>
+                        <option {% if user_obj.course == 'BTECH-IBM' %}selected{% endif %} value="BTECH-IBM">BTECH-IBM</option>
+                        <option {% if user_obj.course == 'BBA' %}selected{% endif %} value="BBA">BBA</option>
+                        <option {% if user_obj.course == 'BBA-IBM' %}selected{% endif %} value="BBA-IBM">BBA-IBM</option>
+                        <option {% if user_obj.course == 'DIPLOMA CS' %}selected{% endif %} value="DIPLOMA CS">DIPLOMA CS</option>
                     </select>
                 </div>
 
@@ -93,12 +93,29 @@
                         class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         required
                     >
-                        <option value="" disabled {% if user_obj.section == '' %}selected{% endif %}selected>Select your section</option>
+                        <option value="" disabled {% if user_obj %}selected{% endif %}selected>Select your section</option>
                         <option {% if user_obj.section == 'A' %}selected{% endif %} value="A">A</option>
                         <option {% if user_obj.section == 'B' %}selected{% endif %}value="B">B</option>
                         <option {% if user_obj.section == 'C' %}selected{% endif %} value="C">C</option>
                         <option {% if user_obj.section == 'D' %}selected{% endif %} value="D">D</option>
                         <option {% if user_obj.section == 'E' %}selected{% endif %} value="E">E</option>
+                    </select>
+                </div>
+
+                 <!-- Year -->
+                 <div>
+                    <label for="section" class="block text-sm font-medium text-gray-700">Year</label>
+                    <select 
+                        id="section" 
+                        name="year" 
+                        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        required
+                    >
+                        <option value="" disabled {% if user_obj %}selected{% endif %}selected>Select your Year</option>
+                        <option {% if user_obj.year == 'I' %}selected{% endif %} value="I">I</option>
+                        <option {% if user_obj.year == 'II' %}selected{% endif %} value="II">II</option>
+                        <option {% if user_obj.year == 'III' %}selected{% endif %} value="III">III</option>
+                        <option {% if user_obj.year == 'IV' %}selected{% endif %} value="IV">IV</option>
                     </select>
                 </div>
 

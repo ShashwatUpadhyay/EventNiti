@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 import uuid
 from django.utils.text import slugify
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your models here.
 class Event(models.Model):
@@ -25,6 +27,7 @@ class Event(models.Model):
         
 class EventSubmission(models.Model):
     choice = (('Present','Present'),('Absent','Absent'))
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     uu_id = models.CharField(max_length=50)
     full_name = models.CharField(max_length=50)
@@ -32,5 +35,32 @@ class EventSubmission(models.Model):
     course = models.CharField(max_length=50)
     section = models.CharField(max_length=50)
     attendence = models.CharField(choices=choice, default='Absent', max_length=10)
+    uid = models.CharField(max_length=100, null=True, blank=True)
     
+    def __str__(self):
+        return str(self.full_name + " - " + self.event.title)
     
+    def save(self, *args, **kwargs):
+        if not self.uid:
+            self.uid = uuid.uuid4()
+        super(EventSubmission, self).save(*args, **kwargs)
+       
+class EventTicket(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    submission_uid = models.CharField(max_length=100, null=True, blank=True)
+    uid = models.CharField(max_length=100, null=True, blank=True)
+    
+    def save(self, *args, **kwargs):
+        if not self.uid:
+            self.uid = uuid.uuid4()
+        super(EventTicket, self).save(*args, **kwargs)
+        
+    def __str__(self):
+        return str(self.user.get_full_name())
+    
+@receiver(post_save,sender = EventSubmission)
+def generate_ticket(sender, instance, created,**kwargs):
+    if created:
+        EventTicket.objects.create(user = instance.user,submission_uid=instance.uid, event = instance.event)
+        print('Ticket Created!')

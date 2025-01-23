@@ -40,6 +40,7 @@ def registrationpage(request):
         email = request.POST.get('email')
         course = request.POST.get('course')
         section = request.POST.get('section')
+        year = request.POST.get('year')
         uuid = request.POST.get('uuid') 
         password = request.POST.get('password')
         re_password = request.POST.get('re-password')
@@ -52,7 +53,8 @@ def registrationpage(request):
                 section,
                 uuid,
                 password,
-                re_password)
+                re_password,
+                year)
         
         if models.UserExtra.objects.filter(uu_id = uuid).exists():
             messages.error(request, 'UUID already Exists!')
@@ -72,7 +74,7 @@ def registrationpage(request):
         user_obj.save()
         group = Group.objects.get(name='STUDENT')
         group.user_set.add(user_obj)
-        models.UserExtra.objects.create(user = user_obj, uu_id = uuid, course = course, section = section)
+        models.UserExtra.objects.create(user = user_obj, uu_id = uuid, course = course, section = section,year=year)
         messages.success(request, 'Your Account has been Created!')
         return redirect('register')
         
