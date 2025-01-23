@@ -20,6 +20,8 @@
             </ul>
             {% endif %}
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            {% if event %}
             <!-- Event Card -->
             {% for events in event %}
             <div class="bg-white border border-gray-200 shadow-lg rounded-lg p-6 hover:shadow-xl hover:scale-105 transform transition duration-300">
@@ -51,6 +53,15 @@
                 </div>
             </div>
         {% endfor %}
+        {% else %}
+
+        <div class="col-span-full">
+            <div class="flex flex-col items-center justify-center bg-yellow-100 border border-yellow-300 text-yellow-700 font-semibold rounded-lg py-6 px-8 mt-6">
+                <p>No Ongoing Events</p>
+            </div>
+        </div>
+
+        {% endif %}
         </div>
     </main>
 </div>

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'base',
     'account',
     'certificate',
+    'events',
 ]
 
 MIDDLEWARE = [
