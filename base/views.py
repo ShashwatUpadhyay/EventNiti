@@ -12,9 +12,5 @@ def home(request):
     event = Event.objects.filter(event_open=True).order_by('start_date')[:3]
     return render(request , 'home.html',{'event':event})
 
-
-def memories(request):
-    return render(request, 'memories.html')
-
 def contact(request):
     return render(request, 'contact.html')

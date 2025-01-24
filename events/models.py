@@ -4,7 +4,9 @@ import uuid
 from django.utils.text import slugify
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
+from django.core.mail import send_mail
+from ppuu import settings
+from ppuu.mail_sender import event_anouncement,event_announcement
 # Create your models here.
 class Event(models.Model):
     title = models.CharField(max_length=200)
@@ -16,6 +18,7 @@ class Event(models.Model):
     start_date = models.DateField(null=True, blank=True)
     event_open = models.BooleanField(default=True)
     registration_open = models.BooleanField(default=True)
+    notify = models.BooleanField(default=True)
     
     def __str__(self):
         return str(self.title)
@@ -34,7 +37,9 @@ class EventSubmission(models.Model):
     email = models.CharField(max_length=50)
     course = models.CharField(max_length=50)
     section = models.CharField(max_length=50)
+    year = models.CharField(max_length=2)
     attendence = models.CharField(choices=choice, default='Absent', max_length=10)
+    attendence_taken_by = models.CharField(max_length=60,null=True,blank=True)
     uid = models.CharField(max_length=100, null=True, blank=True)
     
     def __str__(self):
@@ -62,5 +67,24 @@ class EventTicket(models.Model):
 @receiver(post_save,sender = EventSubmission)
 def generate_ticket(sender, instance, created,**kwargs):
     if created:
-        EventTicket.objects.create(user = instance.user,submission_uid=instance.uid, event = instance.event)
+        ticket = EventTicket.objects.create(user = instance.user,submission_uid=instance.uid, event = instance.event)
+        send_mail(
+            'Ticket Issued',
+            'You received a ticket from PPUU',
+            settings.EMAIL_HOST_USER,
+            [instance.user.email],
+            fail_silently=False,
+            html_message=f"""<p>
+                <h1>Received {instance.event.title} ticket</h1>
+                <a href='{settings.DOMAIN_NAME}events/ticket/{ticket.uid}'><button>OPEN</button></a>
+            </p>"""
+        )
         print('Ticket Created!')
+        
+        
+@receiver(post_save,sender = Event)
+def new_event_anouncement(sender, instance, created,**kwargs):
+    if created:
+        if instance.notify:
+            emails = User.objects.values_list("email", flat=True)
+            event_announcement(emails,instance)

@@ -1,10 +1,11 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,HttpResponse
 from django.contrib import messages
 from django.contrib.auth.models import User
 from . import models
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
+from ppuu.mail_sender import verifyUser
 # Create your views here.
 
 
@@ -20,7 +21,14 @@ def loginpage(request):
         if not User.objects.filter(username = username).exists():
             messages.success(request, "Username Doesn't exists!")
             return redirect('login')
-
+        user = User.objects.get(username = username)
+        user_obj = models.UserExtra.objects.get(user = user)
+        
+        if not user_obj.is_verified:
+            verifyUser(user.email,user_obj.uid)
+            messages.error(request,"Verification mail has been sent to the registered!.. Please verify your account.")
+            return redirect('login')
+        
         user_obj = authenticate(username = username, password = password)
         if not user_obj:
             messages.error(request, "Invalid Credential")
@@ -81,6 +89,22 @@ def registrationpage(request):
         
     return render(request , 'register.html')
 
+def accountVerify(request, uid):
+    user_obj=None
+    try:
+        user_obj = models.UserExtra.objects.get(uid=uid)
+    except:
+        return HttpResponse("Invalid Verification ID!!!")   
+    
+    if user_obj.is_verified:
+        return HttpResponse("Your account is Already verified........")
+    
+    user_obj.is_verified = True
+    user_obj.save()
+    return HttpResponse("Your account has been verified!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        
+        
+    
 
 def logoutpage(request):
     logout(request)

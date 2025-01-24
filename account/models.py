@@ -9,8 +9,9 @@ class UserExtra(models.Model):
     course = models.CharField(max_length=10)
     section = models.CharField(max_length=10)
     uu_id = models.CharField(max_length=30)
-    roll_number = models.CharField(max_length=20)
+    roll_number = models.CharField(max_length=20, null=True, blank=True)
     year = models.CharField(max_length=5)
+    is_verified = models.BooleanField(default=False)
     
     @property
     def full_name(self):

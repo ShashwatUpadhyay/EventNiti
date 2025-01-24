@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from account.models import UserExtra
 from certificate.views import generate_qr_code_base64, is_head, is_member, is_student, is_teacher
 from django.contrib.auth.decorators import login_required
+from ppuu import settings
 
 # Create your views here.
 def events(request):
@@ -50,12 +51,8 @@ def eventregister(request, slug):
         email = request.POST.get('email')
         course = request.POST.get('course')
         section = request.POST.get('section')
-        print(uuid,
-            full_name,
-            email,
-            course,
-            section,)
-        submission = models.EventSubmission.objects.create(uu_id=uuid,full_name = full_name,email = email,user=request.user,course = course,section = section,event = event)
+        year = request.POST.get('year')
+        submission = models.EventSubmission.objects.create(uu_id=uuid,full_name = full_name,year=year,email = email,user=request.user,course = course,section = section,event = event)
         messages.success(request,f"Submission Successful in {event.title} event")
         return redirect('events')
     return render(request, 'eventregister.html',{'event':event, 'user_obj':user_obj})
@@ -69,7 +66,7 @@ def eventTicket(request, uid):
     except:
         return HttpResponse("invalid Ticket ID!")
     
-    return render(request,'eventticket.html',{'ticket':ticket, 'qrCode':generate_qr_code_base64(f'http://127.0.0.1:8000/events/attendence/{ticket.submission_uid}')})
+    return render(request,'eventticket.html',{'ticket':ticket, 'qrCode':generate_qr_code_base64(f'{settings.DOMAIN_NAME}events/attendence/{ticket.submission_uid}/')})
     
 @login_required(login_url='login')
 def myTicket(request):
@@ -78,7 +75,6 @@ def myTicket(request):
     
 @login_required(login_url='login')
 def takeSudentAttendence(request, submissionid):
-    print()
     if is_student(request.user):
         messages.error(request,"Permission Denied!")
         return redirect('home')
@@ -94,5 +90,6 @@ def takeSudentAttendence(request, submissionid):
     
     if submission.attendence == 'Absent':
         submission.attendence = 'Present'
+        submission.attendence_taken_by = request.user.get_full_name()
         submission.save()
     return render(request, 'eventattendence.html', {'submission': True, 'msg': 'Attendence sucessfully Marked!! '})

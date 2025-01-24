@@ -3,53 +3,38 @@
 
 {% block content %}
 {% load static %}
-<div class="bg-gray-100">
-
-    <!-- Page Header -->
-    <header class="bg-blue-600 py-6 shadow-md">
-        <div class="container mx-auto px-6 text-center">
-            <h1 class="text-3xl md:text-4xl font-bold text-white">Memories Gallery</h1>
-            <p class="text-blue-200 text-sm md:text-base mt-2">Relive the best moments from our events</p>
-        </div>
+<div class="bg-gray-100 font-sans">
+    <!-- Header Section -->
+    <header class="bg-blue-600 text-white py-6">
+      <div class="container mx-auto px-6 text-center">
+        <h1 class="text-4xl font-bold">Cherished Memories</h1>
+        <p class="mt-2 text-lg">A gallery of moments worth remembering</p>
+      </div>
     </header>
-
+  
     <!-- Gallery Section -->
-    <main class="container mx-auto px-6 py-10">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <!-- Memory Card -->
-            <div class="relative group">
-                <img src="{% static 'gallary.jpg' %}" alt="Memory 1" class="w-full h-auto rounded-lg shadow-md">
-                <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 flex items-center justify-center rounded-lg transition-opacity duration-300">
-                    <p class="text-white font-semibold text-lg">Event Name 1</p>
+    <section id="memories" class="py-16 bg-blue-50">
+   
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold text-blue-600">Memories</h2>
+            <p class="mt-4 text-gray-600">Relive the moments that matter most to you.</p>
+            <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for mems in mem %}
+                <a href=" {% url 'event_memories_list' mems.event.slug %} ">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <img src="{{ mems.memory_img.latest.image.url }}" alt="Memory" class="w-full">
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg">{{mems.memory_title}}</h3>
+                        <p class="mt-2 text-gray-600">On {{ mems.event.title }} Event</p>
+                        <p class="mt-2 text-gray-600">{{ mems.event.start_date }}</p>
+                    </div>
                 </div>
+            </a>
+                {% endfor %}
             </div>
-
-            <!-- Memory Card -->
-            <div class="relative group">
-                <img src="{% static 'gallary.jpg' %}" alt="Memory 2" class="w-full h-auto rounded-lg shadow-md">
-                <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 flex items-center justify-center rounded-lg transition-opacity duration-300">
-                    <p class="text-white font-semibold text-lg">Event Name 2</p>
-                </div>
-            </div>
-
-            <!-- Memory Card -->
-            <div class="relative group">
-                <img src="{% static 'gallary.jpg' %}" alt="Memory 3" class="w-full h-auto rounded-lg shadow-md">
-                <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 flex items-center justify-center rounded-lg transition-opacity duration-300">
-                    <p class="text-white font-semibold text-lg">Event Name 3</p>
-                </div>
-            </div>
-
-            <!-- More Memory Cards -->
-            <div class="relative group">
-                <img src="{% static 'gallary.jpg' %}" alt="Memory 4" class="w-full h-auto rounded-lg shadow-md">
-                <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 flex items-center justify-center rounded-lg transition-opacity duration-300">
-                    <p class="text-white font-semibold text-lg">Event Name 4</p>
-                </div>
-            </div>
-            <!-- Add as many memory cards as needed -->
         </div>
-    </main>
-</div>
-
+    </section>
+  
+    
+  </div>
 {% endblock content %}

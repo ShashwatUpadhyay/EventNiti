@@ -4,9 +4,9 @@ from django.contrib import admin
 from .models import Event, EventSubmission,EventTicket
 
 class EventSubmissionAdmin(admin.ModelAdmin):
-    list_display = ('event', 'uu_id', 'full_name', 'email', 'course', 'section','attendence')
-    search_fields = ('full_name', 'email','event__title', 'uu_id', 'course','attendence')
-    list_filter = ('course', 'section', 'event')
+    list_display = ('event', 'uu_id', 'full_name','course', 'section','year','attendence','attendence_taken_by')
+    search_fields = ('full_name','event__title', 'uu_id','year', 'course','attendence')
+    list_filter = ('course', 'section', 'event','year')
 
 class EventTicketAdmin(admin.ModelAdmin):
     list_display = ('event_submission','user')

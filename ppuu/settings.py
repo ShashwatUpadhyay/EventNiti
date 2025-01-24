@@ -15,6 +15,9 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# DOMAIN_NAME = 'http://127.0.0.1:8000/'
+DOMAIN_NAME = 'https://9319j0b7-8000.inc1.devtunnels.ms/'
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -41,6 +44,7 @@ INSTALLED_APPS = [
     'account',
     'certificate',
     'events',
+    'memories',
 ]
 
 MIDDLEWARE = [
@@ -78,10 +82,18 @@ WSGI_APPLICATION = 'ppuu.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # },
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+          'ENGINE':'django.db.backends.mysql',
+          'NAME':'ppuudb',
+          'USER':'root',
+          'PASSWORD':'',
+          'HOST':'localhost',
+          'PORT':'3306',
+      }     
 }
 
 
@@ -128,6 +140,13 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/' #url
 MEDIA_ROOT = BASE_DIR / 'media' # for production
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'ppuuetchnicalteam@gmail.com'
+EMAIL_HOST_PASSWORD = 'fndn sasu zkaf psjj'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

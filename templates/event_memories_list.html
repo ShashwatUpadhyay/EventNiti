@@ -1,0 +1,104 @@
+{% extends "index.html" %}
+
+
+{% block content %}
+{% load static %}
+
+{% comment %} <h1>Memories for {{ event.title }}</h1> {% endcomment %}
+
+{% comment %} <div class="memories-container">
+    {% for memory in memories %}
+        <div class="memory-card">
+            <h2>{{ memory.memory_title }}</h2>
+            <p>{{ memory.memory_date }}</p>
+
+            {% for img in memory.memory_img.all %}
+                <img src="{{ img.image.url }}" alt="{{ img.image_title }}" class="w-full">
+            {% endfor %}
+
+            {% for vdo in memory.memory_vdo.all %}
+                <video controls class="w-full">
+                    <source src="{{ vdo.video.url }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div> {% endcomment %}
+
+<div class="bg-gray-100 font-sans">
+    <!-- Header Section -->
+    <header class="bg-blue-600 text-white py-6">
+      <div class="container mx-auto px-6 text-center">
+        <h1 class="text-4xl font-bold">Cherished Memories</h1>
+        <p class="mt-2 text-lg text-center">A gallery of moments worth remembering</p>
+      </div>
+    </header>
+  
+    <!-- Gallery Section -->
+    <section id="memories" class="py-16 bg-blue-50">
+   
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold text-blue-600">Memories</h2>
+            <p class="mt-4 text-gray-600"><h1>Memories for {{ event.title }}</h1></p>
+            <div class="mt-8 grid grid-cols-1 text-center sm:grid-cols-2 lg:grid-cols-3 gap-6"> 
+              {% for memory in memories %}
+                    {% for img in memory.memory_img.all %}
+                        {% comment %} <a href=" {% url 'event_memories_list' mems.event.slug %} "> {% endcomment %}
+                          <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                            <!-- Image -->
+                            <img src="{{ img.image.url }}" alt="Memory" class="w-full cursor-pointer" onclick="openModal('{{ img.image.url }}', '{{ img.image_title }}', '{{ img.image_date }}')">
+                            <p class="text-center mt-2">{{ img.image_title }}</p>
+                            <span class="text-sm text-gray-500 block text-center">{{ img.image_date }}</span>
+                        </div>
+                        <!-- Modal for enlarged image -->
+                      <div id="imageModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center hidden" onclick="closeModal()">
+                        <div class="relative bg-white p-4 rounded-lg">
+                            <img id="modalImage" class="w-full max-w-4xl max-h-screen object-contain" />
+                            <p id="modalImageTitle" class="mt-4 text-center text-xl font-semibold text-blue-600"></p>
+                            <span id="modalImageDate" class="block text-center text-sm text-gray-500"></span>
+                            <button onclick="closeModal()" class="absolute top-4 right-4 text-white text-xl font-bold"><svg fill="#00FF00" height="20px" width="20px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 490 490" xml:space="preserve" stroke="#fafafa"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <polygon points="456.851,0 245,212.564 33.149,0 0.708,32.337 212.669,245.004 0.708,457.678 33.149,490 245,277.443 456.851,490 489.292,457.678 277.331,245.004 489.292,32.337 "></polygon> </g></svg></button>
+                        </div>
+                      </div>
+                     {% endfor %}
+
+                     {% for vdo in memory.memory_vdo.all %}
+                     <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <video controls class="w-full">
+                            <source src="{{ vdo.video.url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <p>{{ vdo.video_title }}</p>
+                        <span>{{ vdo.video_date }}</span>
+
+                    </div>
+                 {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+  </div>
+  <script>
+    // Function to open the modal
+    function openModal(imageUrl, imageTitle, imageDate) {
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalImageTitle = document.getElementById('modalImageTitle');
+        const modalImageDate = document.getElementById('modalImageDate');
+        
+        // Set the image source and title
+        modalImage.src = imageUrl;
+        modalImageTitle.textContent = imageTitle;
+        modalImageDate.textContent = imageDate;
+        
+        // Display the modal
+        modal.classList.remove('hidden');
+    }
+
+    // Function to close the modal
+    function closeModal() {
+        const modal = document.getElementById('imageModal');
+        modal.classList.add('hidden');
+    }
+</script>
+{% endblock content %}

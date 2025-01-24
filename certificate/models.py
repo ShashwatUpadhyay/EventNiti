@@ -7,6 +7,9 @@ from django.dispatch import receiver
 import hashlib
 import secrets 
 from events.models import Event
+from django.core.mail import send_mail
+from ppuu import settings
+
 # Create your models here.
 def convert_date(date_obj):
     ist = pytz.timezone('Asia/Kolkata')
@@ -46,4 +49,15 @@ def save_certificate(sender,created, instance, **kwargs):
         random_string = secrets.token_hex(16)
         instance.hash = hashlib.sha256(random_string.encode()).hexdigest()
         instance.save()
+        send_mail(
+            'Congratulations!! You got Certificate from PPUU',
+            'You received a Certificate from PPUU',
+            settings.EMAIL_HOST_USER,
+            [instance.user.email],
+            fail_silently=False,
+            html_message=f"""<p>
+                <h1>Received {instance.event.title} {instance.certificate_for} Certificate</h1>
+                <a href='{settings.DOMAIN_NAME}certificate/{instance.hash}'><button>OPEN</button></a>
+            </p>"""
+        )
         print("Certificate Created")
