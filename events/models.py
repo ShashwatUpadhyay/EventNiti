@@ -37,7 +37,7 @@ class EventSubmission(models.Model):
     email = models.CharField(max_length=50)
     course = models.CharField(max_length=50)
     section = models.CharField(max_length=50)
-    year = models.CharField(max_length=2)
+    year = models.CharField(max_length=5)
     attendence = models.CharField(choices=choice, default='Absent', max_length=10)
     attendence_taken_by = models.CharField(max_length=60,null=True,blank=True)
     uid = models.CharField(max_length=100, null=True, blank=True)

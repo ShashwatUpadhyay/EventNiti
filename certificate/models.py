@@ -21,7 +21,10 @@ class CertificateFor(models.Model):
     
     def __str__(self):
         return self.title
-    
+
+    class Meta:
+        verbose_name_plural  = 'Certificate Achievements'
+
 class Certificate(models.Model):
     choices = (('Participation', 'Participation') ,('Winner', 'Winner'),('Runner Up', 'Runner Up'),('Second Runner-Up', 'Second Runner-Up'))
     user = models.ForeignKey(User ,on_delete=models.CASCADE)

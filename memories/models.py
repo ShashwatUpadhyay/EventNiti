@@ -10,6 +10,9 @@ class Memories(models.Model):
     
     def __str__(self):
         return self.event.title
+    
+    class Meta:
+        verbose_name_plural  = 'Memories'
 
 class MemoryImages(models.Model):
     memory = models.ForeignKey(Memories,on_delete=models.CASCADE,related_name='memory_img')
@@ -18,10 +21,11 @@ class MemoryImages(models.Model):
     image_date = models.DateField(auto_now_add=True)
     
     def __str__(self):
-        return self.image_date
+        return str(self.image_date)
     
     class Meta:
         get_latest_by = 'image_date'  
+        verbose_name_plural  = 'Memory Images'
 
 
 class MemoryVideo(models.Model):
@@ -32,3 +36,6 @@ class MemoryVideo(models.Model):
     
     def __str__(self):
         return str(self.video_date)
+    
+    class Meta:
+        verbose_name_plural  = 'Memory Videos'

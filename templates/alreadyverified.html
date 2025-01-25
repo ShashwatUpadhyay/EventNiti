@@ -1,0 +1,16 @@
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+      <div id="message-container">
+        <div id="already-verified" class="hidden text-center">
+          <div class="bg-blue-100 p-6 rounded-lg">
+            <h1 class="text-2xl font-bold text-blue-600 mt-4">Your Account Is Already Verified</h1>
+            <p class="mt-2 text-gray-600">No further action is required you can login now!.</p>
+            <a href="{% url "login" %}" class="mt-4 inline-block px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500">Login</a>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-blue-600 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>

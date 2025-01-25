@@ -22,27 +22,21 @@
         <h2 class="text-3xl font-bold text-blue-600">Memories</h2>
         <p class="mt-4 text-gray-600">Relive the moments that matter most to you.</p>
         <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="{% static 'gallary.jpg' %}" alt="Memory" class="w-full">
-                <div class="p-4">
-                    <h3 class="font-bold text-lg">Memory Title</h3>
-                    <p class="mt-2 text-gray-600">A brief description of this memory.</p>
+
+            {% for mems in mem %}
+                <a href=" {% url 'event_memories_list' mems.event.slug %} ">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <img src="{{ mems.memory_img.latest.image.url }}" alt="Memory" class="w-full">
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg">{{mems.memory_title}}</h3>
+                        <p class="mt-2 text-gray-600">On {{ mems.event.title }} Event</p>
+                        <p class="mt-2 text-gray-600">{{ mems.event.start_date }}</p>
+                    </div>
                 </div>
+            </a>
+                {% endfor %}
             </div>
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="{% static 'gallary.jpg' %}" alt="Memory" class="w-full">
-                <div class="p-4">
-                    <h3 class="font-bold text-lg">Memory Title</h3>
-                    <p class="mt-2 text-gray-600">A brief description of this memory.</p>
-                </div>
-            </div>
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="{% static 'gallary.jpg' %}" alt="Memory" class="w-full">
-                <div class="p-4">
-                    <h3 class="font-bold text-lg">Memory Title</h3>
-                    <p class="mt-2 text-gray-600">A brief description of this memory.</p>
-                </div>
-            </div>
+            <span class="float-right"><a href="{% url "memories" %}" class="text-blue-600">more</a></span>
         </div>
     </div>
 </section>

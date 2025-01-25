@@ -32,3 +32,6 @@ class UserExtra(models.Model):
         if not self.uid:
             self.uid = uuid.uuid4()
         super(UserExtra, self).save(*args, **kwargs)
+        
+    class Meta:
+        verbose_name_plural  = 'User Informations'

@@ -37,7 +37,7 @@ def eventregister(request, slug):
             messages.error(request, "Registration is Closed!")
             return redirect('event', slug =slug)
         if models.EventSubmission.objects.filter(user=request.user, event=event).exists():
-            messages.error(request, "You are Alredy Registered")
+            messages.error(request, "Rejected!")
             return redirect('event', slug =slug)
     except Exception as e:
         messages.error(request, f"Error: {e}   ")  

@@ -94,14 +94,14 @@ def accountVerify(request, uid):
     try:
         user_obj = models.UserExtra.objects.get(uid=uid)
     except:
-        return HttpResponse("Invalid Verification ID!!!")   
+        return render(request,'invaliduser.html')   
     
     if user_obj.is_verified:
-        return HttpResponse("Your account is Already verified........")
+        return render(request,'alreadyverified.html')   
     
     user_obj.is_verified = True
     user_obj.save()
-    return HttpResponse("Your account has been verified!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    return render(request,'accountverified.html')   
         
         
     
