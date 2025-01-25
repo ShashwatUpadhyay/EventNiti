@@ -6,6 +6,10 @@ from account.models import UserExtra
 from certificate.views import generate_qr_code_base64, is_head, is_member, is_student, is_teacher
 from django.contrib.auth.decorators import login_required
 from ppuu import settings
+import datetime
+import pytz
+
+india_timezone = pytz.timezone('Asia/Kolkata')
 
 # Create your views here.
 def events(request):
@@ -43,8 +47,6 @@ def eventregister(request, slug):
         messages.error(request, f"Error: {e}   ")  
         return redirect('home')
     
-    
-    
     if request.method == "POST":
         uuid = request.POST.get('uuid')
         full_name = request.POST.get('full_name')
@@ -70,13 +72,13 @@ def eventTicket(request, uid):
     
 @login_required(login_url='login')
 def myTicket(request):
-    ticket = models.EventTicket.objects.filter(user = request.user)
+    ticket = models.EventTicket.objects.filter(user = request.user).order_by('-created_at')
     return render(request , 'tickets.html', {'ticket':ticket})
     
 @login_required(login_url='login')
 def takeSudentAttendence(request, submissionid):
     if is_student(request.user):
-        messages.error(request,"Permission Denied!")
+        messages.error(request,"Access Denied!")
         return redirect('home')
     
     submission = None
@@ -85,11 +87,19 @@ def takeSudentAttendence(request, submissionid):
     except:
         return render(request, 'eventattendence.html', {'submission': False, 'msg': 'QR code is Expired'})
     
+    if models.EventTicket.objects.get(submission_uid=submissionid).restricted:
+        return render(request, 'eventattendence.html', {'submission': False, 'msg': 'Student is Restricted!'})
+
+    if not submission.allowed:
+        return render(request, 'eventattendence.html', {'submission': False, 'msg': 'Candidate is not allowed!'})
+    
     if submission.attendence == 'Present':
         return render(request, 'eventattendence.html', {'submission': False, 'msg': 'Attendence Already Marked'})
     
     if submission.attendence == 'Absent':
+        current_time_india = datetime.datetime.now(india_timezone)
         submission.attendence = 'Present'
-        submission.attendence_taken_by = request.user.get_full_name()
+        submission.attendence_taken_by = f'{request.user.get_full_name()} - {current_time_india.strftime('%Y-%m-%d %I:%M:%S %p')
+}'
         submission.save()
     return render(request, 'eventattendence.html', {'submission': True, 'msg': 'Attendence sucessfully Marked!! '})

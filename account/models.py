@@ -5,7 +5,7 @@ import uuid
 
 class UserExtra(models.Model):
     uid = models.CharField(max_length=100, null=True, blank=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_extra')
     course = models.CharField(max_length=10)
     section = models.CharField(max_length=10)
     uu_id = models.CharField(max_length=30)

@@ -27,6 +27,9 @@ class Event(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         super(Event, self).save(*args, **kwargs)
+    
+    class Meta:
+        ordering = ['-upload_time']
         
 class EventSubmission(models.Model):
     choice = (('Present','Present'),('Absent','Absent'))
@@ -39,8 +42,9 @@ class EventSubmission(models.Model):
     section = models.CharField(max_length=50)
     year = models.CharField(max_length=5)
     attendence = models.CharField(choices=choice, default='Absent', max_length=10)
-    attendence_taken_by = models.CharField(max_length=60,null=True,blank=True)
+    attendence_taken_by = models.CharField(max_length=60,null=True,blank=True, verbose_name='Attendence Taken By/At ')
     uid = models.CharField(max_length=100, null=True, blank=True)
+    allowed = models.BooleanField(default=True)
     
     def __str__(self):
         return str(self.full_name + " - " + self.event.title)
@@ -54,7 +58,9 @@ class EventTicket(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     submission_uid = models.CharField(max_length=100, null=True, blank=True)
-    uid = models.CharField(max_length=100, null=True, blank=True)
+    uid = models.CharField(max_length=100, null=True, blank=True, verbose_name='Ticket UID')
+    created_at = models.DateTimeField(auto_now_add=True)
+    restricted = models.BooleanField(default=False)
     
     def save(self, *args, **kwargs):
         if not self.uid:
