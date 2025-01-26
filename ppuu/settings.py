@@ -15,8 +15,8 @@ from .ckeditorconfig import *
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# DOMAIN_NAME = 'http://127.0.0.1:8000/'
-DOMAIN_NAME = 'https://9319j0b7-8000.inc1.devtunnels.ms/'
+DOMAIN_NAME = 'http://127.0.0.1:8000/'
+# DOMAIN_NAME = 'https://9319j0b7-8000.inc1.devtunnels.ms/'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -154,3 +154,93 @@ EMAIL_USE_SSL = False
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379',
+    }
+}
+
+
+import os
+
+# LOGGING = {
+#     "version": 1,
+#     "disable_existing_loggers": False,
+#     "handlers": {
+#         "console": {
+#             "class": "logging.StreamHandler",
+#         },
+#         'file' : {
+#             'level': 'DEBUG',
+#             'class': 'logging.FileHandler',
+#             'filename': os.path.join(BASE_DIR, 'info.log'),
+#         },
+#     },
+#     "root": {
+#         "handlers": ["console", 'file'],
+#         "level": "DEBUG",
+#     },
+# }
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+        "info_file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(BASE_DIR, "info.log"),
+            "formatter": "verbose",
+        },
+        "error_file": {
+            "level": "ERROR",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(BASE_DIR, "error.log"),
+            "formatter": "verbose",
+        },
+        "debug_file": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(BASE_DIR, "debug.log"),
+            "formatter": "verbose",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console", "info_file"],
+            "level": "INFO",
+            "propagate": True,
+        },
+        "error_logger": {
+            "handlers": ["error_file"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+        "debug_logger": {
+            "handlers": ["debug_file"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "WARNING",
+    },
+}

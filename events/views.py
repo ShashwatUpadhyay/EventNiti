@@ -31,6 +31,7 @@ def event(request, slug):
 @login_required(login_url='login')
 def eventregister(request, slug):
     user_obj = None
+    event=None
     try:
         user_obj = UserExtra.objects.get(user=request.user)
     except Exception as e:
@@ -47,6 +48,10 @@ def eventregister(request, slug):
         messages.error(request, f"Error: {e}   ")  
         return redirect('home')
     
+    if event.limit and event.count >= event.limit:
+        messages.error(request, "Registration is Full!")
+        return redirect('event', slug =slug)
+    
     if request.method == "POST":
         uuid = request.POST.get('uuid')
         full_name = request.POST.get('full_name')
@@ -55,6 +60,8 @@ def eventregister(request, slug):
         section = request.POST.get('section')
         year = request.POST.get('year')
         submission = models.EventSubmission.objects.create(uu_id=uuid,full_name = full_name,year=year,email = email,user=request.user,course = course,section = section,event = event)
+        event.count = event.count + 1
+        event.save()
         messages.success(request,f"Submission Successful in {event.title} event")
         return redirect('events')
     return render(request, 'eventregister.html',{'event':event, 'user_obj':user_obj})

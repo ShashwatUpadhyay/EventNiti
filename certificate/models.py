@@ -36,7 +36,8 @@ class Certificate(models.Model):
     
     def __str__(self):
         date = str(convert_date(self.issue_date))
-        return f'{self.pk} - {self.user.username} - {self.event} - {date} - {self.hash}'
+        return f'{self.user.get_full_name()} - {settings.DOMAIN_NAME}certificate/{self.hash}'
+        # return f'{self.pk} - {self.user.username} - {self.event} - {date} - {self.hash}'
     def save(self, *args, **kwargs):
         # if not hash:
         

@@ -16,7 +16,6 @@ def verifyUser(email,uid):
                 </p>"""
             )
     
-    # <button><a href='{settings.DOMAIN_NAME}user/verify/{uid}'>OPEN</a></button>
 def event_anouncement(emails,instance):
     for email in emails:
         send_mail(

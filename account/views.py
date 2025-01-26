@@ -6,6 +6,15 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from ppuu.mail_sender import verifyUser
+from django.core.cache import cache
+import logging
+import datetime
+import pytz
+
+time_zone = pytz.timezone("Asia/Kolkata")
+current_time = datetime.datetime.now(time_zone)
+
+logger = logging.getLogger(__name__)
 # Create your views here.
 
 
@@ -25,6 +34,25 @@ def loginpage(request):
         user_obj = models.UserExtra.objects.get(user = user)
         
         if not user_obj.is_verified:
+            
+            if cache.get(username):
+                data = cache.get(username)
+                data['count'] += 1
+            
+                if data['count'] >= 3:
+                    cache.set(username,data, 60*5)
+                    messages.error(request,"You have exceeded the limit of verification mail!.. Please try again after 5 minutes.")
+                    return redirect('login')
+                cache.set(username,data, 60*1)
+             
+            if not cache.get(username):   
+                data = {
+                    'username':username,
+                    'count': 1
+                }
+                cache.set(username,data, 60*1)
+               
+            # print('verification sent') 
             verifyUser(user.email,user_obj.uid)
             messages.error(request,"Verification mail has been sent to the registered!.. Please verify your account.")
             return redirect('login')
@@ -34,6 +62,7 @@ def loginpage(request):
             messages.error(request, "Invalid Credential")
             return redirect('login')
         login(request,user_obj)
+        logger.info(f'[{current_time}] {user_obj.get_full_name()} logged in')
         return redirect('home')
     
     return render(request , 'login.html')
@@ -52,17 +81,6 @@ def registrationpage(request):
         uuid = request.POST.get('uuid') 
         password = request.POST.get('password')
         re_password = request.POST.get('re-password')
-        
-        print(first_name,
-                last_name,
-                username,
-                email,
-                course,
-                section,
-                uuid,
-                password,
-                re_password,
-                year)
         
         if models.UserExtra.objects.filter(uu_id = uuid).exists():
             messages.error(request, 'UUID already Exists!')

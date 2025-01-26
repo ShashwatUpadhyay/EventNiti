@@ -10,15 +10,17 @@ from ppuu.mail_sender import event_anouncement,event_announcement
 # Create your models here.
 class Event(models.Model):
     title = models.CharField(max_length=200)
-    slug = models.CharField(max_length=300, null=True, blank=True)
+    slug = models.CharField(max_length=300, null=True, blank=True, verbose_name="Slug(leave it blank)")
     description = models. TextField()
     organized_by = models.ForeignKey(User, on_delete=models.CASCADE)
     location = models.CharField(max_length=100, null=True, blank=True)
+    limit = models.IntegerField(null=True, blank=True)
+    count = models.IntegerField(default=0)
     upload_time = models.DateTimeField(auto_now_add=True)
     start_date = models.DateField(null=True, blank=True)
     event_open = models.BooleanField(default=True)
     registration_open = models.BooleanField(default=True)
-    notify = models.BooleanField(default=True)
+    notify = models.BooleanField(default=True, verbose_name="Notify all users through email (at time of creation)")
     
     def __str__(self):
         return str(self.title)

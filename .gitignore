@@ -1,2 +1,5 @@
 env/
 media/
+info.log
+error.log
+debug.log
