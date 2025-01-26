@@ -207,19 +207,16 @@ LOGGING = {
             "level": "INFO",
             "class": "logging.FileHandler",
             "filename": os.path.join(BASE_DIR, "info.log"),
-            "formatter": "verbose",
         },
         "error_file": {
             "level": "ERROR",
             "class": "logging.FileHandler",
             "filename": os.path.join(BASE_DIR, "error.log"),
-            "formatter": "verbose",
         },
         "debug_file": {
             "level": "DEBUG",
             "class": "logging.FileHandler",
             "filename": os.path.join(BASE_DIR, "debug.log"),
-            "formatter": "verbose",
         },
     },
     "loggers": {
