@@ -6,16 +6,7 @@ import qrcode
 import base64
 from io import BytesIO
 from ppuu import settings
-# Create your views here.
 
-def is_member(user):
-    return user.groups.filter(name='MEMBER').exists()
-def is_teacher(user):
-    return user.groups.filter(name='TEACHER').exists()
-def is_student(user):
-    return user.groups.filter(name='STUDENT').exists()
-def is_head(user):
-    return user.groups.filter(name='HEAD').exists()
 
 def generate_qr_code_base64(data):
     qr = qrcode.QRCode(

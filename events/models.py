@@ -21,6 +21,7 @@ class Event(models.Model):
     event_open = models.BooleanField(default=True)
     registration_open = models.BooleanField(default=True)
     notify = models.BooleanField(default=True, verbose_name="Notify all users through email (at time of creation)")
+    event_over = models.BooleanField(default=False, verbose_name='Event Over?') 
     
     def __str__(self):
         return str(self.title)

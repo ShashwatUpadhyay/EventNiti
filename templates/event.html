@@ -58,6 +58,7 @@
 
                 <!-- Registration Section -->
                 <div class="bg-gray-100 border border-gray-300 p-6 rounded-lg text-center">
+                    {% if not event.event_over %}
                     {% if event.registration_open %}
                     <h3 class="text-lg font-semibold text-gray-800">Want to Join?</h3>
                     <p class="text-gray-600 mt-2">Register now to be part of this exciting event!</p>
@@ -73,6 +74,14 @@
                         class="mt-4 inline-block bg-transparent text-red-600 font-semibold py-3 px-6 rounded-lg border-2 border-red-600 shadow-md hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500"
                     >
                         Registration Closed
+                    </a>
+                    {% endif %}
+                    {% else %}
+                    <a 
+                        href="{% url "eventregister" event.slug %}" 
+                        class="mt-4 inline-block bg-transparent text-clay-500 font-semibold py-3 px-6 rounded-lg border-2 border-clay-500 shadow-md hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500"
+                    >
+                        Registration Over
                     </a>
                     {% endif %}
                 </div>

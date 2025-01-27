@@ -11,7 +11,12 @@
                 <div class="hidden md:flex space-x-8 items-center">
                     <a href="{% url "home" %}" class="hover:text-blue-300">Home</a>
                     <a href="{% url "memories" %}" class="hover:text-blue-300">Memories</a>
+                    {% if user.is_teacher  %}
+                        <a href="{% url "teacherEventList" %}" class="hover:text-blue-300">Events</a>
+                    {% else %}
                     <a href="{% url "events" %}" class="hover:text-blue-300">Events</a>
+
+                    {% endif %}
                     <a href="{% url "blogs" %}" class="hover:text-blue-300">Blogs</a>
                     <a href="{% url "contact" %}" class="hover:text-blue-300">Contact</a>
                     {% if not request.user.is_authenticated %}

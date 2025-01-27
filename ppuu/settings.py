@@ -15,8 +15,8 @@ from .ckeditorconfig import *
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DOMAIN_NAME = 'http://127.0.0.1:8000/'
-# DOMAIN_NAME = 'https://9319j0b7-8000.inc1.devtunnels.ms/'
+# DOMAIN_NAME = 'http://127.0.0.1:8000/'
+DOMAIN_NAME = 'https://9319j0b7-8000.inc1.devtunnels.ms/'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -28,6 +28,7 @@ SECRET_KEY = 'django-insecure-($h@jyg6f%k0e^akfcq+a4@%-*vs6-h@fokhw936@d=n6*6**t
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
 
 
 # Application definition
@@ -122,7 +123,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
@@ -221,7 +223,7 @@ LOGGING = {
     },
     "loggers": {
         "django": {
-            "handlers": ["console", "info_file"],
+            "handlers": ["info_file"],
             "level": "INFO",
             "propagate": True,
         },

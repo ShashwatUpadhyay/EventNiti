@@ -7,6 +7,27 @@ from django.contrib.auth.models import User
 from events.models import Event
 from memories.models import Memories
 
+# Create your views here.
+
+def is_member(user):
+    return user.groups.filter(name='MEMBER').exists()
+
+def is_teacher(user):
+    return user.groups.filter(name='TEACHER').exists()
+
+
+def is_student(user):
+    return user.groups.filter(name='STUDENT').exists()
+
+
+def is_head(user):
+    return user.groups.filter(name='HEAD').exists()
+
+User.add_to_class('is_member', property(is_member))
+User.add_to_class('is_teacher', property(is_teacher))
+User.add_to_class('is_student', property(is_student))
+User.add_to_class('is_head', property(is_head))
+
 
 # Create your views here.
 def home(request):

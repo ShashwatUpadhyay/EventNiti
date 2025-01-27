@@ -1,0 +1,128 @@
+{% extends "index.html" %}
+
+
+{% block content %}
+
+<div class="bg-gray-100">
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="bg-blue-600 text-white py-4">
+            <div class="container mx-auto px-4">
+                <h1 class="text-2xl font-bold">Registered Students</h1>
+                <p class="mt-1">Event: <span class="font-semibold text-green-500">{{event.title}} | {{ event.start_date }}</span></p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-grow">
+            <div class="container mx-auto px-4 py-8">
+                {% if students %}
+                <div class="overflow-x-auto bg-white rounded-lg shadow">
+                    <table id='table' class="min-w-full table-auto border-collapse border border-gray-200">
+                        <thead class="bg-blue-600 text-white">
+                            <tr>
+                                <th class="px-4 py-2 text-left">UUID</th>
+                                <th class="px-4 py-2 text-left">Full Name</th>
+                                <th class="px-4 py-2 text-left">Email</th>
+                                <th class="px-4 py-2 text-left">Course</th>
+                                <th class="px-4 py-2 text-left">Section</th>
+                                <th class="px-4 py-2 text-left">Year</th>
+                                <th class="px-4 py-2 text-left">Attendance</th>
+                                <th class="px-4 py-2 text-left">Attendance Taken By</th>
+                                <th class="px-4 py-2 text-left">Allowed</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for student in students %}
+                            <!-- Example row -->
+                            <tr class="bg-gray-50">
+
+                                <td class="border px-4 py-2">{{ student.uu_id }}</td>
+                                <td class="border px-4 py-2">{{ student.full_name }}</td>
+                                <td class="border px-4 py-2">{{ student.email }}</td>
+                                <td class="border px-4 py-2">{{ student.course }}</td>
+                                <td class="border px-4 py-2">{{ student.section }}</td>
+                                <td class="border px-4 py-2">{{ student.year }}</td>
+                                {% if student.attendence == 'Present' %}
+                                <td class="border px-4 py-2">
+                                    <span class="px-2 py-1 rounded bg-green-100 text-green-600">Present</span>
+                                </td>
+                                {% else %}
+                                <td class="border px-4 py-2">
+                                    <span class="px-2 py-1 rounded bg-red-100 text-red-600">Absent</span>
+                                </td>
+                                {% endif %}
+                                <td class="border px-4 py-2">{{ student.attendence_taken_by|default:"-" }}</td>
+                                {% if student.allowed %}
+                                <td class="border px-4 py-2">
+                                    <span class="px-2 py-1 rounded bg-green-100 text-green-600">Yes</span>
+                                </td>
+                                {% else %}
+                                <td class="border px-4 py-2">
+                                    <span class="px-2 py-1 rounded bg-red-100 text-red-600">No</span>
+                                </td>   
+                                {% endif %}
+                            </tr>
+                                {% endfor %}
+                                <!-- Repeat rows dynamically -->
+                            </tbody>
+                        </table>
+                        {% else %}
+                        
+
+                        <div class="col-span-full">
+                            <div class="flex flex-col items-center justify-center bg-yellow-100 border border-yellow-300 text-yellow-700 font-semibold rounded-lg py-6 px-8 mt-6">
+                                <p>No Registrations</p>
+                            </div>
+                        </div>
+
+                    </div>
+                    {% endif %}
+            </div>
+            <!-- Download Button -->
+    <button id="download-btn" class="ml-4 mt-8 bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        Download Current Status
+    </button>
+        </main>
+    </div>
+</div>
+<script>
+    const formatter = new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Kolkata",
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
+    });
+      
+    const indiaTime = formatter.format(new Date());
+
+    document.getElementById("download-btn").addEventListener("click", () => {
+        const element = document.getElementById("table");
+        const opt = {
+            margin: [0.5, 0.5, 0.5, 0.5], // Adjust margins
+            filename: `{{ event.title }}_${indiaTime}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { 
+                scale: 3, // Increase scale for better resolution
+                useCORS: true // Ensures cross-origin images are rendered properly
+            },
+            jsPDF: { 
+                unit: 'in', 
+                format: 'a4', // A4 format ensures better width handling
+                orientation: 'landscape' // Adjust orientation
+            }
+        };
+
+        // Add temporary styles to ensure proper width
+        element.style.width = "100%";
+        element.style.maxWidth = "100%";
+
+        // Generate PDF
+        html2pdf().set(opt).from(element).save();
+    });
+</script>
+{% endblock content %}

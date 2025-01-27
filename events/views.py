@@ -3,7 +3,8 @@ from . import models
 from django.contrib import messages
 from django.contrib.auth.models import User
 from account.models import UserExtra
-from certificate.views import generate_qr_code_base64, is_head, is_member, is_student, is_teacher
+from base.views import is_head, is_member, is_student, is_teacher
+from certificate.views import generate_qr_code_base64
 from django.contrib.auth.decorators import login_required
 from ppuu import settings
 import datetime
@@ -13,7 +14,7 @@ india_timezone = pytz.timezone('Asia/Kolkata')
 
 # Create your views here.
 def events(request):
-    event = models.Event.objects.filter(event_open=True)
+    event = models.Event.objects.filter(event_open=True).order_by('start_date')
     return render(request, 'events.html',{'event':event})
 
 @login_required(login_url='login')
@@ -38,6 +39,9 @@ def eventregister(request, slug):
         print(e)
     try:
         event = models.Event.objects.get(slug= slug)
+        if  event.event_over:
+            messages.error(request, "Event is Over!")
+            return redirect('event',slug =slug)
         if not event.registration_open:
             messages.error(request, "Registration is Closed!")
             return redirect('event', slug =slug)
@@ -110,3 +114,37 @@ def takeSudentAttendence(request, submissionid):
 }'
         submission.save()
     return render(request, 'eventattendence.html', {'submission': True, 'msg': 'Attendence sucessfully Marked!! '})
+
+
+@login_required(login_url='login')
+def teacherEventList(request):
+    if not is_teacher(request.user):
+        messages.error(request,"Access Denied!")
+        return redirect('home')
+    
+    event = models.Event.objects.all().order_by('start_date')
+    return render(request, 'eventsteacher.html',{'event':event})
+
+
+@login_required(login_url='login')
+def teacherEvent(request, slug):
+    if not is_teacher(request.user):
+        messages.error(request,"Access Denied!")
+        return redirect('home')
+    
+    event = models.Event.objects.get(slug=slug)
+    return render(request, 'vieweventteacher.html',{'event':event})
+
+@login_required(login_url='login')
+def registeredStudentList(request, slug):
+    if not is_teacher(request.user):
+        messages.error(request,"Access Denied!")
+        return redirect('home')
+    
+    students = models.EventSubmission.objects.filter(event__slug=slug).order_by('full_name')
+    try:
+        event = models.Event.objects.get(slug=slug)
+    except:
+        return redirect('teacherEventList')
+    
+    return render(request , 'registeredstudent.html', {'students':students, 'event' : event}) 
