@@ -65,3 +65,17 @@ def event_announcement(emails, instance):
     )
     email.attach_alternative(html_content, "text/html")
     email.send()
+    
+    
+def change_password_email(email, token):
+    send_mail(
+        'Reset Password',
+        'Reset Password',
+        settings.EMAIL_HOST_USER,
+        [email],
+        fail_silently=False,
+        html_message=f"""<p>
+            <h1>Click the button below to reset your password 👇!</h1>
+            <button><a href='{settings.DOMAIN_NAME}user/changepassword/{token}/'>OPEN</a></button>
+        </p>"""
+    )

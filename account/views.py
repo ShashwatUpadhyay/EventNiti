@@ -5,11 +5,12 @@ from . import models
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
-from ppuu.mail_sender import verifyUser
+from ppuu.mail_sender import verifyUser, change_password_email
 from django.core.cache import cache
 import logging
 import datetime
 import pytz
+import secrets
 
 time_zone = pytz.timezone("Asia/Kolkata")
 current_time = datetime.datetime.now(time_zone)
@@ -100,7 +101,7 @@ def registrationpage(request):
         user_obj.save()
         group = Group.objects.get(name='STUDENT')
         group.user_set.add(user_obj)
-        models.UserExtra.objects.create(user = user_obj, uu_id = uuid, course = course, section = section,year=year)
+        models.UserExtra.objects.create(user = user_obj, uu_id = uuid, course = course, section = section,year=year,forget_password_token = secrets.token_hex(20),forget_password_token_time = current_time)
         messages.success(request, 'Your Account has been Created!')
         return redirect('register')
         
@@ -127,3 +128,42 @@ def accountVerify(request, uid):
 def logoutpage(request):
     logout(request)
     return redirect('login')
+        
+        
+def forgot_password(request):
+    if request.method == "POST":
+        email = request.POST.get('email')
+        if not User.objects.filter(email = email).exists():
+            messages.error(request, 'Email Not Found!')
+            return redirect('forgot_password')
+        user = User.objects.get(email = email)
+        user_obj = models.UserExtra.objects.get(user = user)
+        
+        change_password_email(user.email,user_obj.forget_password_token)
+        messages.success(request, 'Password Reset Link has been sent to the registered email!..')
+        return redirect('forgot_password')
+    return render(request, 'forgotpassword.html')  
+       
+        
+def change_password(request,uid):
+    user_obj = None
+    try:
+        user_obj = models.UserExtra.objects.get(forget_password_token = uid)
+    except:
+        return render(request,'invaliduser.html')
+    
+    if request.method == "POST":
+        password = request.POST.get('password')
+        re_password = request.POST.get('re-password')
+        if password != re_password:
+            messages.error(request, "Passwords doesn't not match")
+            return redirect('change_password', uid = uid)
+        user = user_obj.user
+        user.set_password(password)
+        user.save()
+        user_obj.forget_password_token = secrets.token_hex(20)
+        user_obj.forget_password_token_time = current_time
+        user_obj.save()
+        messages.success(request, 'Password Changed Successfully!')
+        return redirect('login')
+    return render(request, 'changepassword.html')  

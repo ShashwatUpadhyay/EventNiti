@@ -10,18 +10,20 @@ from ppuu.mail_sender import event_anouncement,event_announcement
 # Create your models here.
 class Event(models.Model):
     title = models.CharField(max_length=200)
-    slug = models.CharField(max_length=300, null=True, blank=True, verbose_name="Slug(leave it blank)")
+    slug = models.CharField(max_length=300, null=True, blank=True, help_text=("Slug(leave it blank)"))
+    poster = models.ImageField(upload_to='event_poster/', null=True, blank=True)
     description = models. TextField()
     organized_by = models.ForeignKey(User, on_delete=models.CASCADE)
     location = models.CharField(max_length=100, null=True, blank=True)
-    limit = models.IntegerField(null=True, blank=True)
+    limit = models.IntegerField(null=True, blank=True, help_text=('Limit (leave it blank if no registration limit)'))
     count = models.IntegerField(default=0)
     upload_time = models.DateTimeField(auto_now_add=True)
     start_date = models.DateField(null=True, blank=True)
     event_open = models.BooleanField(default=True)
     registration_open = models.BooleanField(default=True)
-    notify = models.BooleanField(default=True, verbose_name="Notify all users through email (at time of creation)")
-    event_over = models.BooleanField(default=False, verbose_name='Event Over?') 
+    notify = models.BooleanField(default=True, help_text=("Notify all users through email (at the time of creation)"))
+    event_over = models.BooleanField(default=False, help_text=('Mark it True if the Event is Over')) 
+    text_status = models.CharField(max_length=100, null=True, blank=True, help_text=('let he backend handle it'))
     
     def __str__(self):
         return str(self.title)
@@ -29,6 +31,12 @@ class Event(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
+        if self.registration_open == False:
+            if not self.text_status:
+                self.text_status = 'Registration Closed'
+        if self.registration_open == True:
+            if not self.text_status:
+                self.text_status = 'Registration Open'
         super(Event, self).save(*args, **kwargs)
     
     class Meta:
@@ -93,7 +101,12 @@ def generate_ticket(sender, instance, created,**kwargs):
         
 @receiver(post_save,sender = Event)
 def new_event_anouncement(sender, instance, created,**kwargs):
-    if created:
+    if instance.event_open:
         if instance.notify:
             emails = User.objects.values_list("email", flat=True)
             event_announcement(emails,instance)
+    # if created:
+    #     if instance.event_open and instance.notify:
+    #         emails = User.objects.values_list("email", flat=True)
+    #         event_announcement(emails,instance)
+            

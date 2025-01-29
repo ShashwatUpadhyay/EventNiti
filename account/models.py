@@ -12,6 +12,8 @@ class UserExtra(models.Model):
     roll_number = models.CharField(max_length=20, null=True, blank=True)
     year = models.CharField(max_length=5)
     is_verified = models.BooleanField(default=False)
+    forget_password_token = models.CharField(max_length=100, null=True, blank=True)
+    forget_password_token_time = models.DateTimeField(null=True, blank=True)
     
     @property
     def full_name(self):

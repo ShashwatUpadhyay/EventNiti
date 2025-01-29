@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_ckeditor_5',
+    "channels",
     'base',
     'account',
     'certificate',
@@ -48,6 +50,7 @@ INSTALLED_APPS = [
     'memories',
     'blog',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -77,9 +80,14 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'ppuu.wsgi.application'
+ASGI_APPLICATION = 'ppuu.asgi.application'
+# WSGI_APPLICATION = 'ppuu.wsgi.application'
 
-
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",  # For development (use Redis in production)
+    },
+}
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
