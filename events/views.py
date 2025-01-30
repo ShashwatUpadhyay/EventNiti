@@ -7,7 +7,6 @@ from base.views import is_head, is_member, is_student, is_teacher
 from certificate.views import generate_qr_code_base64
 from django.contrib.auth.decorators import login_required
 from ppuu import settings
-from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from django.http import JsonResponse
 import datetime

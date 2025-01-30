@@ -10,6 +10,4 @@ urlpatterns = [
     path('register/<slug>/', views.eventregister, name = 'eventregister'),
     path('ticket/<uid>', views.eventTicket, name='eventTicket'),
     path('attendence/<submissionid>/', views.takeSudentAttendence, name = 'takeSudentAttendence'),
-    
-    # for teahcer view
 ]
