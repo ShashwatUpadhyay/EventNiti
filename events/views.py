@@ -144,7 +144,7 @@ def takeSudentAttendence(request, submissionid):
 
 @login_required(login_url='login')
 def teacherEventList(request):
-    if not is_teacher(request.user):
+    if is_student(request.user):
         messages.error(request,"Access Denied!")
         return redirect('home')
     
@@ -154,7 +154,7 @@ def teacherEventList(request):
 
 @login_required(login_url='login')
 def teacherEvent(request, slug):
-    if not is_teacher(request.user):
+    if is_student(request.user):
         messages.error(request,"Access Denied!")
         return redirect('home')
     
@@ -163,7 +163,7 @@ def teacherEvent(request, slug):
 
 @login_required(login_url='login')
 def registeredStudentList(request, slug):
-    if not is_teacher(request.user):
+    if is_student(request.user):
         messages.error(request,"Access Denied!")
         return redirect('home')
     
