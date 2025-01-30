@@ -6,8 +6,9 @@ urlpatterns = [
     path('auth-view/', views.teacherEventList, name = 'teacherEventList'),
     path('auth-view/<slug>/', views.teacherEvent, name = 'teacherEvent'),
     path('auth-view/<slug>/registrations/', views.registeredStudentList, name = 'registeredStudentList'),
+    path('auth-view/<slug>/registration/', views.registeredStudentListAjax, name = 'registeredStudentListAjax'),
     path('<slug>/', views.event, name = 'event'),
     path('register/<slug>/', views.eventregister, name = 'eventregister'),
-    path('ticket/<uid>', views.eventTicket, name='eventTicket'),
+    path('ticket/<uid>/', views.eventTicket, name='eventTicket'),
     path('attendence/<submissionid>/', views.takeSudentAttendence, name = 'takeSudentAttendence'),
 ]

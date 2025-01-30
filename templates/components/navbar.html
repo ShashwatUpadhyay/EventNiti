@@ -1,80 +1,96 @@
-
-    <nav class="bg-blue-600 text-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <!-- Logo -->
-                <div class="flex items-center">
-                    <a href="{% url "home" %}" class="text-2xl font-bold tracking-wide">Prerogative Pointers</a>
-                </div>
-
-                <!-- Menu for larger screens -->
-                <div class="hidden md:flex space-x-8 items-center">
-                    <a href="{% url "home" %}" class="hover:text-blue-300">Home</a>
-                    <a href="{% url "memories" %}" class="hover:text-blue-300">Memories</a>
-                    {% if not  user.is_student  %}
-                        <a href="{% url "teacherEventList" %}" class="hover:text-blue-300">Events</a>
-                    {% else %}
-                    <a href="{% url "events" %}" class="hover:text-blue-300">Events</a>
-
-                    {% endif %}
-                    <a href="{% url "blogs" %}" class="hover:text-blue-300">Blogs</a>
-                    <a href="{% url "contact" %}" class="hover:text-blue-300">Contact</a>
-                    {% if not request.user.is_authenticated %}
-                    <a href="{% url "login" %}" class="hover:text-blue-300">Login</a>
-                    <a href="{% url "register" %}" class="hover:text-blue-300">Register</a>
-                    {% else %}
-                        {% if user.is_student %}
-                        <a href="{% url "certificates" %}" class="hover:text-blue-300">Certificates</a>
-                        <a href="{% url "myticket" %}" class="hover:text-blue-300">Ticket</a>
-                        {% endif %}
-                    <a href="{% url "logout" %}" class="text-red-400">Logout</a>
-                    {% endif %}
-
-                    {% comment %} <a href="{% url "logout" %}" class="hover:text-red-300">Logout</a> {% endcomment %}
-                </div>
-
-                <!-- Mobile menu button -->
-                <div class="flex items-center md:hidden">
-                    <button id="menu-btn" class="focus:outline-none">
-                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                        </svg>
-                    </button>
-                </div>
+{% load static %}
+<nav class="bg-gradient-to-r from-blue-600 to-purple-500 text-white shadow-lg backdrop-blur-lg fixed w-full z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+            <!-- Logo -->
+            <div class="flex items-center space-x-3">
+                <img src="{% static 'images/logo.png' %}" alt="Prerogative Pointers" class="w-10 h-10">
+                {% comment %} <img src="{% static 'images/1712909764811.jpeg' %}" alt="Prerogative Pointers" class="w-10 h-10"> {% endcomment %}
+                <a href="{% url 'home' %}" class="text-2xl font-bold tracking-wide flex items-center space-x-2">
+                    <span>Prerogative Pointers</span>
+                </a>
             </div>
-        </div>
 
-        <!-- Mobile menu -->
-        <div id="mobile-menu" class="hidden md:hidden">
-            <a href="{% url "home" %}" class="block px-4 py-2 text-sm hover:bg-blue-700">Home</a>
-            <a href="{% url "memories" %}" class="block px-4 py-2 text-sm hover:bg-blue-700">Memories</a>
-            {% if not user.is_student %}
-            <a href="{% url "teacherEventList" %}" class="block px-4 py-2 text-sm hover:bg-blue-700">Events</a>
-            {% else %}
-            <a href="{% url "events" %}" class="block px-4 py-2 text-sm hover:bg-blue-700">Events</a>
-
-            {% endif %}
-            <a href="{% url "blogs" %}" class="block px-4 py-2 text-sm hover:bg-blue-700">Blogs</a>
-            <a href="{% url "contact" %}" class="block px-4 py-2 text-sm hover:bg-blsue-700">Contact</a>
-            {% if not  request.user.is_authenticated %}
-            <a href="{% url "login" %}" class="block px-4 py-2 text-sm hover:bg-blue-700">Login</a>
-            <a href="{% url "register" %}" class="block px-4 py-2 text-sm hover:bg-blue-700">Register</a>
-            {% else  %}
-                {% if user.is_student %}
-                <a href="{% url "certificates" %}" class="block px-4 py-2 text-sm hover:bg-blue-700">Certificates</a>
-                <a href="{% url "myticket" %}" class="block px-4 py-2 text-sm hover:bg-blue-700">Ticket</a>
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex space-x-8 items-center text-lg">
+                <a href="{% url 'home' %}" class="hover:text-blue-300 transition duration-300">🏠 Home</a>
+                <a href="{% url 'memories' %}" class="hover:text-blue-300 transition duration-300">📷 Memories</a>
+                {% if not user.is_student %}
+                    <a href="{% url 'teacherEventList' %}" class="hover:text-blue-300 transition duration-300">📅 Events</a>
+                {% else %}
+                    <a href="{% url 'events' %}" class="hover:text-blue-300 transition duration-300">📅 Events</a>
                 {% endif %}
-                <a href="{% url "logout" %}" class="block px-4 py-2 text-sm text-red-400">Logout</a>
-            {% endif %}
+                <a href="{% url 'blogs' %}" class="hover:text-blue-300 transition duration-300">📝 Blogs</a>
+                <a href="{% url 'contact' %}" class="hover:text-blue-300 transition duration-300">📞 Contact</a>
+
+                {% if not request.user.is_authenticated %}
+                    <a href="{% url 'login' %}" class="hover:text-blue-300 transition duration-300">🔑 Login</a>
+                    <a href="{% url 'register' %}" class="hover:text-blue-300 transition duration-300">🆕 Register</a>
+                {% else %}
+                    <div class="relative">
+                        <button id="user-menu-btn" class="flex items-center space-x-2 hover:text-blue-300 transition duration-300">
+                            <span>👤 {{ user.username }}</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <!-- Dropdown Menu -->
+                        <div id="user-dropdown" class="absolute right-0 mt-2 w-40 bg-white text-black rounded-lg shadow-lg hidden">
+                            {% if user.is_student %}
+                                <a href="{% url 'certificates' %}" class="block px-4 py-2 hover:bg-gray-200">📜 Certificates</a>
+                                <a href="{% url 'myticket' %}" class="block px-4 py-2 hover:bg-gray-200">🎟️ My Tickets</a>
+                            {% endif %}
+                            <a href="{% url 'logout' %}" class="block px-4 py-2 text-red-500 hover:bg-gray-200">🚪 Logout</a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="menu-btn" class="md:hidden focus:outline-none">
+                <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
         </div>
-    </nav>
+    </div>
 
-    <script>
-        // Toggle mobile menu visibility
-        const menuBtn = document.getElementById('menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-blue-700 text-white text-center bg-gradient-to-r from-blue-600 to-purple-500">
+        <a href="{% url 'home' %}" class="block py-2 hover:bg-blue-800">🏠 Home</a>
+        <a href="{% url 'memories' %}" class="block py-2 hover:bg-blue-800">📷 Memories</a>
+        {% if not user.is_student %}
+            <a href="{% url 'teacherEventList' %}" class="block py-2 hover:bg-blue-800">📅 Events</a>
+        {% else %}
+            <a href="{% url 'events' %}" class="block py-2 hover:bg-blue-800">📅 Events</a>
+        {% endif %}
+        <a href="{% url 'blogs' %}" class="block py-2 hover:bg-blue-800">📝 Blogs</a>
+        <a href="{% url 'contact' %}" class="block py-2 hover:bg-blue-800">📞 Contact</a>
 
-        menuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-    </script>
+        {% if not request.user.is_authenticated %}
+            <a href="{% url 'login' %}" class="block py-2 hover:bg-blue-800">🔑 Login</a>
+            <a href="{% url 'register' %}" class="block py-2 hover:bg-blue-800">🆕 Register</a>
+        {% else %}
+            {% if user.is_student %}
+                <a href="{% url 'certificates' %}" class="block py-2 hover:bg-blue-800">📜 Certificates</a>
+                <a href="{% url 'myticket' %}" class="block py-2 hover:bg-blue-800">🎟️ My Tickets</a>
+            {% endif %}
+            <a href="{% url 'logout' %}" class="block py-2 text-red-400 hover:bg-blue-800">🚪 Logout</a>
+        {% endif %}
+    </div>
+</nav>
+
+<script>
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const userMenuBtn = document.getElementById('user-menu-btn');
+    const userDropdown = document.getElementById('user-dropdown');
+
+    menuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    userMenuBtn.addEventListener('click', () => {
+        userDropdown.classList.toggle('hidden');
+    });
+</script>

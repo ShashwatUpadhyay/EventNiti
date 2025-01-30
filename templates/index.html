@@ -13,6 +13,16 @@
         <style src="{% static 'css/styles.css' %}"></style>
         <link rel="shortcut icon" href="{% static 'images/pplogo.png' %}">
         <style>
+            body, html {
+                margin: 0;
+                padding: 0;
+              }
+              
+              /* Ensure navbar and body start at the top */
+              .navbar {
+                margin-top: 0 !important;
+              }
+              
             html {
                 scroll-behavior: smooth;
             }

@@ -5,35 +5,35 @@ Event Registration | Prerogatory Pointers United University
 {% endblock title %}
 
 {% block content %}
-
-<div class="bg-gray-100">
+<div class="bg-gradient-to-r from-blue-100 to-indigo-200 min-h-screen py-12">
 
     <!-- Page Header -->
-    <header class="bg-blue-600 py-6 shadow-md">
+    <header class="bg-blue-600 py-12 shadow-xl">
         <div class="container mx-auto px-6 text-center">
-            <h1 class="text-3xl md:text-4xl font-bold text-white">Event Registration</h1>
-            <p class="text-blue-200 text-sm md:text-base mt-2">Register for an exciting event</p>
+            <h1 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight">Event Registration</h1>
+            <p class="text-blue-200 text-lg md:text-xl mt-2">Register for an exciting event at Prerogatory Pointers United University</p>
         </div>
     </header>
 
     <!-- Registration Form Section -->
     <main class="container mx-auto px-6 py-10">
-        <div class="bg-white shadow-lg rounded-lg p-8 max-w-3xl mx-auto">
-            <h2 class="text-2xl md:text-3xl font-bold text-gray-800 text-center">Register for the Event</h2>
-            <p class="text-gray-600 text-center mt-2 mb-8">Fill out the form below to register for the event</p>
+        <div class="bg-white shadow-lg rounded-lg p-8 max-w-3xl mx-auto border-t-8 border-blue-500">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-6">Register for the Event</h2>
+            <p class="text-gray-600 text-center mt-2 mb-8">Please fill out the form below to secure your spot for the event</p>
 
             <form action="#" method="POST" class="space-y-6">
                 {% csrf_token %}
+                
                 <!-- UUID Input -->
                 <div>
-                    <label for="uuid"  class="block text-sm font-medium text-gray-700">UUID</label>
+                    <label for="uuid" class="block text-sm font-medium text-gray-700">UUID</label>
                     <input 
                         type="text" 
                         id="uuid" 
                         name="uuid" 
-                        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        class="w-full mt-1 px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 ease-in-out transform hover:scale-105"
                         placeholder="Enter your UUID" 
-                        {% if  user_obj.uu_id %} value='{{ user_obj.uu_id }}' {% endif %}
+                        {% if user_obj.uu_id %} value='{{ user_obj.uu_id }}' {% endif %}
                         required
                     >
                 </div>
@@ -45,7 +45,7 @@ Event Registration | Prerogatory Pointers United University
                         type="text" 
                         id="full_name" 
                         name="full_name" 
-                        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        class="w-full mt-1 px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 ease-in-out transform hover:scale-105"
                         placeholder="Enter your full name"
                         {% if user_obj.full_name %} value='{{ user_obj.full_name }}' {% endif %} 
                         required
@@ -59,7 +59,7 @@ Event Registration | Prerogatory Pointers United University
                         type="email" 
                         id="email" 
                         name="email" 
-                        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        class="w-full mt-1 px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 ease-in-out transform hover:scale-105"
                         placeholder="Enter your email" 
                         {% if user_obj.email %} value='{{ user_obj.email }}' {% endif %}
                         required
@@ -70,10 +70,9 @@ Event Registration | Prerogatory Pointers United University
                 <div>
                     <label for="course" class="block text-sm font-medium text-gray-700">Course</label>
                     <select 
-                    name = "course" 
-                        id="course" 
                         name="course" 
-                        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        id="course" 
+                        class="w-full mt-1 px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 ease-in-out transform hover:scale-105"
                         required
                     >
                         <option value="" disabled {% if not user_obj.course %}selected{% endif %}>Select your course</option>
@@ -93,28 +92,28 @@ Event Registration | Prerogatory Pointers United University
                     <select 
                         id="section" 
                         name="section" 
-                        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        class="w-full mt-1 px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 ease-in-out transform hover:scale-105"
                         required
                     >
-                        <option value="" disabled {% if user_obj %}selected{% endif %}selected>Select your section</option>
+                        <option value="" disabled {% if user_obj %}selected{% endif %} selected>Select your section</option>
                         <option {% if user_obj.section == 'A' %}selected{% endif %} value="A">A</option>
-                        <option {% if user_obj.section == 'B' %}selected{% endif %}value="B">B</option>
+                        <option {% if user_obj.section == 'B' %}selected{% endif %} value="B">B</option>
                         <option {% if user_obj.section == 'C' %}selected{% endif %} value="C">C</option>
                         <option {% if user_obj.section == 'D' %}selected{% endif %} value="D">D</option>
                         <option {% if user_obj.section == 'E' %}selected{% endif %} value="E">E</option>
                     </select>
                 </div>
 
-                 <!-- Year -->
-                 <div>
-                    <label for="section" class="block text-sm font-medium text-gray-700">Year</label>
+                <!-- Year Dropdown -->
+                <div>
+                    <label for="year" class="block text-sm font-medium text-gray-700">Year</label>
                     <select 
-                        id="section" 
+                        id="year" 
                         name="year" 
-                        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        class="w-full mt-1 px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 ease-in-out transform hover:scale-105"
                         required
                     >
-                        <option value="" disabled {% if user_obj %}selected{% endif %}selected>Select your Year</option>
+                        <option value="" disabled {% if user_obj %}selected{% endif %} selected>Select your Year</option>
                         <option {% if user_obj.year == 'I' %}selected{% endif %} value="I">I</option>
                         <option {% if user_obj.year == 'II' %}selected{% endif %} value="II">II</option>
                         <option {% if user_obj.year == 'III' %}selected{% endif %} value="III">III</option>
@@ -126,9 +125,9 @@ Event Registration | Prerogatory Pointers United University
                 <div class="text-center">
                     <button 
                         type="submit" 
-                        class="bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        class="bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transform transition duration-300"
                     >
-                        Register
+                        Register Now
                     </button>
                 </div>
             </form>

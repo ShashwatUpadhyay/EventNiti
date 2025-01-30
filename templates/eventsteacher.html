@@ -1,102 +1,110 @@
 {% extends "index.html" %}
 
 {% block title %}
-
 All Events | Prerogatory Pointers United University
-
 {% endblock title %}
 
 {% block content %}
 
-<div class="bg-gray-100">
-    <div class="bg-blue-600 py-6 shadow-md">
+<div class="bg-gray-50 py-12">
+    <!-- Page Header -->
+    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 py-12 shadow-md">
         <div class="container mx-auto px-6 text-center">
-            <h1 class="text-3xl md:text-4xl font-bold text-white">All Events</h1>
-            <p class="text-blue-200 text-sm md:text-base mt-2">Explore all ongoing and upcoming events</p>
+            <h1 class="text-4xl font-bold text-white">🎉 All Events</h1>
+            <p class="text-blue-200 text-lg mt-2">Explore all ongoing and upcoming events</p>
         </div>
     </div>
+
     <!-- Events Section -->
     <main class="container mx-auto px-6 py-10">
         {% if messages %}
-            <ul class="messages text-green-600 text-lg text-center mb-4">
-                {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-            {% if event %}
-            <!-- Event Card -->
-            {% for events in event %}
-            <div class="bg-white border border-gray-200 shadow-lg rounded-lg p-6 hover:shadow-xl hover:scale-105 transform transition duration-300">
-                <h2 class="text-xl font-bold text-blue-600">{{ events.title }}</h2>
-                <p class="text-gray-700 mt-2">Date: <span class="font-medium text-gray-900">{{ events.start_date }}</span></p>
-                <p class="text-gray-700 mt-1">Location: <span class="font-medium text-gray-900">{{ events.location }}</span></p>
-                
-                <!-- Registration Status Badge -->
-                <div class="mt-4">
-                    {% if events.event_over %}
-                    <span class="inline-block bg-cyan-500 text-white font-semibold py-1 px-3 rounded-full text-sm">
-                        Event Over
-                    </span>
-                    {% else %}
-
-                {% if events.registration_open %}
-                    {% if events.text_status %}
-                    <span class="inline-block bg-green-600 text-white font-semibold py-1 px-3 rounded-full text-sm">
-                        {{events.text_status}}
-                    </span>
-                    {% else %}
-                    <span class="inline-block bg-green-600 text-white font-semibold py-1 px-3 rounded-full text-sm">
-                        Registration Open
-                    </span>
-                    {% endif %}
-                {% else %}
-                        {% if events.text_status %}
-                            <span class="inline-block bg-red-600 text-white font-semibold py-1 px-3 rounded-full text-sm">
-                                {{events.text_status}}
-                            </span>
-                        {% else %}
-                            <span class="inline-block bg-red-600 text-white font-semibold py-1 px-3 rounded-full text-sm">
-                                Registration Closed
-                            </span>
-                        {% endif %}
-                 {% endif %}
-
-                {% endif %}
-                </div>
-                {% if events.limit %}
-                <span class="inline-block bg-yellow-600 mt-2 text-white font-semibold py-1 px-3 rounded-full text-sm">
-                    {{ events.count }} / {{ events.limit }} Registered
-                </span>
-                {% else %}
-                <span class="inline-block bg-yellow-600 mt-2 text-white font-semibold py-1 px-3 rounded-full text-sm">
-                    {{ events.count }} Registered
-                </span>
-                {% endif %}
-                <p class="text-gray-700 mt-4">
-                    {{ events.description }}
-                </p>
-        
-                <div class="text-right mt-4">
-                    <a href="{% url 'teacherEvent' events.slug %}" class="inline-block bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-blue-700">
-                        View Details
-                    </a>
-                </div>
-            </div>
-        {% endfor %}
-        {% else %}
-
-        <div class="col-span-full">
-            <div class="flex flex-col items-center justify-center bg-yellow-100 border border-yellow-300 text-yellow-700 font-semibold rounded-lg py-6 px-8 mt-6">
-                <p>No Ongoing Events</p>
-            </div>
-        </div>
-
+        <ul class="messages text-green-600 text-lg text-center mb-4">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
         {% endif %}
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% if event %}
+            <!-- Event Cards -->
+            {% for events in event %}
+            <div class="bg-white border border-gray-200 shadow-lg rounded-lg overflow-hidden hover:shadow-2xl hover:scale-105 transform transition duration-300">
+                
+                <!-- Event Poster -->
+                <div class="relative">
+                    <img src="{{ events.poster.url }}" alt="Event Poster" class="w-full h-48 object-cover"
+                         onerror="this.onerror=null; this.src='';">
+                    <div class="absolute top-2 left-2 bg-black bg-opacity-50 text-white py-1 px-3 text-sm rounded-full">
+                        {{ events.start_date }}
+                    </div>
+                </div>
+
+                <!-- Event Details -->
+                <div class="p-6">
+                    <h2 class="text-xl font-bold text-blue-600">{{ events.title }}</h2>
+                    <p class="text-gray-700 mt-2"><strong>📍 Location:</strong> {{ events.location }}</p>
+
+                    <!-- Registration Status Badge -->
+                    <div class="mt-4">
+                        {% if events.event_over %}
+                        <span class="inline-block bg-gray-500 text-white font-semibold py-1 px-3 rounded-full text-sm">
+                            Event Over
+                        </span>
+                        {% else %}
+                            {% if events.registration_open %}
+                                <span class="inline-block bg-green-600 text-white font-semibold py-1 px-3 rounded-full text-sm">
+                                    {{ events.text_status|default:"Registration Open" }}
+                                </span>
+                            {% else %}
+                                <span class="inline-block bg-red-600 text-white font-semibold py-1 px-3 rounded-full text-sm">
+                                    {{ events.text_status|default:"Registration Closed" }}
+                                </span>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+
+                    <!-- Registration Count -->
+                    <div class="mt-2">
+                        <span class="inline-block bg-yellow-600 text-white font-semibold py-1 px-3 rounded-full text-sm">
+                            {{ events.count }}{% if events.limit %} / {{ events.limit }}{% endif %} Registered
+                        </span>
+                    </div>
+
+                    <p class="text-gray-700 mt-4 truncate">
+                       
+                        {{ events.description }}
+                    </p>
+
+                    <!-- View Details Button -->
+                    <div class="text-right mt-4">
+                        <a href="{% url 'teacherEvent' events.slug %}" class="inline-block bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-blue-700 transition">
+                            View Details →
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            {% else %}
+            <!-- No Events Message -->
+            <div class="col-span-full flex flex-col items-center justify-center bg-yellow-100 border border-yellow-300 text-yellow-700 font-semibold rounded-lg py-6 px-8 mt-6">
+                <p>🚀 No Ongoing Events</p>
+            </div>
+            {% endif %}
         </div>
     </main>
 </div>
+
+<!-- Fade-in Animation -->
+<style>
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+        animation: fadeIn 0.8s ease-out;
+    }
+</style>
 
 {% endblock content %}

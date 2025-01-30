@@ -6,11 +6,17 @@ Prerogative Pointers
 
 {% block content %}
 {% load static %}
-<section id="welcome" class="bg-blue-500 text-white text-center py-16">
-    <h1 class="text-4xl font-bold">Welcome to Prerogative Pointers</h1>
+
+<!-- Hero Section -->
+<section id="welcome" class="bg-gradient-to-r from-blue-600 to-purple-500 text-white text-center py-20">
+    <h1 class="text-5xl font-extrabold animate-fade-in">Welcome to Prerogative Pointers</h1>
     <p class="mt-4 text-lg">Your journey to unforgettable experiences starts here.</p>
-    <button class="mt-6 px-6 py-2 bg-white text-blue-500 rounded-lg font-semibold hover:bg-blue-100">Get Started</button>
+    <button class="mt-6 px-6 py-3 bg-white text-blue-600 rounded-full font-semibold hover:bg-blue-100 transition duration-300">
+        Get Started 🚀
+    </button>
 </section>
+
+<!-- Messages -->
 {% if messages %}
 <ul class="messages text-red-600 text-lg text-center">
     {% for message in messages %}
@@ -18,83 +24,107 @@ Prerogative Pointers
     {% endfor %}
 </ul>
 {% endif %}
+
 <!-- Memories Section -->
-<section id="memories" class="py-16 bg-blue-50">
-   
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-3xl font-bold text-blue-600">Memories</h2>
-        <p class="mt-4 text-gray-600">Relive the moments that matter most to you.</p>
+<section id="memories" class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+        <h2 class="text-4xl font-extrabold text-blue-600">✨ Memories ✨</h2>
+        <p class="mt-2 text-gray-600">Relive the moments that matter most to you.</p>
         <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
             {% for mems in mem %}
-                <a href=" {% url 'event_memories_list' mems.event.slug %} ">
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <img src="{{ mems.memory_img.latest.image.url }}" alt="Memory" class="w-full">
+                <a href=" {% url 'event_memories_list' mems.event.slug %} " class="hover:scale-105 transition duration-300">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl">
+                    <img src="{{ mems.memory_img.latest.image.url }}" alt="Memory" class="w-full h-48 object-cover">
                     <div class="p-4">
-                        <h3 class="font-bold text-lg">{{mems.memory_title}}</h3>
-                        <p class="mt-2 text-gray-600">On {{ mems.event.title }} Event</p>
-                        <p class="mt-2 text-gray-600">{{ mems.event.start_date }}</p>
+                        <h3 class="font-bold text-lg text-gray-800">{{mems.memory_title}}</h3>
+                        <p class="text-gray-500 mt-1">On {{ mems.event.title }} Event</p>
+                        <p class="text-gray-500">{{ mems.event.start_date }}</p>
                     </div>
                 </div>
-            </a>
-                {% endfor %}
-            </div>
-            <span class="float-right"><a href="{% url "memories" %}" class="text-blue-600">more</a></span>
+                </a>
+            {% endfor %}
         </div>
+        <a href="{% url "memories" %}" class="text-blue-600 mt-4 inline-block">See more ➡️</a>
     </div>
 </section>
 
 <!-- Events Section -->
-<main class="container mx-auto px-6 py-10">
-    <h1 class="text-3xl text-center mb-2 md:text-4xl font-bold text-blue-600">Upcomming Events</h1> 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    {% for events in event %}
-            <div class="bg-white border border-gray-200 shadow-lg rounded-lg p-6 hover:shadow-xl hover:scale-105 transform transition duration-300">
-                <h2 class="text-xl font-bold text-blue-600">{{ events.title }}</h2>
-                <p class="text-gray-700 mt-2">Date: <span class="font-medium text-gray-900">{{ events.start_date }}</span></p>
-                <p class="text-gray-700 mt-1">Location: <span class="font-medium text-gray-900">{{ events.location }}</span></p>
-                
-                <!-- Registration Status Badge -->
-                <div class="mt-4">
-                    {% if events.registration_open %}
-                        <span class="inline-block bg-green-600 text-white font-semibold py-1 px-3 rounded-full text-sm">
-                            Registration Open
-                        </span>
-                    {% else %}
-                        <span class="inline-block bg-red-600 text-white font-semibold py-1 px-3 rounded-full text-sm">
-                            Registration Closed
-                        </span>
-                    {% endif %}
+<main class="container mx-auto px-6 py-16">
+    <h2 class="text-4xl text-center font-extrabold text-blue-600">📅 Upcoming Events</h2> 
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+        {% if event %}
+        {% for events in event %}
+            <div class="bg-white border border-gray-200 shadow-lg rounded-lg overflow-hidden hover:shadow-xl hover:scale-105 transform transition duration-300">
+    
+                <!-- Event Poster -->
+                {% if events.poster %}
+                <img src="{{ events.poster.url }}" alt="Event Poster" class="w-full h-48 object-cover">
+                {% else %}
+                <div class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">
+                    No Poster Available
                 </div>
+                {% endif %}
         
-                <p class="text-gray-700 mt-4">
-                    {{ events.description }}
-                </p>
-        
-                <div class="text-right mt-4">
-                    <a href="{% url 'event' events.slug %}" class="inline-block bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-blue-700">
-                        View Details
-                    </a>
+                <!-- Event Details -->
+                <div class="p-6">
+                    <h2 class="text-xl font-bold text-blue-600">{{ events.title }}</h2>
+                    <p class="text-gray-600 mt-2">📅 Date: <span class="font-medium text-gray-900">{{ events.start_date }}</span></p>
+                    <p class="text-gray-600">📍 Location: <span class="font-medium text-gray-900">{{ events.location }}</span></p>
+                    
+                    <!-- Registration Status Badge -->
+                    <div class="mt-4">
+                        {% if events.event_over %}
+                        <span class="inline-block bg-gray-500 text-white font-semibold py-1 px-3 rounded-full text-sm">
+                            Event Over
+                        </span>
+                        {% else %}
+                            {% if events.registration_open %}
+                                <span class="inline-block bg-green-500 text-white font-semibold py-1 px-3 rounded-full text-sm">
+                                    Registration Open ✅
+                                </span>
+                            {% else %}
+                                <span class="inline-block bg-red-500 text-white font-semibold py-1 px-3 rounded-full text-sm">
+                                    Registration Closed ❌
+                                </span>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+
+                    <!-- View Details Button -->
+                    <div class="text-right mt-4">
+                        <a href="{% url 'event' events.slug %}" class="inline-block bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-blue-700">
+                            View Details
+                        </a>
+                    </div>
                 </div>
             </div>
-            
-        {% endfor %}
+        {% endfor %}    
+        {% else %}
+            <div class="col-span-full">
+                <div class="flex flex-col items-center justify-center bg-yellow-100 border border-yellow-300 text-yellow-700 font-semibold rounded-lg py-6 px-8 mt-6">
+                    <p>No Ongoing Events</p>
+                </div>
+            </div>
+        {% endif %} 
     </div>
-   <span class="float-right"><a href="{% url "events" %}" class="text-blue-600">more</a></span>
+    <a href="{% url "events" %}" class="text-blue-600 mt-4 inline-block">See more ➡️</a>
 </main>
 
 <!-- Contact Section -->
-<section id="contact" class="py-16 bg-blue-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-3xl font-bold text-blue-600">Contact Us</h2>
-        <p class="mt-4 text-gray-600">We’d love to hear from you. Get in touch with us!</p>
-        <form class="mt-8 max-w-2xl mx-auto">
+<section id="contact" class="py-16 bg-gradient-to-r from-blue-600 to-purple-500 text-white">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+        <h2 class="text-4xl font-extrabold">📩 Contact Us</h2>
+        <p class="mt-2 text-lg">We’d love to hear from you. Get in touch with us!</p>
+        <form class="mt-8 max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-lg text-gray-800">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <input type="text" placeholder="Your Name" class="p-4 border border-gray-300 rounded-lg">
-                <input type="email" placeholder="Your Email" class="p-4 border border-gray-300 rounded-lg">
+                <input type="text" placeholder="Your Name" class="p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <input type="email" placeholder="Your Email" class="p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
             </div>
-            <textarea placeholder="Your Message" class="mt-4 p-4 w-full border border-gray-300 rounded-lg" rows="5"></textarea>
-            <button type="submit" class="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Send Message</button>
+            <textarea placeholder="Your Message" class="mt-4 p-4 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" rows="5"></textarea>
+            <button type="submit" class="mt-4 px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition duration-300">
+                Send Message ✉️
+            </button>
         </form>
     </div>
 </section>

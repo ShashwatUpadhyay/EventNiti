@@ -1,87 +1,106 @@
 {% extends "index.html" %}
 {% block title %}
-
 {{ event.title }} Event
-
 {% endblock title %}
-{% block content %}
-<div class="bg-gray-100">
 
-    <div class="container mx-auto py-12 px-4">
-        <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-            <div class="bg-blue-600 text-white text-center py-4">
-                <h1 class="text-3xl font-bold">Event: {{ event.title }}</h1>
+{% block content %}
+<div class="bg-gray-50 font-sans py-12">
+    <div class="container mx-auto py-12 px-6">
+        <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden animate-fade-in">
+            
+            <!-- Event Header -->
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-6">
+                <h1 class="text-4xl font-bold">{{ event.title }}</h1>
+                <p class="mt-2 text-blue-200">An exclusive event experience</p>
             </div>
-            <div class="p-6">
+
+            <!-- Event Poster -->
+            <div class="p-6 flex justify-center">
+                <div class="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-300">
+                    <img src="{{ event.poster.url }}" alt="Event Poster" class="w-full max-h-80 object-cover"
+                         onerror="this.onerror=null; this.src='';">
+                </div>
+            </div>
+
+            <!-- Event Details -->
+            <div class="p-6 space-y-6">
                 <div class="mb-6">
-                    <h2 class="text-xl font-semibold text-gray-700">Description</h2>
+                    <h2 class="text-2xl font-semibold text-gray-800">📜 Description</h2>
                     <p class="text-gray-600 mt-2">{{ event.description }}</p>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div class="bg-gray-50 p-4 rounded-lg shadow-md">
-                        <h3 class="font-semibold text-gray-700">Organized By</h3>
+
+                <!-- Event Information Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="bg-gray-100 p-5 rounded-lg shadow-md hover:shadow-lg transition">
+                        <h3 class="font-semibold text-gray-800">🎤 Organized By</h3>
                         <p class="text-gray-600">{{ event.organized_by.username }}</p>
                     </div>
-                    <div class="bg-gray-50 p-4 rounded-lg shadow-md">
-                        <h3 class="font-semibold text-gray-700">Location</h3>
+                    <div class="bg-gray-100 p-5 rounded-lg shadow-md hover:shadow-lg transition">
+                        <h3 class="font-semibold text-gray-800">📍 Location</h3>
                         <p class="text-gray-600">{{ event.location }}</p>
                     </div>
-                    <div class="bg-gray-50 p-4 rounded-lg shadow-md">
-                        <h3 class="font-semibold text-gray-700">Participant Limit</h3>
-                        <p class="text-gray-600"> {{ event.limit|default:"No limit" }}</p>
+                    <div class="bg-gray-100 p-5 rounded-lg shadow-md hover:shadow-lg transition">
+                        <h3 class="font-semibold text-gray-800">👥 Participant Limit</h3>
+                        <p class="text-gray-600">{{ event.limit|default:"No limit" }}</p>
                     </div>
                     <a href="{% url 'registeredStudentList' event.slug %}">
-                    <div class="bg-gray-50 p-4 rounded-lg shadow-md">
-                        <h3 class="font-semibold text-gray-700 hover:text-blue-500">Currently Registered</h3>
-                        <p class="text-gray-600">{{ event.count }}</p>
-                    </div>
+                        <div class="bg-gray-100 p-5 rounded-lg shadow-md hover:shadow-lg hover:bg-blue-50 transition">
+                            <h3 class="font-semibold text-blue-700">📝 Currently Registered</h3>
+                            <p class="text-gray-800 font-bold">{{ event.count }}</p>
+                        </div>
                     </a>
-                    <div class="bg-gray-50 p-4 rounded-lg shadow-md">
-                        <h3 class="font-semibold text-gray-700">Upload Time</h3>
+                    <div class="bg-gray-100 p-5 rounded-lg shadow-md hover:shadow-lg transition">
+                        <h3 class="font-semibold text-gray-800">⏳ Upload Time</h3>
                         <p class="text-gray-600">{{ event.upload_time }}</p>
                     </div>
-                    <div class="bg-gray-50 p-4 rounded-lg shadow-md">
-                        <h3 class="font-semibold text-gray-700">Start Date</h3>
+                    <div class="bg-gray-100 p-5 rounded-lg shadow-md hover:shadow-lg transition">
+                        <h3 class="font-semibold text-gray-800">📆 Start Date</h3>
                         <p class="text-gray-600">{{ event.start_date }}</p>
                     </div>
-                    <div class="bg-gray-50 p-4 rounded-lg shadow-md">
-                        <h3 class="font-semibold text-gray-700">Event Open</h3>
-                        <p class="text-gray-600">
-                            {% if event.event_open %}
-                            <span class="inline-block mt-2 bg-green-600 text-white font-semibold py-1 px-3 rounded-full text-sm">
-                            Yes
-                            </span>
-                            {% else %}
-                            <span class="inline-block mt-2 bg-red-600 text-white font-semibold py-1 px-3 rounded-full text-sm">
-                                No
-                            </span>
-
-                            {% endif %}
-                        </p>
+                    <div class="bg-gray-100 p-5 rounded-lg shadow-md hover:shadow-lg transition">
+                        <h3 class="font-semibold text-gray-800">🚀 Event Open</h3>
+                        {% if event.event_open %}
+                            <span class="mt-2 bg-green-600 text-white font-semibold py-1 px-3 rounded-full text-sm inline-block">Yes</span>
+                        {% else %}
+                            <span class="mt-2 bg-red-600 text-white font-semibold py-1 px-3 rounded-full text-sm inline-block">No</span>
+                        {% endif %}
                     </div>
-                    <div class="bg-gray-50 p-4 rounded-lg shadow-md">
-                        <h3 class="font-semibold text-gray-700">Registration Open</h3>
-                        <p class="text-gray-600">
-                            {% if event.registration_open %}
-                            <span class="inline-block mt-2 bg-green-600 text-white font-semibold py-1 px-3 rounded-full text-sm">
-                            Yes
-                            </span>
-                            {% else %}
-                            <span class="inline-block mt-2 bg-red-600 text-white font-semibold py-1 px-3 rounded-full text-sm">
-                                No
-                            </span>
-
-                            {% endif %}
-                        </p>
+                    <div class="bg-gray-100 p-5 rounded-lg shadow-md hover:shadow-lg transition">
+                        <h3 class="font-semibold text-gray-800">📝 Registration Open</h3>
+                        {% if event.registration_open %}
+                            <span class="mt-2 bg-green-600 text-white font-semibold py-1 px-3 rounded-full text-sm inline-block">Yes</span>
+                        {% else %}
+                            <span class="mt-2 bg-red-600 text-white font-semibold py-1 px-3 rounded-full text-sm inline-block">No</span>
+                        {% endif %}
                     </div>
                 </div>
+
+                <!-- Back Button -->
                 <div class="mt-8 text-center">
-                    <a href="{% url "teacherEventList" %}" class="bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700">Back to Events</a>
+                    <a href="{% url 'teacherEventList' %}" class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition">
+                        🔙 Back to Events
+                    </a>
                 </div>
             </div>
         </div>
     </div>
-    
-    </div>
+</div>
+
+<!-- Animation Styles -->
+<style>
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    .animate-fade-in {
+        animation: fadeIn 0.8s ease-out;
+    }
+</style>
 
 {% endblock content %}

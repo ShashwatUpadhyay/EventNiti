@@ -174,3 +174,30 @@ def registeredStudentList(request, slug):
         return redirect('teacherEventList')
     
     return render(request , 'registeredstudent.html', {'students':students, 'event' : event}) 
+
+@login_required(login_url='login')
+def registeredStudentListAjax(request, slug):
+    if is_student(request.user):
+        messages.error(request, "Access Denied!")
+        return redirect('home')
+    
+    event = models.Event.objects.get(slug=slug)
+    students = models.EventSubmission.objects.filter(event__slug=slug).order_by('full_name')
+    
+    if request.is_ajax():  # Check if it's an AJAX request
+        student_data = []
+        for student in students:
+            student_data.append({
+                "uu_id": student.uu_id,
+                "full_name": student.full_name,
+                "email": student.email,
+                "course": student.course,
+                "section": student.section,
+                "year": student.year,
+                "attendence": student.attendence,
+                "attendence_taken_by": student.attendence_taken_by or "-",
+                "allowed": "Yes" if student.allowed else "No"
+            })
+        return JsonResponse({"students": student_data})
+    
+    return render(request, 'registeredstudent.html', {'students': students, 'event': event})

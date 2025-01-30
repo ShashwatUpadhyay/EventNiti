@@ -31,6 +31,7 @@ def loginpage(request):
         if not User.objects.filter(username = username).exists():
             messages.success(request, "Username Doesn't exists!")
             return redirect('login')
+        
         user = User.objects.get(username = username)
         user_obj = models.UserExtra.objects.get(user = user)
         

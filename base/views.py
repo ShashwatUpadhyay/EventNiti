@@ -37,3 +37,7 @@ def home(request):
 
 def contact(request):
     return render(request, 'contact.html')
+
+
+def socials(request):
+    return render(request, 'links.html')

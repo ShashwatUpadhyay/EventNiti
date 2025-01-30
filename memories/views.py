@@ -40,3 +40,4 @@ def UploadMemories(request, event_slug):
             messages.error(request, "Please provide an image and title.")
     return render(request, 'uploadeventmemory.html')
 
+

@@ -7,11 +7,11 @@ Registered Students
 {% endblock title %}
 
 {% block content %}
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <div class="bg-gray-100">
-    <div class="min-h-screen flex flex-col">
+    <div class="min-h-screen flex flex-col pt-12">
         <!-- Header -->
-        <header class="bg-blue-600 text-white py-4">
+        <header class="bg-blue-600 text-white py-12">
             <div class="container mx-auto px-4">
                 <h1 class="text-2xl font-bold">Registered Students</h1>
                 <p class="mt-1">Event: <span class="font-semibold text-green-500">{{event.title}} | {{ event.start_date }}</span></p>
@@ -159,5 +159,50 @@ Registered Students
         // Generate PDF
         html2pdf().set(opt).from(element).save();
     });
+
+    const eventSlug = "{{ event.slug }}";
+
+    // Function to fetch the latest student data using AJAX
+    function fetchStudents() {
+        $.ajax({
+            url: "{% url 'registeredStudentListAjax' event.slug %}",
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                updateStudentTable(data.students);
+            },
+            error: function() {
+                console.log("Failed to fetch data");
+            }
+        });
+    }
+
+    // Function to update the student table with the latest data
+    function updateStudentTable(students) {
+        let tableBody = document.querySelector("#table tbody");
+        tableBody.innerHTML = "";  // Clear existing rows
+        
+        students.forEach(student => {
+            tableBody.innerHTML += `
+                <tr class="bg-gray-50">
+                    <td class="border px-4 py-2">${student.uu_id}</td>
+                    <td class="border px-4 py-2">${student.full_name}</td>
+                    <td class="border px-4 py-2">${student.email}</td>
+                    <td class="border px-4 py-2">${student.course}</td>
+                    <td class="border px-4 py-2">${student.section}</td>
+                    <td class="border px-4 py-2">${student.year}</td>
+                    <td class="border px-4 py-2">${student.attendence}</td>
+                    <td class="border px-4 py-2">${student.attendence_taken_by}</td>
+                    <td class="border px-4 py-2">${student.allowed}</td>
+                </tr>
+            `;
+        });
+    }
+
+    // Set interval to call the fetchStudents function every 5 seconds (5000 ms)
+    setInterval(fetchStudents, 1000);
+    
+    // Initial call to fetch students when the page loads
+    fetchStudents();
 </script>
 {% endblock content %}

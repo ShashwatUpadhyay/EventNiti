@@ -37,5 +37,5 @@ def certificate(request,hash):
 
 @login_required(login_url='login')
 def certificates(request):
-    certi_obj = models.Certificate.objects.filter(user=request.user)
+    certi_obj = models.Certificate.objects.filter(user=request.user).order_by('-issue_date')
     return render(request ,'certificatecard.html', {'certi_obj':certi_obj})
