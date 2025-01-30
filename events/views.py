@@ -122,16 +122,16 @@ def takeSudentAttendence(request, submissionid):
     try:
         submission = models.EventSubmission.objects.get(uid=submissionid)
     except:
-        return render(request, 'eventattendence.html', {'submission': False, 'msg': 'QR code is Expired'})
+        return render(request, 'eventattendence.html', {'submission': False, 'msg': 'Invalid QR Code', 'student': None})
     
     if models.EventTicket.objects.get(submission_uid=submissionid).restricted:
-        return render(request, 'eventattendence.html', {'submission': False, 'msg': 'Student is Restricted!'})
+        return render(request, 'eventattendence.html', {'submission': False, 'msg': 'Student is Restricted!', 'student': submission.full_name})
 
     if not submission.allowed:
-        return render(request, 'eventattendence.html', {'submission': False, 'msg': 'Candidate is not allowed!'})
+        return render(request, 'eventattendence.html', {'submission': False, 'msg': 'Candidate is not allowed!', 'student': submission.full_name})
     
     if submission.attendence == 'Present':
-        return render(request, 'eventattendence.html', {'submission': False, 'msg': 'Attendence Already Marked'})
+        return render(request, 'eventattendence.html', {'submission': False, 'msg': 'Attendence Already Marked', 'student': submission.full_name})
     
     if submission.attendence == 'Absent':
         current_time_india = datetime.datetime.now(india_timezone)
@@ -139,7 +139,7 @@ def takeSudentAttendence(request, submissionid):
         submission.attendence_taken_by = f'{request.user.get_full_name()} - {current_time_india.strftime('%Y-%m-%d %I:%M:%S %p')}'
         submission.save()
         
-    return render(request, 'eventattendence.html', {'submission': True, 'msg': 'Attendence sucessfully Marked!! '})
+    return render(request, 'eventattendence.html', {'submission': True, 'msg': 'Attendence sucessfully Marked!! ', 'student': submission.full_name})  
 
 
 @login_required(login_url='login')

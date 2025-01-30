@@ -18,15 +18,15 @@
 
                     {% endif %}
                     <a href="{% url "blogs" %}" class="hover:text-blue-300">Blogs</a>
+                    <a href="{% url "contact" %}" class="hover:text-blue-300">Contact</a>
                     {% if not request.user.is_authenticated %}
                     <a href="{% url "login" %}" class="hover:text-blue-300">Login</a>
                     <a href="{% url "register" %}" class="hover:text-blue-300">Register</a>
                     {% else %}
-                    {% if not user.is_teacher %}
-                    <a href="{% url "contact" %}" class="hover:text-blue-300">Contact</a>
-                    <a href="{% url "certificates" %}" class="hover:text-blue-300">Certificates</a>
-                    <a href="{% url "myticket" %}" class="hover:text-blue-300">Ticket</a>
-                    {% endif %}
+                        {% if not user.is_teacher %}
+                        <a href="{% url "certificates" %}" class="hover:text-blue-300">Certificates</a>
+                        <a href="{% url "myticket" %}" class="hover:text-blue-300">Ticket</a>
+                        {% endif %}
                     <a href="{% url "logout" %}" class="text-red-400">Logout</a>
                     {% endif %}
 
@@ -55,16 +55,16 @@
 
             {% endif %}
             <a href="{% url "blogs" %}" class="block px-4 py-2 text-sm hover:bg-blue-700">Blogs</a>
-            {% if not user.is_teacher %}
             <a href="{% url "contact" %}" class="block px-4 py-2 text-sm hover:bg-blsue-700">Contact</a>
-            <a href="{% url "certificates" %}" class="block px-4 py-2 text-sm hover:bg-blue-700">Certificates</a>
-            <a href="{% url "myticket" %}" class="block px-4 py-2 text-sm hover:bg-blue-700">Ticket</a>
             {% if not  request.user.is_authenticated %}
             <a href="{% url "login" %}" class="block px-4 py-2 text-sm hover:bg-blue-700">Login</a>
             <a href="{% url "register" %}" class="block px-4 py-2 text-sm hover:bg-blue-700">Register</a>
             {% else  %}
-            {% endif %}
-            <a href="{% url "logout" %}" class="block px-4 py-2 text-sm text-red-400">Logout</a>
+                {% if not user.is_teacher %}
+                <a href="{% url "certificates" %}" class="block px-4 py-2 text-sm hover:bg-blue-700">Certificates</a>
+                <a href="{% url "myticket" %}" class="block px-4 py-2 text-sm hover:bg-blue-700">Ticket</a>
+                {% endif %}
+                <a href="{% url "logout" %}" class="block px-4 py-2 text-sm text-red-400">Logout</a>
             {% endif %}
         </div>
     </nav>

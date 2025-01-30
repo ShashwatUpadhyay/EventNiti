@@ -4,11 +4,14 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Prerogatory Pointers United University</title>
+        <title>{% block title %}
+        Prerogatory Pointers United University
+        {% endblock title %}</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
         <style src="{% static 'css/styles.css' %}"></style>
+        <link rel="shortcut icon" href="{% static 'images/pplogo.png' %}">
         <style>
             html {
                 scroll-behavior: smooth;

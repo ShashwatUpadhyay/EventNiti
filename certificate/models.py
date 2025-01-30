@@ -9,6 +9,7 @@ import secrets
 from events.models import Event
 from django.core.mail import send_mail
 from ppuu import settings
+import uuid
 
 # Create your models here.
 def convert_date(date_obj):
@@ -37,21 +38,15 @@ class Certificate(models.Model):
     def __str__(self):
         date = str(convert_date(self.issue_date))
         return f'{self.user.get_full_name()} - {settings.DOMAIN_NAME}certificate/{self.hash}'
-        # return f'{self.pk} - {self.user.username} - {self.event} - {date} - {self.hash}'
     def save(self, *args, **kwargs):
-        # if not hash:
-        
         super(Certificate, self).save(*args, **kwargs)
-
-
-    
-    
+        
     
 @receiver(post_save, sender = Certificate)
 def save_certificate(sender,created, instance, **kwargs):
     if created:
         random_string = secrets.token_hex(16)
-        instance.hash = hashlib.sha256(random_string.encode()).hexdigest()
+        instance.hash = uuid.uuid4()
         instance.save()
         send_mail(
             'Congratulations!! You got Certificate from PPUU',
