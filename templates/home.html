@@ -110,7 +110,62 @@ Prerogative Pointers
     </div>
     <a href="{% url "events" %}" class="text-blue-600 mt-4 inline-block">See more ➡️</a>
 </main>
+<section class="container mx-auto px-6 py-16">
+    <h1 class="text-4xl text-center font-extrabold text-blue-600 mb-8">Our Past Successful Events</h1>
+    <div class="relative">
+        <!-- Slider Container -->
+        <div id="slider-container" class="past-events__container flex overflow-x-auto scroll-smooth">
+            <div id="slider" class="past-events__slider flex space-x-4">
+                {% for event in events %}
+                <div class="past-events__card bg-white rounded-lg shadow-lg overflow-hidden w-64 flex-shrink-0">
+                    <div class="past-events__image">
+                        <img src="{{event.poster.url}}" alt="Event Image" class="w-full h-48 object-cover">
+                    </div>
+                    <div class="past-events__details p-4">
+                        <h3 class="past-events__event-title text-2xl font-semibold text-gray-800 mb-2">{{ event.title}}</h3>
+                        <p class="past-events__date text-sm text-gray-500 mb-2">Date: April 26, 2024</p>
+                        <p class="past-events__description text-sm text-gray-600">United University and Prerogative Pointers group made history by launching their inaugural student chapter, celebrating a significant and inspiring milestone.</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
 
+        <!-- Left and Right Navigation Buttons -->
+        <button id="prev-btn" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white p-2 rounded-full focus:outline-none">
+            &#60;
+        </button>
+        <button id="next-btn" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white p-2 rounded-full focus:outline-none">
+            &#62;
+        </button>
+    </div>
+</section>
+
+<script>
+    const sliderContainer = document.getElementById('slider-container');
+    const slider = document.getElementById('slider');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+
+    // Scroll amount (adjust as needed)
+    const scrollAmount = 300;
+
+    // Scroll left on previous button click
+    prevBtn.addEventListener('click', () => {
+        sliderContainer.scrollBy({
+            left: -scrollAmount,
+            behavior: 'smooth'
+        });
+    });
+
+    // Scroll right on next button click
+    nextBtn.addEventListener('click', () => {
+        sliderContainer.scrollBy({
+            left: scrollAmount,
+            behavior: 'smooth'
+        });
+    });
+</script>
 <!-- Contact Section -->
 <section id="contact" class="py-16 bg-gradient-to-r from-blue-600 to-purple-500 text-white">
     <div class="max-w-7xl mx-auto px-6 text-center">

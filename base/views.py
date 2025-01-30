@@ -33,7 +33,8 @@ User.add_to_class('is_head', property(is_head))
 def home(request):
     event = Event.objects.filter(event_open=True).order_by('start_date')[:3]
     mem = Memories.objects.prefetch_related('memory_img')[:3]
-    return render(request , 'home.html',{'event':event,'mem':mem})
+    events = Event.objects.all().order_by('start_date')
+    return render(request , 'home.html',{'event':event,'mem':mem,'events':events})
 
 def contact(request):
     return render(request, 'contact.html')
@@ -41,3 +42,6 @@ def contact(request):
 
 def socials(request):
     return render(request, 'links.html')
+
+def ourTeam(request):
+    return render(request, 'ourteam.html')  
