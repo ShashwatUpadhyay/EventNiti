@@ -137,7 +137,7 @@ def teacherEventList(request):
         messages.error(request,"Access Denied!")
         return redirect('home')
     
-    event = models.Event.objects.filter(event_over=False).order_by('start_date')
+    event = models.Event.objects.filter(event_over=False, event_open=True).order_by('start_date')
     return render(request, 'eventsteacher.html',{'event':event})
 
 
