@@ -1,11 +1,11 @@
-<footer class="bg-blue-700 text-white">
+<footer class="bg-grey/10 backdrop-blur-md shadow-lg text-black">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Footer Content -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <!-- About Section -->
             <div>
                 <h2 class="text-lg font-semibold">About Us</h2>
-                <p class="mt-2 text-sm text-blue-200">
+                <p class="mt-2 text-sm text-gray-300">
                     We are committed to delivering the best services to help you achieve your goals. Your satisfaction is our priority.
                 </p>
             </div>
@@ -14,10 +14,10 @@
             <div>
                 <h2 class="text-lg font-semibold">Quick Links</h2>
                 <ul class="mt-2 space-y-2">
-                    <li><a href="#" class="hover:text-blue-300">Home</a></li>
-                    <li><a href="#" class="hover:text-blue-300">About</a></li>
-                    <li><a href="#" class="hover:text-blue-300">Services</a></li>
-                    <li><a href="#" class="hover:text-blue-300">Contact</a></li>
+                    <li><a href="{% url "home" %}" class="hover:text-blue-400 transition duration-300">Home</a></li>
+                    <li><a href="{% url "events" %}" class="hover:text-blue-400 transition duration-300">Events</a></li>
+                    <li><a href="{% url "memories" %}" class="hover:text-blue-400 transition duration-300">Memories</a></li>
+                    <li><a href="{% url "contact" %}" class="hover:text-blue-400 transition duration-300">Contact</a></li>
                 </ul>
             </div>
 
@@ -26,30 +26,43 @@
                 <h2 class="text-lg font-semibold">Contact Us</h2>
                 <ul class="mt-2 space-y-2">
                     <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 2l5 5m-5 0V2m0 6h4M4 4l4 16m0 0l4-16m0 0l4 16M2 20h20" />
-                        </svg>
-                        <span>123 Bluestone Ave, Ocean City</span>
+                        <i class="fa-solid fa-location-dot text-blue-400 text-lg mr-2"></i>
+                        <span>United University, rawatpur, Prayagraj, Uttar Pradesh</span>
                     </li>
                     <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h1M4 6a2 2 0 112 2h.5a3.5 3.5 0 013.5 3.5V12a4 4 0 004 4h.5a2.5 2.5 0 002.5 2.5H20" />
-                        </svg>
-                        <span>(123) 456-7890</span>
+                        <i class="fa-solid fa-phone text-blue-400 text-lg mr-2"></i>
+                        <span>+91 987654321</span>
                     </li>
                     <li class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12v.01M3 5a2 2 0 012-2h14a2 2 0 012 2v6m-4 2h4m-6 4a4 4 0 11-8 0 4 4 0 018 0z" />
-                        </svg>
-                        <span>support@example.com</span>
+                        <i class="fa-solid fa-envelope text-blue-400 text-lg mr-2"></i>
+                        <span>prerogativepointers.uu@gmail.com</span>
                     </li>
                 </ul>
+
+                <!-- Social Media Icons -->
+                <div class="flex space-x-4 mt-4">
+                    <a href="#" class="text-blue-400 text-2xl hover:scale-110 transform transition duration-300">
+                        <i class="fa-brands fa-facebook"></i>
+                    </a>
+                    <a href="#" class="text-blue-300 text-2xl hover:scale-110 transform transition duration-300">
+                        <i class="fa-brands fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-pink-400 text-2xl hover:scale-110 transform transition duration-300">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="#" class="text-blue-500 text-2xl hover:scale-110 transform transition duration-300">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </a>
+                </div>
             </div>
         </div>
 
         <!-- Bottom Section -->
-        <div class="mt-8 border-t border-blue-600 pt-4 text-center text-sm text-blue-200">
+        <div class="mt-8 border-t border-gray-700 pt-4 text-center text-sm text-gray-300">
             &copy; 2025 Prerogative Pointers. All rights reserved.
         </div>
     </div>
 </footer>
+
+<!-- Include Font Awesome (If not included already) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>

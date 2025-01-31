@@ -168,18 +168,47 @@ Prerogative Pointers
 </script>
 <!-- Contact Section -->
 <section id="contact" class="py-16 bg-gradient-to-r from-blue-600 to-purple-500 text-white">
-    <div class="max-w-7xl mx-auto px-6 text-center">
-        <h2 class="text-4xl font-extrabold">📩 Contact Us</h2>
-        <p class="mt-2 text-lg">We’d love to hear from you. Get in touch with us!</p>
-        <form class="mt-8 max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-lg text-gray-800">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <input type="text" placeholder="Your Name" class="p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                <input type="email" placeholder="Your Email" class="p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+    <div class="bg-white shadow-xl rounded-lg p-8 max-w-2xl mx-auto lg:w-2/3 backdrop-blur-md bg-opacity-80">
+        <h2 class="text-3xl font-bold text-gray-800 text-center">📩 Get in Touch</h2>
+        <p class="text-gray-600 text-center mt-2 mb-6">Fill out the form below, and we'll get back to you soon.</p>
+        
+        <form action="#" method="POST" class="space-y-6">
+            {% csrf_token %}
+            
+            <!-- Name Input -->
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700">Your Name</label>
+                <input type="text" id="name" name="name" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    placeholder="Enter your full name" required>
             </div>
-            <textarea placeholder="Your Message" class="mt-4 p-4 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" rows="5"></textarea>
-            <button type="submit" class="mt-4 px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition duration-300">
-                Send Message ✉️
-            </button>
+
+            <!-- Email Input -->
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">Your Email</label>
+                <input type="email" id="email" name="email" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    placeholder="Enter your email address" required>
+            </div>
+
+            <!-- Subject Input -->
+            <div>
+                <label for="subject" class="block text-sm font-medium text-gray-700">Subject</label>
+                <input type="text" id="subject" name="subject" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    placeholder="Enter the subject" required>
+            </div>
+
+            <!-- Message Input -->
+            <div>
+                <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+                <textarea id="message" name="message" rows="5" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    placeholder="Type your message here" required></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:scale-105 transform transition duration-300 hover:bg-blue-700 focus:ring-2 focus:ring-blue-400">
+                    🚀 Send Message
+                </button>
+            </div>
         </form>
     </div>
 </section>

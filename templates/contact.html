@@ -1,92 +1,98 @@
 {% extends "index.html" %}
 
 {% block title %}
-
 Contact Us
-
 {% endblock title %}
 
 {% block content %}
 
-<div class="bg-gray-100">
+<div class="bg-gray-100 font-sans py-12">
 
-    <!-- Page Header -->
-    <header class="bg-blue-600 py-6 shadow-md">
-        <div class="container mx-auto px-6 text-center">
-            <h1 class="text-3xl md:text-4xl font-bold text-white">Contact Us</h1>
-            <p class="text-blue-200 text-sm md:text-base mt-2">We'd love to hear from you!</p>
+    <!-- Page Header with Animated Effect -->
+    <header class="bg-gradient-to-r from-blue-600 to-purple-500 text-white py-16 text-center shadow-lg">
+        <div class="container mx-auto px-6">
+            <h1 class="text-5xl font-extrabold animate-fade-in">📞 Contact Us</h1>
+            <p class="mt-2 text-lg text-blue-200">We'd love to hear from you! Reach out for any inquiries.</p>
         </div>
     </header>
 
-    <!-- Contact Form Section -->
-    <main class="container mx-auto px-6 py-10">
-        <div class="bg-white shadow-lg rounded-lg p-8 max-w-2xl mx-auto">
-            <h2 class="text-2xl md:text-3xl font-bold text-gray-800 text-center">Get in Touch</h2>
-            <p class="text-gray-600 text-center mt-2 mb-8">Fill out the form below and we'll get back to you as soon as possible.</p>
+    <!-- Contact Section -->
+    <main class="container mx-auto px-6 py-10 flex flex-col-reverse lg:flex-row gap-12">
+        
+        <!-- Contact Form -->
+        <div class="bg-white shadow-xl rounded-lg p-8 max-w-2xl mx-auto lg:w-2/3 backdrop-blur-md bg-opacity-80">
+            <h2 class="text-3xl font-bold text-gray-800 text-center">📩 Get in Touch</h2>
+            <p class="text-gray-600 text-center mt-2 mb-6">Fill out the form below, and we'll get back to you soon.</p>
             
             <form action="#" method="POST" class="space-y-6">
+                {% csrf_token %}
+                
                 <!-- Name Input -->
                 <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-                    <input 
-                        type="text" 
-                        id="name" 
-                        name="name" 
-                        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Your full name" 
-                        required
-                    >
+                    <label for="name" class="block text-sm font-medium text-gray-700">Your Name</label>
+                    <input type="text" id="name" name="name" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                        placeholder="Enter your full name" required>
                 </div>
 
                 <!-- Email Input -->
                 <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                    <input 
-                        type="email" 
-                        id="email" 
-                        name="email" 
-                        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Your email address" 
-                        required
-                    >
+                    <label for="email" class="block text-sm font-medium text-gray-700">Your Email</label>
+                    <input type="email" id="email" name="email" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                        placeholder="Enter your email address" required>
                 </div>
 
                 <!-- Subject Input -->
                 <div>
                     <label for="subject" class="block text-sm font-medium text-gray-700">Subject</label>
-                    <input 
-                        type="text" 
-                        id="subject" 
-                        name="subject" 
-                        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Subject of your message" 
-                        required
-                    >
+                    <input type="text" id="subject" name="subject" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                        placeholder="Enter the subject" required>
                 </div>
 
                 <!-- Message Input -->
                 <div>
                     <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
-                    <textarea 
-                        id="message" 
-                        name="message" 
-                        rows="5" 
-                        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Write your message here" 
-                        required
-                    ></textarea>
+                    <textarea id="message" name="message" rows="5" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                        placeholder="Type your message here" required></textarea>
                 </div>
 
                 <!-- Submit Button -->
                 <div class="text-center">
-                    <button 
-                        type="submit" 
-                        class="bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        Send Message
+                    <button type="submit" class="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:scale-105 transform transition duration-300 hover:bg-blue-700 focus:ring-2 focus:ring-blue-400">
+                        🚀 Send Message
                     </button>
                 </div>
             </form>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="flex flex-col items-center lg:w-1/3 space-y-6">
+            <div class="bg-white shadow-lg rounded-lg p-6 text-center w-full">
+                <h3 class="text-lg font-bold text-gray-800">📍 Our Location</h3>
+                <p class="text-gray-600 mt-2">United University, rawatpur, Prayagraj, Uttar Pradesh</p>
+                <div class="mt-4">
+                    <iframe class="w-full rounded-lg shadow-md" height="200" 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1802.1546530351854!2d81.75685246694408!3d25.39445506958427!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x398533a4e2e9d1b9%3A0x7d8f6607de9fcdc7!2sUnited%20University%2C%20Prayagraj!5e0!3m2!1sen!2sin!4v1738326991414!5m2!1sen!2sin
+"
+                        allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+
+            <div class="bg-white shadow-lg rounded-lg p-6 text-center w-full">
+                <h3 class="text-lg font-bold text-gray-800">📞 Contact Details</h3>
+                <p class="text-gray-600 mt-2">Email: prerogativepointers.uu@gmail.com</p>   
+                <p class="text-gray-600">Phone: +91 987654321</p>
+            </div>
+
+            <div class="bg-white shadow-lg rounded-lg p-6 text-center w-full">
+                <h3 class="text-lg font-bold text-gray-800">🌍 Follow Us</h3>
+                <div class="flex justify-center space-x-4 mt-4">
+                    <a href="#" class="text-blue-400 text-2xl hover:scale-110 transform transition duration-300"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-pink-600 text-2xl hover:scale-110 transform transition duration-300"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-blue-700 text-2xl hover:scale-110 transform transition duration-300"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="text-blue-700 text-2xl hover:scale-110 transform transition duration-300"><i class="fab fa-whatsapp"></i></a>
+                    <a href="mailto:prerogativepointers.uu@gmail.com" class="text-blue-700 text-2xl hover:scale-110 transform transition duration-300"><i class="fa-regular fa-envelope"></i></a>
+                </div>
+            </div>
         </div>
     </main>
 

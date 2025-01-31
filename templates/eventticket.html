@@ -1,61 +1,82 @@
-{% extends "index.html" %}
-
-{% block title %}
-Event Ticket | Prerogatory Pointers United University
-{% endblock title %}
-
-{% block content %}
-
-
-<div id="ticket" class="bg-white rounded-lg mt-4 shadow-lg max-w-4xl mx-auto p-8">
+{% extends "index.html" %} {% block title %} Event Ticket | Prerogatory Pointers
+United University {% endblock title %} {% block content %}
+{% load static %}
+<div
+  id="ticket"
+  class="bg-white rounded-lg shadow-lg max-w-4xl mx-auto p-12"
+  style="
+    {% comment %} background-image: url('{% static 'images/logo.png' %}'); {% endcomment %}
+  "
+>
   <!-- Ticket Header -->
-  <div class="text-center mb-6">
-      <h2 class="text-3xl font-bold text-gray-800 mb-2">Event Ticket</h2>
-      <p class="text-xl text-gray-600">Your Ticket for {{ ticket.event.title }}</p>
+  <div class="text-center mb-6 mt-20 ">
+    <h2 class="text-3xl font-bold text-gray-800 mb-2">Event Ticket</h2>
+    <p class="text-xl text-gray-600">
+      Your Ticket for {{ ticket.event.title }}
+    </p>
   </div>
 
   <!-- Ticket Information -->
   <div class="space-y-4">
-      <div class="flex justify-between">
-          <p class="text-lg font-semibold text-gray-700">Ticket Owner:</p>
-          <p class="text-lg text-gray-600">{{ ticket.user.get_full_name }}</p>
-      </div>
-      <div class="flex justify-between">
-          <p class="text-lg font-semibold text-gray-700">Event Date:</p>
-          <p class="text-lg text-gray-600">{{ ticket.event.start_date }}</p>
-      </div>
+    <div class="flex justify-between">
+      <p class="text-lg font-semibold text-gray-700">Ticket Owner:</p>
+      <p class="text-lg text-gray-600">{{ ticket.user.get_full_name }}</p>
+    </div>
+    <div class="flex justify-between">
+      <p class="text-lg font-semibold text-gray-700">Event Date:</p>
+      <p class="text-lg text-gray-600">{{ ticket.event.start_date }}</p>
+    </div>
   </div>
 
   <!-- QR Code Section -->
   <div class="my-8 flex justify-center">
-      <img src="data:image/png;base64,{{ qrCode }}" alt="QR Code" class="w-32 h-32 rounded-lg shadow-md border-2 border-gray-300">
+
+    
+    <img
+      src="data:image/png;base64,{{ qrCode }}"
+      alt="QR Code"
+      class="w-32 h-32 rounded-lg shadow-md border-2 border-gray-300"
+    />
+
+    <img
+      src="{% static 'images/logo.png' %}"
+      alt="QR Code"
+      class="w-32 h-32 rounded-lg ml-2"
+    />
   </div>
 
   <!-- Instructions -->
   <div class="text-center">
-      <p class="text-sm text-gray-600">Please present this QR code at the entrance to get attendance.</p>
+    <p class="text-sm text-gray-600">
+      Please present this QR code at the entrance to get attendance.
+    </p>
   </div>
 
   <!-- Download Button -->
 </div>
+
 <div class="text-center mt-8 mb-8">
-    <button id="download-btn" class="bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
-        Download Ticket
-    </button>
+  <button
+    id="download-btn"
+    class="bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+  >
+    Download Ticket
+  </button>
 </div>
 
 <script>
   document.getElementById("download-btn").addEventListener("click", () => {
-      const element = document.getElementById("ticket");
-      const opt = {
-          margin: 1,
-          filename: 'Ticket_{{ ticket.event.title }}_{{ ticket.user.get_full_name }}.pdf',
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: { scale: 2 },
-          jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
-      };
-      html2pdf().set(opt).from(element).save();
+    const element = document.getElementById("ticket");
+    const opt = {
+      margin: 1,
+      filename:
+        "Ticket_{{ ticket.event.title }}_{{ ticket.user.get_full_name }}.pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "in", format: "letter", orientation: "landscape" },
+    };
+    html2pdf().set(opt).from(element).save();
   });
 </script>
 
-  {% endblock content %}
+{% endblock content %}
