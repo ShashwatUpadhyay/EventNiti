@@ -19,13 +19,15 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-3xl font-bold text-blue-600">Memories from {{ event.title }} event on {{ event.start_date|date:'M d, Y' }}.</h2>
         {% comment %} <p class="mt-4 text-gray-600"><h1>Memories for </h1></p> {% endcomment %}
+         {% if user.is_authenticated %}
          {% if not user.is_student %}
          <a href='{% url "event_memory_upload" event.slug %}'>
-         <button  class="bg-blue-600 text-white font-semibold py-2 my-3 px-6 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300">
-           Upload Photo
-         </button>
-        </a>
-         {% endif %}
+           <button  class="bg-blue-600 text-white font-semibold py-2 my-3 px-6 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300">
+             Upload Photo
+            </button>
+          </a>
+          {% endif %}
+          {% endif %}
         <div class="mt-8 grid grid-cols-1 text-center sm:grid-cols-2 lg:grid-cols-3 gap-6"> 
               {% for memory in memories %}
                     {% for img in memory.memory_img.all %}

@@ -10,13 +10,15 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 from .ckeditorconfig import *
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # DOMAIN_NAME = 'http://127.0.0.1:8000/'
-DOMAIN_NAME = 'https://9319j0b7-8000.inc1.devtunnels.ms/'
+# DOMAIN_NAME = 'https://9319j0b7-8000.inc1.devtunnels.ms/'
+DOMAIN_NAME = 'https://shashwat.pythonanywhere.com/'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -61,11 +63,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'ppuu.urls'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ BASE_DIR , 'templates'],
+        'DIRS': [  os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -96,7 +97,15 @@ DATABASES = {
           'PASSWORD':'',
           'HOST':'localhost',
           'PORT':'3306',
-      }     
+      },
+    #  'default': {
+    #       'ENGINE':'django.db.backends.mysql',
+    #       'NAME':'shashwat$ppuudb',
+    #       'USER':'shashwat',
+    #       'PASSWORD':'@Iampekka1',
+    #       'HOST':'shashwat.mysql.pythonanywhere-services.com',
+    #       'PORT':'3306',
+    #   }     
 }
 
 
@@ -157,17 +166,6 @@ EMAIL_USE_SSL = False
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379',
-    }
-}
-
-
-import os
-
 # LOGGING = {
 #     "version": 1,
 #     "disable_existing_loggers": False,
@@ -188,59 +186,59 @@ import os
 # }
 
 
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "verbose": {
-            "format": "{levelname} {asctime} {module} {message}",
-            "style": "{",
-        },
-        "simple": {
-            "format": "{levelname} {message}",
-            "style": "{",
-        },
-    },
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-            "formatter": "simple",
-        },
-        "info_file": {
-            "level": "INFO",
-            "class": "logging.FileHandler",
-            "filename": os.path.join(BASE_DIR, "info.log"),
-        },
-        "error_file": {
-            "level": "ERROR",
-            "class": "logging.FileHandler",
-            "filename": os.path.join(BASE_DIR, "error.log"),
-        },
-        "debug_file": {
-            "level": "DEBUG",
-            "class": "logging.FileHandler",
-            "filename": os.path.join(BASE_DIR, "debug.log"),
-        },
-    },
-    "loggers": {
-        "django": {
-            "handlers": ["info_file"],
-            "level": "INFO",
-            "propagate": True,
-        },
-        "error_logger": {
-            "handlers": ["error_file"],
-            "level": "ERROR",
-            "propagate": False,
-        },
-        "debug_logger": {
-            "handlers": ["debug_file"],
-            "level": "DEBUG",
-            "propagate": False,
-        },
-    },
-    "root": {
-        "handlers": ["console"],
-        "level": "WARNING",
-    },
-}
+# LOGGING = {
+#     "version": 1,
+#     "disable_existing_loggers": False,
+#     "formatters": {
+#         "verbose": {
+#             "format": "{levelname} {asctime} {module} {message}",
+#             "style": "{",
+#         },
+#         "simple": {
+#             "format": "{levelname} {message}",
+#             "style": "{",
+#         },
+#     },
+#     "handlers": {
+#         "console": {
+#             "class": "logging.StreamHandler",
+#             "formatter": "simple",
+#         },
+#         "info_file": {
+#             "level": "INFO",
+#             "class": "logging.FileHandler",
+#             "filename": os.path.join(BASE_DIR, "info.log"),
+#         },
+#         "error_file": {
+#             "level": "ERROR",
+#             "class": "logging.FileHandler",
+#             "filename": os.path.join(BASE_DIR, "error.log"),
+#         },
+#         "debug_file": {
+#             "level": "DEBUG",
+#             "class": "logging.FileHandler",
+#             "filename": os.path.join(BASE_DIR, "debug.log"),
+#         },
+#     },
+#     "loggers": {
+#         "django": {
+#             "handlers": ["info_file"],
+#             "level": "INFO",
+#             "propagate": True,
+#         },
+#         "error_logger": {
+#             "handlers": ["error_file"],
+#             "level": "ERROR",
+#             "propagate": False,
+#         },
+#         "debug_logger": {
+#             "handlers": ["debug_file"],
+#             "level": "DEBUG",
+#             "propagate": False,
+#         },
+#     },
+#     "root": {
+#         "handlers": ["console"],
+#         "level": "WARNING",
+#     },
+# }
