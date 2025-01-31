@@ -31,9 +31,9 @@ User.add_to_class('is_head', property(is_head))
 
 # Create your views here.
 def home(request):
-    event = Event.objects.filter(event_open=True).order_by('start_date')[:3]
+    event = Event.objects.filter(event_open=True,event_over = False).order_by('start_date')[:3]
     mem = Memories.objects.prefetch_related('memory_img')[:3]
-    events = Event.objects.all().order_by('start_date')
+    events = Event.objects.filter(event_over = True,event_open=True).order_by('start_date')
     return render(request , 'home.html',{'event':event,'mem':mem,'events':events})
 
 def contact(request):

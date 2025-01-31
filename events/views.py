@@ -16,7 +16,7 @@ india_timezone = pytz.timezone('Asia/Kolkata')
 
 # Create your views here.
 def events(request):
-    event = models.Event.objects.filter(event_open=True).order_by('start_date')
+    event = models.Event.objects.filter(event_open=True,event_over = False).order_by('start_date').order_by('-registration_open')
     return render(request, 'events.html',{'event':event})
 
 @login_required(login_url='login')
@@ -85,16 +85,6 @@ def eventregister(request, slug):
 
     return render(request, 'eventregister.html',{'event':event, 'user_obj':user_obj})
 
-def update_registered_students(event_slug):
-    channel_layer = get_channel_layer()
-    students = models.EventSubmission.objects.filter(event__slug=event_slug).order_by('full_name')
-    student_data = list(students.values("uu_id", "full_name", "email", "course", "section", "year", "attendence", "attendence_taken_by", "allowed"))
-
-    async_to_sync(channel_layer.group_send)(
-        f"event_{event_slug}",
-        {"type": "send_student_update", "data": student_data}
-    )
-
 
 def eventTicket(request, uid):
     ticket = None
@@ -147,7 +137,7 @@ def teacherEventList(request):
         messages.error(request,"Access Denied!")
         return redirect('home')
     
-    event = models.Event.objects.all().order_by('start_date')
+    event = models.Event.objects.filter(event_over=False).order_by('start_date')
     return render(request, 'eventsteacher.html',{'event':event})
 
 
