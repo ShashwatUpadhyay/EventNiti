@@ -6,7 +6,7 @@ from django.contrib import messages
 from base.views import is_student
 # Create your views here.
 def memories(request):
-    mem = models.Memories.objects.prefetch_related('memory_img')
+    mem = models.Memories.objects.prefetch_related('memory_img').order_by('-event__start_date')
     return render(request, 'memories.html',{'mem':mem})
 
 def event_memories_list(request, event_slug):
