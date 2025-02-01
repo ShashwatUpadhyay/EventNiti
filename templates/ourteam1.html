@@ -1,0 +1,100 @@
+{% extends "index.html" %}
+
+{% block title %}
+Prerogative Pointers
+{% endblock title %}
+
+{% block content %}
+{% load static %}
+<body class="bg-gray-50">
+
+  <!-- Banner Section -->
+  <section class="relative py-20 bg-blue-900">
+      <div class="absolute inset-0 bg-black opacity-50"></div>
+      <div class="container mx-auto px-4 relative">
+          <div class="flex flex-col items-center justify-center text-center">
+              <div class="max-w-3xl">
+                  <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Our Team</h1>
+                  <nav class="text-white font-medium">
+                      <a href="index.php" class="hover:text-blue-200">Home</a>
+                      <span class="mx-2">/</span>
+                      <a href="ourteam.php" class="hover:text-blue-200">Our Team</a>
+                  </nav>
+              </div>
+          </div>
+      </div>
+  </section>
+
+  <!-- Team Sections -->
+  <div class="max-w-7xl mx-auto px-4 py-16">
+      <!-- Faculty Heads -->
+      <div class="text-center mb-16">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">Esteemed Faculty Heads</h2>
+          <p class="text-gray-600 mb-8">Igniting curiosity and excellence in our student chapter.</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <!-- Faculty Member Cards -->
+              <div class="bg-white p-6 rounded-lg shadow-lg">
+                  <img src="{% static 'images/logo.png' %}" alt="Dr. Prashant Shukla" class="w-32 h-32 rounded-full mx-auto mb-4">
+                  <h3 class="text-xl font-semibold mb-2">Dr. Prashant Shukla</h3>
+                  <p class="text-gray-600 mb-4">Faculty Coordinator, FoET/FoCA<br>United University</p>
+                  <div class="flex justify-center space-x-4">
+                      <a href="#" class="text-blue-600 hover:text-blue-800">
+                          <img src="img/icons8-linkedin.svg" class="w-6 h-6" alt="LinkedIn">
+                      </a>
+                  </div>
+              </div>
+              <!-- Repeat similar structure for other members -->
+          </div>
+      </div>
+
+      <hr class="my-16 border-gray-200">
+
+      <!-- CEO Section -->
+      <div class="text-center mb-16">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">Visionary CEO and Co-Founder</h2>
+          <p class="text-gray-600 mb-8">Spearheading transformative initiatives for student innovation.</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <!-- CEO Cards -->
+              <div class="bg-white p-6 rounded-lg shadow-lg">
+                  <img src="img/ourteam/Somin Dey.png" alt="Somin Dey" class="w-32 h-32 rounded-full mx-auto mb-4">
+                  <h3 class="text-xl font-semibold mb-2">Somin Dey</h3>
+                  <p class="text-gray-600 mb-4">CEO, Prerogative Group of Institute</p>
+                  <div class="flex justify-center space-x-4">
+                      <a href="https://linkedin.com/in/somindey19" class="text-blue-600 hover:text-blue-800">
+                          <img src="img/icons8-linkedin.svg" class="w-6 h-6" alt="LinkedIn">
+                      </a>
+                  </div>
+              </div>
+              <!-- Repeat for other members -->
+          </div>
+      </div>
+
+      <!-- Continue similar sections for other team categories -->
+      
+      <!-- Team Members Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <!-- Team Member Card -->
+          <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+              <img src="img/ourteam/Priyanshu Singh.jpg" alt="Priyanshu Singh" class="w-24 h-24 rounded-full mx-auto mb-4">
+              <h3 class="text-lg font-semibold text-center">Priyanshu Singh</h3>
+              <p class="text-gray-600 text-center mb-4">President</p>
+              <div class="flex justify-center space-x-3">
+                  <a href="#" class="text-blue-600 hover:text-blue-800">
+                      <img src="img/icons8-linkedin.svg" class="w-6 h-6" alt="LinkedIn">
+                  </a>
+                  <a href="#" class="text-pink-600 hover:text-pink-800">
+                      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                          <!-- Instagram SVG path -->
+                      </svg>
+                  </a>
+              </div>
+          </div>
+          <!-- Repeat for other members -->
+      </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</body>
+
+{% endblock content %}
