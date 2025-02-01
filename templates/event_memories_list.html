@@ -28,12 +28,12 @@
           </a>
           {% endif %}
           {% endif %}
-        <div class="mt-8 grid grid-cols-1 text-center sm:grid-cols-2 lg:grid-cols-3 gap-6"> 
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6 bg-gray-100"> 
               {% for memory in memories %}
                     {% for img in memory.memory_img.all %}
-                          <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                            <img src="{{ img.image.url }}" alt="Memory" class="w-full cursor-pointer" onclick="openModal('{{ img.image.url }}', '{{ img.image_title }}', '{{ img.image_date }}')">
-                            <p class="text-center mt-2">{{ img.image_title|default:"--No context--" }}</p>
+                          <div class="text-center">
+                            <img src="{{ img.image.url }}" alt="Memory" class="w-full h-56 object-cover rounded-lg shadow-md hover:opacity-80 transition duration-300" onclick="openModal('{{ img.image.url }}', '{{ img.image_title }}', '{{ img.image_date }}')">
+                            <p class="mt-2 text-gray-700 font-semibold">{{ img.image_title|default:"--No context--" }}</p>
                         </div>
                       <div id="imageModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center hidden" onclick="closeModal()">
                         <div class="relative bg-white p-4 rounded-lg">
