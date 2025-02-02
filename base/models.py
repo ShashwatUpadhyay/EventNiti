@@ -1,17 +1,20 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
+from account.models import User
+from events.models import Event
 
-    
-# class Memories(models.Model):
-#     title = models.CharField(max_length=200)
-#     slug = models.CharField(max_length=300)
-#     description = models.TextField()
-#     date = models.DateField(null=True, blank=True)
-    
-#     def save(self, *args, **kwargs):
-#         if not self.slug:
-#             self.slug = slugify(self.title)
-#         super(Memories, self).save(*args, **kwargs)
-        
-#     def __str__(self):
-#         return str(self.title)
-    
+class Review(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    rating = models.PositiveSmallIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
+    comment = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'event')
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Review by {self.user} for {self.event} - {self.rating}/5"

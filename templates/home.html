@@ -14,18 +14,18 @@ Prerogative Pointers
 <section class="bg-center bg-no-repeat bg-cover pt-20 bg-[url('{{rand_mem}}')] bg-gray-700 bg-blend-multiply">
 {% comment %} <section class="bg-center bg-no-repeat bg-cover pt-20 bg-[url('https://shashwat.pythonanywhere.com/media/memories_images/top-banner.jpg')] bg-gray-700 bg-blend-multiply"> {% endcomment %}
     <div class="px-4 mx-auto max-w-screen-xl text-center py-24 lg:py-56 ">
-        <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-white md:text-5xl lg:text-6xl">Welcome to Prerogative Pointers</h1>
+        <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-purple-500 md:text-5xl lg:text-6xl">Welcome to Prerogative Pointers</h1>
         <p class="mb-8 text-lg font-normal text-gray-300 lg:text-xl sm:px-16 lg:px-48">Your journey to unforgettable experiences starts here.
 
         </p>
         <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0">
-            <a href="{% url 'ourTeam' %}" class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900">
+            <a href="{% url 'ourTeam' %}" class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-purple-500 hover:bg-white hover:text-purple-500 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900">
                 Our Team
                 <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
                 </svg>
             </a>
-            <a href="#events" class="inline-flex justify-center hover:text-gray-900 items-center py-3 px-5 sm:ms-4 text-base font-medium text-center text-white rounded-lg border border-white hover:bg-gray-100 focus:ring-4 focus:ring-gray-400">
+            <a href="#events" class="inline-flex justify-center hover:text-gray-900 items-center py-3 px-5 sm:ms-4 text-base font-medium text-center text-white rounded-lg border border-purple-500 hover:bg-gray-100 focus:ring-4 focus:ring-gray-400">
                 Join Events
             </a>  
         </div>
@@ -45,7 +45,7 @@ Prerogative Pointers
 <!-- Memories Section -->
 <section id="memories" class="py-16 bg-gray-50">
     <div class="max-w-7xl mx-auto px-6 text-center">
-        <h2 class="text-4xl font-extrabold text-blue-600">✨ Memories ✨</h2>
+        <h2 class="text-4xl font-extrabold text-purple-500">✨ Memories ✨</h2>
         <p class="mt-2 text-gray-600">Relive the moments that matter most to you.</p>
         <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
@@ -56,7 +56,7 @@ Prerogative Pointers
                     <div class="p-4">
                         <h3 class="font-bold text-lg text-gray-800">{{mems.memory_title}}</h3>
                         <p class="text-gray-500 mt-1">On {{ mems.event.title }} Event</p>
-                        <p class="text-gray-500">{{ mems.event.start_date }}</p>
+                        <p class="text-gray-500">{{ mems.event.start_date|date:"F d, Y" }}</p>
                     </div>
                 </div>
                 </a>
@@ -68,7 +68,7 @@ Prerogative Pointers
 
 <!-- Events Section -->
 <main id='events' class="container mx-auto px-6 py-16">
-    <h2 class="text-4xl text-center font-extrabold text-blue-600">📅 Upcoming Events</h2> 
+    <h2 class="text-4xl text-center font-extrabold text-purple-500">📅 Upcoming Events</h2> 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
         {% if event %}
         {% for events in event %}
@@ -86,7 +86,7 @@ Prerogative Pointers
                 <!-- Event Details -->
                 <div class="p-6">
                     <h2 class="text-xl font-bold text-blue-600">{{ events.title }}</h2>
-                    <p class="text-gray-600 mt-2">📅 Date: <span class="font-medium text-gray-900">{{ events.start_date }}</span></p>
+                    <p class="text-gray-600 mt-2">📅 Date: <span class="font-medium text-gray-900">{{ events.start_date|date:"F d, Y"|default:"To be Announced..." }}</span></p>
                     <p class="text-gray-600">📍 Location: <span class="font-medium text-gray-900">{{ events.location }}</span></p>
                     
                     <!-- Registration Status Badge -->
@@ -149,7 +149,7 @@ Prerogative Pointers
     {% endif %}
 </main>
 <section class="container mx-auto px-6 py-16">
-    <h1 class="text-4xl text-center font-extrabold text-blue-600 mb-8">Our Past Successful Events</h1>
+    <h1 class="text-4xl text-center font-extrabold text-purple-500 mb-8">Our Past Successful Events</h1>
     <div class="relative">
         <!-- Slider Container -->
         <div id="slider-container" class="past-events__container flex overflow-x-auto scroll-smooth">
@@ -170,10 +170,10 @@ Prerogative Pointers
         </div>
 
         <!-- Left and Right Navigation Buttons -->
-        <button id="prev-btn" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white p-2 rounded-full focus:outline-none">
+        <button id="prev-btn" class="bg-purple-500 absolute left-0 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white p-2 rounded-full focus:outline-none">
             &#60;
         </button>
-        <button id="next-btn" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white p-2 rounded-full focus:outline-none">
+        <button id="next-btn" class="bg-purple-500 absolute right-0 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white p-2 rounded-full focus:outline-none">
             &#62;
         </button>
     </div>
