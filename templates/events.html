@@ -49,7 +49,7 @@ All Events | Prerogatory Pointers United University
         <!-- Event Details -->
         <div class="p-6">
             <h2 class="text-xl font-bold text-blue-600">{{ events.title }}</h2>
-            <p class="text-gray-700 mt-2">📅 Date: <span class="font-medium text-gray-900">{{ events.start_date|default:"To be Announced..." }}</span></p>
+            <p class="text-gray-700 mt-2">📅 Date: <span class="font-medium text-gray-900">{{ events.start_date|date:"F d, Y"|default:"To be Announced..." }}</span></p>
             <p class="text-gray-700 mt-1">📍 Location: <span class="font-medium text-gray-900">{{ events.location }}</span></p>
             
             <!-- Registration Status Badge -->

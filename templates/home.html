@@ -110,9 +110,22 @@ Prerogative Pointers
 
                     <!-- View Details Button -->
                     <div class="text-right mt-4">
+                        {% if user.is_authenticated %}
+                        {% if not user.is_student %}
+                            <a href="{% url 'teacherEvent' events.slug %}" class="inline-block bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-blue-700">
+                                View Details
+                            </a>
+                        {% else %}
                         <a href="{% url 'event' events.slug %}" class="inline-block bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-blue-700">
                             View Details
                         </a>
+                        {% endif %}
+                        
+                        {% else %}
+                        <a href="{% url 'event' events.slug %}" class="inline-block bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-blue-700">
+                            View Details
+                        </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -125,7 +138,15 @@ Prerogative Pointers
             </div>
         {% endif %} 
     </div>
-    <a href="{% url "events" %}" class="text-blue-600 mt-4 inline-block">See more ➡️</a>
+    {% if user.is_authenticated %}
+        {% if not user.is_student %}
+            <a href="{% url "teacherEventList" %}" class="text-blue-600 mt-4 inline-block">See more ➡️</a>
+        {% else %}
+            <a href="{% url "events" %}" class="text-blue-600 mt-4 inline-block">See more ➡️</a>
+        {% endif %}
+    {% else %}
+        <a href="{% url "events" %}" class="text-blue-600 mt-4 inline-block">See more ➡️</a>
+    {% endif %}
 </main>
 <section class="container mx-auto px-6 py-16">
     <h1 class="text-4xl text-center font-extrabold text-blue-600 mb-8">Our Past Successful Events</h1>

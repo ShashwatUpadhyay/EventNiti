@@ -134,8 +134,7 @@ def takeSudentAttendence(request, submissionid):
 @login_required(login_url='login')
 def teacherEventList(request):
     if is_student(request.user):
-        messages.error(request,"Access Denied!")
-        return redirect('home')
+        return redirect('events')
     
     event = models.Event.objects.filter(event_over=False, event_open=True).order_by('start_date')
     return render(request, 'eventsteacher.html',{'event':event})
@@ -144,8 +143,7 @@ def teacherEventList(request):
 @login_required(login_url='login')
 def teacherEvent(request, slug):
     if is_student(request.user):
-        messages.error(request,"Access Denied!")
-        return redirect('home')
+        return redirect('event')
     
     event = models.Event.objects.get(slug=slug)
     return render(request, 'vieweventteacher.html',{'event':event})

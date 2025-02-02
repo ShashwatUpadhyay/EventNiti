@@ -35,7 +35,6 @@ def home(request):
     mem = Memories.objects.prefetch_related('memory_img').order_by('-event__start_date')[:3]
     events = Event.objects.filter(event_over = True,event_open=True).order_by('start_date')
     rand_mem = MemoryImages.objects.order_by('?').first()
-    print(rand_mem.image.url)
     return render(request , 'home.html',{'event':event,'mem':mem,'events':events,'rand_mem':rand_mem.image.url})
 
 def contact(request):

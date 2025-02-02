@@ -15,7 +15,17 @@
                 <h2 class="text-lg font-semibold">Quick Links</h2>
                 <ul class="mt-2 space-y-2">
                     <li><a href="{% url "home" %}" class="hover:text-blue-400 transition duration-300">Home</a></li>
+
+                    {% if user.is_authenticated %}
+                        {% if not user.is_student %}
+                        <li><a href="{% url "teacherEventList" %}" class="hover:text-blue-400 transition duration-300">Events</a></li>
+                        {% else %}
+                        <li><a href="{% url "events" %}" class="hover:text-blue-400 transition duration-300">Events</a></li>
+                        {% endif %}
+                    {% else %}
                     <li><a href="{% url "events" %}" class="hover:text-blue-400 transition duration-300">Events</a></li>
+                    {% endif %}
+
                     <li><a href="{% url "memories" %}" class="hover:text-blue-400 transition duration-300">Memories</a></li>
                     <li><a href="{% url "contact" %}" class="hover:text-blue-400 transition duration-300">Contact</a></li>
                 </ul>

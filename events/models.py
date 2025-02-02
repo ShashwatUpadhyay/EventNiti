@@ -23,7 +23,7 @@ class Event(models.Model):
         'Limit (leave it blank if no registration limit)'))
     count = models.IntegerField(default=0)
     upload_time = models.DateTimeField(auto_now_add=True)
-    start_date = models.DateField(null=True, blank=True)
+    start_date = models.DateTimeField(null=True, blank=True)
     event_open = models.BooleanField(default=True)
     registration_open = models.BooleanField(default=True)
     notify = models.BooleanField(default=True, help_text=(

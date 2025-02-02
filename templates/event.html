@@ -50,10 +50,10 @@
                 <!-- Date and Time -->
                 <div class="flex flex-wrap items-center justify-between bg-blue-50 border border-blue-200 p-4 rounded-md">
                     <p class="text-gray-700 text-lg">
-                        <span class="font-semibold">Date:</span> {{ event.start_date }}
+                        <span class="font-semibold">Date:</span> {{ event.start_date|date:"F d, Y" }}
                     </p>
                     <p class="text-gray-700 text-lg">
-                        <span class="font-semibold">Time:</span> 9:00 AM
+                        <span class="font-semibold">Time:</span> {{ event.start_date|time:"h:i A"  }}
                     </p>
                 </div>
             
