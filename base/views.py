@@ -5,7 +5,7 @@ from . import models
 from account.models import UserExtra
 from django.contrib.auth.models import User
 from events.models import Event
-from memories.models import Memories
+from memories.models import Memories, MemoryImages
 
 # Create your views here.
 
@@ -34,7 +34,9 @@ def home(request):
     event = Event.objects.filter(event_open=True,event_over = False).order_by('start_date')[:3]
     mem = Memories.objects.prefetch_related('memory_img').order_by('-event__start_date')[:3]
     events = Event.objects.filter(event_over = True,event_open=True).order_by('start_date')
-    return render(request , 'home.html',{'event':event,'mem':mem,'events':events})
+    rand_mem = MemoryImages.objects.order_by('?').first()
+    print(rand_mem.image.url)
+    return render(request , 'home.html',{'event':event,'mem':mem,'events':events,'rand_mem':rand_mem.image.url})
 
 def contact(request):
     return render(request, 'contact.html')
