@@ -29,7 +29,7 @@ Memories | Cherished Memories
                         <img src="{{ mems.memory_img.latest.image.url }}" alt="Memory" class="w-full h-56 object-cover group-hover:opacity-90 transition-opacity">
                         <div class="p-4">
                             <h3 class="font-bold text-xl text-gray-800">{{ mems.memory_title }}</h3>
-                            <p class="mt-1 text-blue-600 font-semibold">📅 {{ mems.event.start_date }}</p>
+                            <p class="mt-1 text-blue-600 font-semibold">📅 {{ mems.event.start_date|date:"F d, Y" }}</p>
                             <p class="mt-1 text-gray-600">Event: <span class="font-medium">{{ mems.event.title }}</span></p>
                         </div>
                     </div>

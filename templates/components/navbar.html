@@ -13,40 +13,49 @@
             <!-- Desktop Menu -->
             <div class="hidden md:flex space-x-8 items-center text-lg">
                 <a href="{% url 'home' %}" class="relative group hover:text-gray-300 transition duration-300">
-                    🏠 Home
+                    Home
                     <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-300 transition-all duration-300 group-hover:w-full"></span>
                 </a>
                 <a href="{% url 'memories' %}" class="relative group hover:text-gray-300 transition duration-300">
-                    📷 Memories
+                    Memories
                     <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-300 transition-all duration-300 group-hover:w-full"></span>
                 </a>
+        {% if user.is_authenticated %}
+
                 {% if not user.is_student %}
                     <a href="{% url 'teacherEventList' %}" class="relative group hover:text-gray-300 transition duration-300">
-                        📅 Events
+                       Events
                         <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-300 transition-all duration-300 group-hover:w-full"></span>
                     </a>
                 {% else %}
                     <a href="{% url 'events' %}" class="relative group hover:text-gray-300 transition duration-300">
-                        📅 Events
+                        Events
                         <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-300 transition-all duration-300 group-hover:w-full"></span>
                     </a>
                 {% endif %}
+            {% else %}
+            <a href="{% url 'events' %}" class="relative group hover:text-gray-300 transition duration-300">
+                Events
+                <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-300 transition-all duration-300 group-hover:w-full"></span>
+            </a>
+            {% endif %}
                 <a href="{% url 'blogs' %}" class="relative group hover:text-gray-300 transition duration-300">
-                    📝 Blogs
+                    Blogs
                     <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-300 transition-all duration-300 group-hover:w-full"></span>
                 </a>
                 <a href="{% url 'contact' %}" class="relative group hover:text-gray-300 transition duration-300">
-                    📞 Contact
+                    Contact
                     <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-300 transition-all duration-300 group-hover:w-full"></span>
                 </a>
 
                 {% if not request.user.is_authenticated %}
-                    <a href="{% url 'login' %}" class="px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition duration-300">
-                        🔑 Login
+                    <a href="{% url 'login' %}" class="px-3 py-1 bg-purple-500 rounded-lg hover:bg-purple-800 transition duration-300">
+                        Login
+                        {% comment %} 🔑 Login {% endcomment %}
                     </a>
-                    <a href="{% url 'register' %}" class="px-4 py-2 bg-gray-600 rounded-lg hover:bg-gray-500 transition duration-300">
-                        🆕 Register
-                    </a>
+                    {% comment %} <a href="{% url 'register' %}" class="px-4 py-2 bg-gray-600 rounded-lg hover:bg-gray-500 transition duration-300">
+                         Register
+                    </a> {% endcomment %}
                 {% else %}
                     <div class="relative group">
                         <button id="user-menu-btn" class="flex items-center space-x-2 hover:text-gray-300 transition duration-300">
@@ -61,7 +70,7 @@
                                 <a href="{% url 'certificates' %}" class="block px-4 py-2 hover:bg-gray-100 rounded-t-lg">📜 Certificates</a>
                                 <a href="{% url 'myticket' %}" class="block px-4 py-2 hover:bg-gray-100">🎟️ My Tickets</a>
                             {% endif %}
-                            <a href="{% url 'logout' %}" class="block px-4 py-2 text-red-500 hover:bg-gray-100 rounded-b-lg">🚪 Logout</a>
+                            <a href="{% url 'logout' %}" class="block px-4 py-2 text-red-500 hover:bg-gray-100 rounded-b-lg">Logout</a>
                         </div>
                     </div>
                 {% endif %}
@@ -80,17 +89,21 @@
     <div id="mobile-menu" class="hidden md:hidden bg-white/10 backdrop-blur-md text-black text-center">
         <a href="{% url 'home' %}" class="block py-3 hover:bg-gray-700 transition duration-300">🏠 Home</a>
         <a href="{% url 'memories' %}" class="block py-3 hover:bg-gray-700 transition duration-300">📷 Memories</a>
-        {% if not user.is_student %}
-            <a href="{% url 'teacherEventList' %}" class="block py-3 hover:bg-gray-700 transition duration-300">📅 Events</a>
+        {% if user.is_authenticated %}
+            {% if not user.is_student %}
+                <a href="{% url 'teacherEventList' %}" class="block py-3 hover:bg-gray-700 transition duration-300">📅 Events</a>
+            {% else %}
+                <a href="{% url 'events' %}" class="block py-3 hover:bg-gray-700 transition duration-300">📅 Events</a>
+            {% endif %}
         {% else %}
-            <a href="{% url 'events' %}" class="block py-3 hover:bg-gray-700 transition duration-300">📅 Events</a>
+        <a href="{% url 'events' %}" class="block py-3 hover:bg-gray-700 transition duration-300">📅 Events</a>
         {% endif %}
         <a href="{% url 'blogs' %}" class="block py-3 hover:bg-gray-700 transition duration-300">📝 Blogs</a>
         <a href="{% url 'contact' %}" class="block py-3 hover:bg-gray-700 transition duration-300">📞 Contact</a>
 
         {% if not request.user.is_authenticated %}
-            <a href="{% url 'login' %}" class="block py-3 hover:bg-gray-700 transition duration-300">🔑 Login</a>
-            <a href="{% url 'register' %}" class="block py-3 hover:bg-gray-700 transition duration-300">🆕 Register</a>
+            <a href="{% url 'login' %}" class="block py-3 hover:bg-purple-500 transition duration-300">🔑 Login</a>
+            {% comment %} <a href="{% url 'register' %}" class="block py-3 hover:bg-gray-700 transition duration-300">🆕 Register</a> {% endcomment %}
         {% else %}
             {% if user.is_student %}
                 <a href="{% url 'certificates' %}" class="block py-3 hover:bg-gray-700 transition duration-300">📜 Certificates</a>
