@@ -46,3 +46,6 @@ def socials(request):
 
 def ourTeam(request):
     return render(request, 'ourteam.html')  
+
+def ourFoundingTeam(request):
+    return render(request, 'foundingteam.html')  

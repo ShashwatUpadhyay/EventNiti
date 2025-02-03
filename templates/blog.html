@@ -9,6 +9,62 @@
 
 {% block content %}
 
+<style>
+    {% comment %} .ck-content h1 {
+          font-size: 50px; 
+        }
+    .ck-content h2 {
+          font-size: 30px; 
+        }
+    .ck-content h3 {
+          font-size: 20px; 
+        }
+    .ck-content ol {
+        list-style-type: decimal;
+        }
+    .ck-content p { 
+        font-size: 16px; 
+        margin-top: 1em; 
+        margin-bottom: 1em 
+    } {% endcomment %}
+    .ck-content > blockquote,
+.ck-content > dl,
+.ck-content > dd,
+.ck-content > h1,
+.ck-content > h2,
+.ck-content > h3,
+.ck-content > h4,
+.ck-content > h5,
+.ck-content > h6,
+.ck-content > hr,
+.ck-content > figure,
+.ck-content > p,
+.ck-content > pre {
+  margin: revert;
+}
+
+.ck-content > ol,
+.ck-content > ul {
+  list-style: revert;
+  margin: revert;
+  padding: revert;
+}
+
+.ck-content > table {
+  border-collapse: revert;
+}
+
+.ck-content > h1,
+.ck-content > h2,
+.ck-content > h3,
+.ck-content > h4,
+.ck-content > h5,
+.ck-content > h6 {
+  font-size: revert;
+  font-weight: revert;
+}
+</style>
+
 <section id="blog-content" class="py-12 bg-blue-50">
     <div class="max-w-5xl mx-auto px-4 mt-20 sm:px-6 lg:px-8">
         <!-- Blog Title -->
@@ -19,7 +75,7 @@
         </div>
 
         <!-- Blog Content -->
-        <div class="prose prose-lg max-w-none text-gray-700">
+        <div class="prose prose-lg max-w-none text-gray-700 ck-content">
             {% comment %} {{ blog.content }} {% endcomment %}
             {{ blog.content|safe }}
         </div>
