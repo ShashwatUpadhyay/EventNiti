@@ -8,6 +8,7 @@ urlpatterns = [
     path('auth-view/<slug>/registrations/', views.registeredStudentList, name = 'registeredStudentList'),
     path('auth-view/<slug>/registration/', views.registeredStudentListAjax, name = 'registeredStudentListAjax'),
     path('<slug>/', views.event, name = 'event'),
+    path('<slug>/result/', views.eventResult, name = 'eventResult'),
     path('register/<slug>/', views.eventregister, name = 'eventregister'),
     path('ticket/<uid>/', views.eventTicket, name='eventTicket'),
     path('attendence/<submissionid>/', views.takeSudentAttendence, name = 'takeSudentAttendence'),

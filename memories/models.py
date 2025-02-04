@@ -12,7 +12,7 @@ class Memories(models.Model):
         return self.event.title
     
     class Meta:
-        verbose_name_plural  = 'Memories'
+        verbose_name = '1. Memory'
 
 class MemoryImages(models.Model):
     memory = models.ForeignKey(Memories,on_delete=models.CASCADE,related_name='memory_img')
@@ -24,8 +24,8 @@ class MemoryImages(models.Model):
         return str(self.image_date)
     
     class Meta:
-        get_latest_by = 'image_date'  
-        verbose_name_plural  = 'Memory Images'
+        get_latest_by = 'image_date'
+        verbose_name = '2. Memory Image'
 
 
 class MemoryVideo(models.Model):
@@ -38,4 +38,4 @@ class MemoryVideo(models.Model):
         return str(self.video_date)
     
     class Meta:
-        verbose_name_plural  = 'Memory Videos'
+        verbose_name = '3. Memory Video'

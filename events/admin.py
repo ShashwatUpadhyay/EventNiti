@@ -1,8 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Event, EventSubmission,EventTicket
-
+from .models import Event, EventSubmission,EventTicket,EventResult
 class EventSubmissionAdmin(admin.ModelAdmin):
     list_display = ('event', 'uu_id', 'full_name','course', 'section','year','allowed','attendence','attendence_taken_by')
     search_fields = ('full_name','event__title', 'uu_id','year', 'course','attendence')
@@ -21,5 +20,5 @@ class EventAdmin(admin.ModelAdmin):
 
 admin.site.register(EventSubmission, EventSubmissionAdmin)
 admin.site.register(EventTicket,EventTicketAdmin)
-
 admin.site.register(Event,EventAdmin)
+admin.site.register(EventResult)

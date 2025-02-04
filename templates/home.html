@@ -155,6 +155,7 @@ Prerogative Pointers
         <div id="slider-container" class="past-events__container flex overflow-x-auto scroll-smooth">
             <div id="slider" class="past-events__slider flex space-x-4">
                 {% for event in events %}
+                <a href='{% url "eventResult" event.slug %}'>
                 <div class="past-events__card bg-white rounded-lg shadow-lg overflow-hidden w-64 flex-shrink-0">
                     <div class="past-events__image">
                         <img src="{{event.poster.url}}" alt="Event Image" class="w-full h-48 object-cover">
@@ -165,6 +166,7 @@ Prerogative Pointers
                         {% comment %} <p class="past-events__description text-sm text-gray-600">{{event.description}}</p> {% endcomment %}
                     </div>
                 </div>
+            </a>
                 {% endfor %}
             </div>
         </div>

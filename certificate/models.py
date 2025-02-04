@@ -24,7 +24,8 @@ class CertificateFor(models.Model):
         return self.title
 
     class Meta:
-        verbose_name_plural  = 'Certificate Achievements'
+        verbose_name = '2. Certificate Achievement'
+        
 
 class Certificate(models.Model):
     choices = (('Participation', 'Participation') ,('Winner', 'Winner'),('Runner Up', 'Runner Up'),('Second Runner-Up', 'Second Runner-Up'))
@@ -40,6 +41,10 @@ class Certificate(models.Model):
         return f'{self.user.get_full_name()} - {settings.DOMAIN_NAME}certificate/{self.hash}'
     def save(self, *args, **kwargs):
         super(Certificate, self).save(*args, **kwargs)
+        
+    class Meta:
+        ordering = ['-issue_date']
+        verbose_name = '1. Certificate'
         
     
 @receiver(post_save, sender = Certificate)

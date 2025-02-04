@@ -92,36 +92,6 @@ Registered Students
     </div>
 </div>
 <script>
-
-    const eventSlug = "{{ event.slug }}";
-    const socket = new WebSocket(`ws://${window.location.host}/ws/event/${eventSlug}/`);
-
-    socket.onmessage = function(event) {
-        const students = JSON.parse(event.data);
-        updateStudentTable(students);
-    };
-
-    function updateStudentTable(students) {
-        let tableBody = document.querySelector("#table tbody");
-        tableBody.innerHTML = "";  
-        students.forEach(student => {
-            tableBody.innerHTML += `
-                <tr>
-                    <td>${student.uu_id}</td>
-                    <td>${student.full_name}</td>
-                    <td>${student.email}</td>
-                    <td>${student.course}</td>
-                    <td>${student.section}</td>
-                    <td>${student.year}</td>
-                    <td>${student.attendence}</td>
-                    <td>${student.attendence_taken_by || "-"}</td>
-                    <td>${student.allowed ? "Yes" : "No"}</td>
-                </tr>
-            `;
-        });
-    }
-
-
     const formatter = new Intl.DateTimeFormat("en-US", {
         timeZone: "Asia/Kolkata",
         year: "numeric",

@@ -189,3 +189,16 @@ def registeredStudentListAjax(request, slug):
         return JsonResponse({"students": student_data})
     
     return render(request, 'registeredstudent.html', {'students': students, 'event': event})
+
+def eventResult(request, slug):
+    event =  None
+    result =  None
+    submisson =  None
+    try:
+        event = models.Event.objects.get(slug=slug)
+        submisson = models.EventSubmission.objects.filter(event = event)
+        result = models.EventResult.objects.get(event = event)
+    except Exception as e:
+        return redirect('events')
+    
+    return render(request , 'resultofevent.html',{'event':event, 'result':result,'submisson':submisson})

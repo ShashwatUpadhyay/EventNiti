@@ -6,7 +6,7 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.core.mail import send_mail
 from ppuu import settings
-from ppuu.mail_sender import event_anouncement, event_announcement
+from ppuu.mail_sender import event_anouncement, event_announcement,event_result_anouncement
 # Create your models here.
 
 
@@ -49,7 +49,7 @@ class Event(models.Model):
 
     class Meta:
         ordering = ['-upload_time']
-
+        verbose_name = '1. Event'
 
 class EventSubmission(models.Model):
     choice = (('Present', 'Present'), ('Absent', 'Absent'))
@@ -75,6 +75,9 @@ class EventSubmission(models.Model):
         if not self.uid:
             self.uid = uuid.uuid4()
         super(EventSubmission, self).save(*args, **kwargs)
+    
+    class Meta:
+        verbose_name = '2. Event Submission'
 
 
 class EventTicket(models.Model):
@@ -94,6 +97,32 @@ class EventTicket(models.Model):
     def __str__(self):
         return str(self.user.get_full_name())
 
+    class Meta:
+        verbose_name = '3. Event Ticket'
+
+class EventResult(models.Model):
+    event = models.OneToOneField(Event, on_delete=models.CASCADE, related_name='result')
+    first = models.ForeignKey(User, on_delete=models.CASCADE, related_name='first')
+    first_img = models.ImageField(upload_to='event_result_photo/', null=True, blank=True)
+    second = models.ForeignKey(User, on_delete=models.CASCADE, related_name='second')
+    second_img = models.ImageField(upload_to='event_result_photo/', null=True, blank=True)
+    third = models.ForeignKey(User, on_delete=models.CASCADE, related_name='third')
+    third_img = models.ImageField(upload_to='event_result_photo/', null=True, blank=True)
+    result_announced = models.BooleanField(default=False)
+    upload_time = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return str(self.event.title) + " - " + "Result"
+    
+    class Meta:
+        verbose_name = '4. Event Result'
+    
+
+@receiver(post_save, sender=EventResult)
+def resultAnounced(sender, instance, created, **kwargs):
+    if instance.result_announced:
+        emails = User.objects.values_list("email", flat=True)
+        event_result_anouncement(emails, instance.event)
 
 @receiver(post_save, sender=EventSubmission)
 def generate_ticket(sender, instance, created, **kwargs):

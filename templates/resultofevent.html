@@ -1,0 +1,131 @@
+{% extends "index.html" %}
+ {% block title %} Registered Students {% endblock title %} 
+ {% block content %}
+<div class="bg-gray-100">
+  <div class="min-h-screen flex flex-col pt-12">
+    <!-- Header -->
+    <header class="bg-blue-600 text-white py-12">
+      <div class="container mx-auto px-4">
+        <h1 class="text-2xl font-bold">EVENT RESULT</h1>
+        <p class="mt-1">
+          Event:
+          <span class="font-semibold text-green-500"
+            >{{event.title}} | {{ event.start_date|date:'F d, Y' }}</span
+          >
+        </p>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+      <div class="container mx-auto px-4 py-8">
+        {% if result %}
+        <section class="bg-white pt-20 animate-fade-in animate-slide-in">
+            <div class=" px-4 mx-auto max-w-screen-xl text-center py-8 lg:py-16 lg:px-6 rounded-xl my-4 animate-fade-in animate-slide-in shadow-xl shadow-purple-500/50">
+                {% comment %} <div class="mx-auto mb-8 max-w-screen-sm lg:mb-16"> {% endcomment %}
+                    {% comment %} <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-gray-900"></h2> {% endcomment %}
+                    {% comment %} <p class="font-light text-gray-500 sm:text-xl dark:text-gray-400"></p> {% endcomment %}
+                {% comment %} </div>  {% endcomment %}
+        
+                {% comment %} person {% endcomment %}
+                <div class="grid gap-8 lg:gap-16 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
+                    <div class="text-center text-gray-500 dark:text-gray-400">
+                        <img class="mx-auto mb-4 w-36 h-36 rounded-full border border-4 border-purple-500" src="{{ result.first_img.url }}" alt="Bonnie Avatar">
+                        <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900 ">
+                            <a href="#">{{ result.first }}</a>
+                        </h3>
+                        <p class='text-black'>Winner🥇</p>
+                    </div>
+        
+                    <div class="text-center text-gray-500 dark:text-gray-400">
+                        <img class="mx-auto mb-4 w-36 h-36 rounded-full border border-4 border-purple-500" src="{{ result.second_img.url }}" alt="Bonnie Avatar">
+                        <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900 ">
+                            <a href="#">{{ result.second }}</a>
+                        </h3>
+                        <p class='text-black'>Runner Up🥈</p>
+                    </div>
+        
+                    <div class="text-center text-gray-500 dark:text-gray-400">
+                        <img class="mx-auto mb-4 w-36 h-36 rounded-full border border-4 border-purple-500" src="{{ result.third_img.url }}" alt="Bonnie Avatar">
+                        <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900 ">
+                            <a href="#">{{ result.third }}</a>
+                        </h3>
+                        <p class='text-black'>Second-Runner Up🥉</p>
+                        <ul class="flex justify-center mt-4 space-x-4">
+                        </ul>
+                    </div>
+                </div>  
+            </div>
+        </section>
+          {% else %}
+
+          <div class="col-span-full">
+            <div
+              class="flex flex-col items-center justify-center bg-yellow-100 border border-yellow-300 text-yellow-700 font-semibold rounded-lg py-6 px-8 mt-6"
+            >
+              <p>Result not announced yet</p>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      {% comment %} student participated {% endcomment %}
+      <div class="container mx-auto px-4 py-8">
+        {% if result and submisson %}
+        <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-gray-900 text-center">All participants</h2>
+        <div class="overflow-x-auto bg-white rounded-lg shadow">
+          <table
+            id="table"
+            class="min-w-full table-auto border-collapse border border-gray-200"
+          >
+            <thead class="bg-blue-600 text-white">
+              <tr>
+                <th class="px-4 py-2 text-left">Full Name</th>
+                <th class="px-4 py-2 text-left">Course</th>
+                <th class="px-4 py-2 text-left">Section</th>
+                <th class="px-4 py-2 text-left">Year</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for student in submisson %}
+              <!-- Example row -->
+              <tr class="bg-gray-50">
+                <td class="border px-4 py-2">{{ student.full_name }}</td>
+                <td class="border px-4 py-2">{{ student.course }}</td>
+                <td class="border px-4 py-2">{{ student.section }}</td>
+                <td class="border px-4 py-2">{{ student.year }}</td>
+                {% comment %} {% if student.attendence == 'Present' %}
+                <td class="border px-4 py-2">
+                  <span class="px-2 py-1 rounded bg-green-100 text-green-600"
+                    >Present</span
+                  >
+                </td>
+                {% else %}
+                <td class="border px-4 py-2">
+                  <span class="px-2 py-1 rounded bg-red-100 text-red-600"
+                    >Absent</span
+                  >
+                </td>
+                {% endif %} {% endcomment %}
+              </tr>
+              {% endfor %}
+              <!-- Repeat rows dynamically -->
+            </tbody>
+          </table>
+          {% comment %} {% else %}
+
+          <div class="col-span-full">
+            <div
+              class="flex flex-col items-center justify-center bg-yellow-100 border border-yellow-300 text-yellow-700 font-semibold rounded-lg py-6 px-8 mt-6"
+            >
+              <p>No Submissions</p>
+            </div>
+          </div> {% endcomment %}
+          {% endif %}
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+{% endblock content %}

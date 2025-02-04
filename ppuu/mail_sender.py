@@ -30,17 +30,10 @@ def event_anouncement(emails,instance):
                     <button><a href='{settings.DOMAIN_NAME}events/{instance.slug}/'>OPEN</a></button>
                 </p>"""
             )
+        
 
 
 def event_announcement(emails, instance):
-    """
-    Sends an email announcement for an event to a list of recipients.
-
-    Args:
-        emails (list): List of recipient email addresses.
-        instance (Event): Event instance containing title and slug.
-    """
-    # Prepare the email content
     subject = f'Join {instance.title}'
     text_content = f'Join {instance.title}. Click the link below to register:\n{settings.DOMAIN_NAME}events/{instance.slug}'
     html_content = f"""
@@ -54,8 +47,26 @@ def event_announcement(emails, instance):
         <p style="margin-top: 20px;">Thank you for your interest!</p>
     </div>
     """
+    email = EmailMultiAlternatives(
+        subject=subject,
+        body=text_content,
+        from_email=settings.EMAIL_HOST_USER,
+        to=[],  # Keep "To" empty to avoid showing a main recipient
+        bcc=emails[1:],  # Add all recipients in BCC
+    )
+    email.attach_alternative(html_content, "text/html")
+    email.send()
     
-    # Create email
+
+def event_result_anouncement(emails, instance):
+    subject =f'{instance.event.title} result is out!'
+    text_content = f'{instance.event.title} result is out!'
+    html_content = f"""<p>
+                    <h1>We are thrilled to announce that {instance.event.title} event result is out!</h1>
+                    <h4>Click the link below to see the result</h4>
+                    <button><a href='{settings.DOMAIN_NAME}events/{instance.slug}/'>OPEN</a></button>
+                </p>"""
+                
     email = EmailMultiAlternatives(
         subject=subject,
         body=text_content,
