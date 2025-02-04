@@ -3,3 +3,6 @@ media/
 info.log
 error.log
 debug.log
+
+__pycache__/
+*.pyc
