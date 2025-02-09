@@ -57,9 +57,17 @@
     </div>
     
     <!-- Download Button -->
+     <div class='grid lg:grid-col-1'>
     <button id="download-btn" class="ml-4 mt-8 bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
         Download Certificate
     </button>
+    <a href='{{ linkedin_url }}' target='_blank'>
+        <button class="ml-4 mt-8 bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            Add to linkdin <i class="fab fa-linkedin"></i>
+        </button>
+    </a>
+</div>
+
 </div>
 <script>
     document.getElementById("download-btn").addEventListener("click", () => {

@@ -6,6 +6,27 @@ import qrcode
 import base64
 from io import BytesIO
 from ppuu import settings
+from ppuu.settings import DOMAIN_NAME
+from datetime import datetime
+
+
+def generate_certificate_link(student,certif_name, certi, dt):
+    base_url = f"https://www.linkedin.com/profile/add?startTask={certif_name}"
+    cert_name = f'{certif_name} Certificate'
+    org_id = "103012446"  
+    issue_year = dt.year
+    issue_month = dt.month
+    exp_year = ""
+    exp_month = ""
+    cert_url = f"{DOMAIN_NAME}certificates/{certi.hash}"
+    cert_id = certi.hash
+
+    linkedin_url = f"{base_url}&name={cert_name}&organizationId={org_id}" \
+                   f"&issueYear={issue_year}&issueMonth={issue_month}" \
+                   f"&expirationYear={exp_year}&expirationMonth={exp_month}" \
+                   f"&certUrl={cert_url}&certId={cert_id}"
+
+    return linkedin_url
 
 
 def generate_qr_code_base64(data):
@@ -32,8 +53,9 @@ def certificate(request,hash):
         certi_obj = models.Certificate.objects.get(hash=hash)
     except Exception as e:
         return HttpResponse(f'No certificate with code: {hash}')
-        
-    return render(request ,'certificate.html', {'certi_obj':certi_obj,'qr_code_base64': generate_qr_code_base64(f'{settings.DOMAIN_NAME}certificate/{certi_obj.hash}')})
+    dt = datetime.fromisoformat(str(certi_obj.issue_date))
+    linkedin_url = generate_certificate_link(certi_obj.user, certi_obj.certificate_for.title, certi_obj,dt)  
+    return render(request ,'certificate.html', {'certi_obj':certi_obj,'linkedin_url':linkedin_url,'qr_code_base64': generate_qr_code_base64(f'{settings.DOMAIN_NAME}certificate/{certi_obj.hash}')})
 
 @login_required(login_url='login')
 def certificates(request):
