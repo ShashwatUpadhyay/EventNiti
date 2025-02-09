@@ -156,7 +156,7 @@ Prerogative Pointers
             <div id="slider" class="past-events__slider flex space-x-4">
                 {% for event in events %}
                 <a href='{% url "eventResult" event.slug %}'>
-                <div class="past-events__card bg-white rounded-lg shadow-lg overflow-hidden w-64 flex-shrink-0">
+                <div class="past-events__card bg-white rounded-lg shadow-lg overflow-hidden w-64 flex-shrink-0" height='200px'>
                     <div class="past-events__image">
                         <img src="{{event.poster.url}}" alt="Event Image" class="w-full h-48 object-cover">
                     </div>
