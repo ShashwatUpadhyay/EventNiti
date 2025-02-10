@@ -13,7 +13,7 @@ from datetime import datetime
 def generate_certificate_link(student,certif_name, certi, dt):
     base_url = f"https://www.linkedin.com/profile/add?startTask={certif_name}"
     cert_name = f'{certif_name} Certificate'
-    org_id = "103012446"  
+    org_id = "103420170"  
     issue_year = dt.year
     issue_month = dt.month
     exp_year = ""
