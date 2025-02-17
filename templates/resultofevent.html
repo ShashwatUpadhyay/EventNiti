@@ -72,9 +72,10 @@
 
       {% comment %} student participated {% endcomment %}
       <div class="container mx-auto px-4 py-8">
-        {% if result and submisson %}
+        {% if result and submisson %}<hr>
         <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-gray-900 text-center">All participants</h2>
-        <div class="overflow-x-auto bg-white rounded-lg shadow">
+        <hr>
+        <div class="overflow-x-auto bg-white rounded-lg shadow mt-6">
           <table
             id="table"
             class="min-w-full table-auto border-collapse border border-gray-200"
@@ -125,6 +126,23 @@
           {% endif %}
         </div>
       </div>
+      {% if event.blogs.all %}
+      <hr>
+      <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-gray-900 text-center">Blogs</h2><hr>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mx-12 my-12 ">
+        {% for blog in event.blogs.all %}
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden group hover:shadow-xl transform transition duration-300 ease-in-out hover:scale-105" width='100px'>
+            <img src="{{ blog.image.url }}" alt="Blog Image" class="w-full h-48 object-cover group-hover:opacity-80 transition duration-300 ease-in-out">
+            <div class="p-6">
+                <a href="{% url 'blogpage' blog.slug %}" class="mt-4 inline-block text-blue-600 hover:underline group-hover:text-blue-800 transition duration-300 ease-in-out">
+                    <h3 class="text-xl font-semibold text-gray-800 group-hover:text-blue-600">{{ blog.title }}</h3>
+                </a>
+                <p class="text-gray-500 mt-2">{{ blogs.content|striptags|truncatewords:10|safe }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
     </main>
   </div>
 </div>

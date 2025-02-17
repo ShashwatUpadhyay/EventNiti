@@ -3,6 +3,7 @@ from . import models
 from django.contrib import messages
 from django.contrib.auth.models import User
 from account.models import UserExtra
+from blog.models import Blog
 from base.views import is_head, is_member, is_student, is_teacher
 from certificate.views import generate_qr_code_base64
 from django.contrib.auth.decorators import login_required
@@ -194,11 +195,13 @@ def eventResult(request, slug):
     event =  None
     result =  None
     submisson =  None
+    blog =  None
     try:
         event = models.Event.objects.get(slug=slug)
         submisson = models.EventSubmission.objects.filter(event = event)
         result = models.EventResult.objects.get(event = event)
+        blogs = Blog.objects.filter(related_event = event)
     except Exception as e:
         return redirect('events')
     
-    return render(request , 'resultofevent.html',{'event':event, 'result':result,'submisson':submisson})
+    return render(request , 'resultofevent.html',{'event':event, 'result':result,'submisson':submisson,'blogs':blogs})

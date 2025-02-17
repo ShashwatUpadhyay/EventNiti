@@ -7,6 +7,6 @@ def blogs(request):
         blog.first_line = blog.content.split('\n')[0]
     return render(request, 'blogpage.html', {'blog': blogs})
 
-def blogpage(request,slug):
+def blogpage(request,slug): 
     blog = models.Blog.objects.get(slug=slug)
     return render(request, 'blog.html', {'blog': blog})
