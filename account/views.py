@@ -33,10 +33,19 @@ def loginpage(request):
             return redirect('login')
         
         user = User.objects.get(username = username)
-        user_obj = models.UserExtra.objects.get(user = user)
+        user_obj=None
+        try:
+            user_obj = models.UserExtra.objects.get(user = user)
+        except:
+            user_obj = authenticate(username = username, password = password)
+            if not user_obj:
+                messages.error(request, "Invalid Credential")
+                return redirect('login') 
+            login(request,user_obj)
+            logger.info(f'[{current_time}] {user_obj.get_full_name()} logged in')
+            return redirect('/admin')
         
         if not user_obj.is_verified:
-            
             if cache.get(username):
                 data = cache.get(username)
                 data['count'] += 1
@@ -54,7 +63,6 @@ def loginpage(request):
                 }
                 cache.set(username,data, 60*1)
                
-            # print('verification sent') 
             verifyUser(user.email,user_obj.uid)
             messages.error(request,"Verification mail has been sent to the registered!.. Please verify your account.")
             return redirect('login')
