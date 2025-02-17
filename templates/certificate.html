@@ -5,10 +5,10 @@
 {% endblock title %}
 
 {% block content %}
-<div class="flex flex-wrap bg-gray-100 items-center justify-center min-h-screen p-4">
+<div class="flex flex-wrap bg-gray-100 items-center justify-center min-h-screen p-4 py-20">
 
     <!-- Certificate Container -->
-    <div id="certificate" class="relative bg-white border-4 border-blue-600 shadow-xl rounded-lg p-6 sm:p-8 md:p-12 max-w-full sm:max-w-2xl lg:max-w-4xl text-center">
+    <div id="certificate" class="relative bg-white border-4 border-blue-600 shadow-xl rounded-lg p-6 sm:p-8 md:p-12 max-w-full sm:max-w-2xl lg:max-w-4xl text-center mt-12">
         <!-- QR Code -->
         <img src="data:image/png;base64,{{qr_code_base64}}" alt="QR Code" class="absolute top-4 left-4 w-24 h-24 rounded-md shadow-md">
     

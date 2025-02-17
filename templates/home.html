@@ -252,5 +252,20 @@ Prerogative Pointers
         </form>
     </div>
 </section>
-
+{% if messages %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            {% for message in messages %}
+                Swal.fire({
+                    position: "top-end",
+                    icon: "{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}",
+                    title: "{{ message }}",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+                  
+            {% endfor %}
+        });
+    </script>
+{% endif %}
 {% endblock content %}

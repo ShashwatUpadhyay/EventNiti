@@ -202,6 +202,7 @@ def eventResult(request, slug):
         result = models.EventResult.objects.get(event = event)
         blogs = Blog.objects.filter(related_event = event)
     except Exception as e:
-        return redirect('events')
+        messages.error(request,"No Result Announcement")
+        return redirect('home')
     
     return render(request , 'resultofevent.html',{'event':event, 'result':result,'submisson':submisson,'blogs':blogs})
