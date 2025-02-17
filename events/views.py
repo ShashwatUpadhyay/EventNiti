@@ -172,7 +172,7 @@ def registeredStudentListAjax(request, slug):
     event = models.Event.objects.get(slug=slug)
     students = models.EventSubmission.objects.filter(event__slug=slug).order_by('full_name')
     
-    if request.is_ajax():  # Check if it's an AJAX request
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':  # Check if it's an AJAX request
         student_data = []
         for student in students:
             student_data.append({

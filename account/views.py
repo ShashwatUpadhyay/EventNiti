@@ -77,6 +77,7 @@ def registrationpage(request):
         last_name = request.POST.get('last_name')
         username = request.POST.get('username')
         email = request.POST.get('email')
+        phone = request.POST.get('phone')
         course = request.POST.get('course')
         section = request.POST.get('section')
         year = request.POST.get('year')
@@ -90,6 +91,12 @@ def registrationpage(request):
         if User.objects.filter(email = email).exists():
             messages.error(request, 'Email already Exists!')
             return redirect('register')
+        if User.objects.filter(phone = phone).exists():
+            messages.error(request, 'Mobile number already Exists!')
+            return redirect('register')
+        if len(str(phone))!=10:
+            messages.error(request, 'Mobile number is Invalid!')
+            return redirect('register')
         if User.objects.filter(username = username).exists():
             messages.error(request, 'Username already Exists!')
             return redirect('register')
@@ -102,7 +109,7 @@ def registrationpage(request):
         user_obj.save()
         group = Group.objects.get(name='STUDENT')
         group.user_set.add(user_obj)
-        models.UserExtra.objects.create(user = user_obj, uu_id = uuid, course = course, section = section,year=year,forget_password_token = secrets.token_hex(20),forget_password_token_time = current_time)
+        models.UserExtra.objects.create(user = user_obj,phone=phone, uu_id = uuid, course = course, section = section,year=year,forget_password_token = secrets.token_hex(20),forget_password_token_time = current_time)
         messages.success(request, 'Your Account has been Created!')
         return redirect('register')
         
