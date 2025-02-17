@@ -32,16 +32,6 @@ Prerogative Pointers
     </div>
 </section>
 
-
-<!-- Messages -->
-{% if messages %}
-<ul class="messages text-red-600 text-lg text-center">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-
 <!-- Memories Section -->
 <section id="memories" class="py-16 bg-gray-50">
     <div class="max-w-7xl mx-auto px-6 text-center">

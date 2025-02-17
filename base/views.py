@@ -6,6 +6,7 @@ from account.models import UserExtra
 from django.contrib.auth.models import User
 from events.models import Event
 from memories.models import Memories, MemoryImages
+from .models import PreviousYearQuestionPaper
 
 # Create your views here.
 
@@ -49,3 +50,7 @@ def ourTeam(request):
 
 def ourFoundingTeam(request):
     return render(request, 'foundingteam.html')  
+
+def previous_paper(request):
+    return render(request,'PreviousYearQuestionPaper.html' )
+ 
