@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Exam</title>
+  <link rel="stylesheet" href="{% static 'css/prac.css' %}"> <link rel="shortcut icon" href="{% static 'images/pplogo.png' %}">
+</head>
+<body style='background-image: url("{% static 'images/background.jpg' %}");'>
+    <h1>Exam</h1>
+  <div class="container">
+    {% if papers %}
+   
+    {% for p in papers %}
+    <div class="year">
+        <!-- <div class="upper">
+            <img src="{{p.paper.url}}" alt="Best Industry Leaders">
+        </div>
+        <div class="icon">
+            <img src="{% static 'images/icon.png' %}">
+        </div> -->
+        <div class="down">
+          <p>{{p.course.name}}</p>
+            <h3>{{ p.subject.name }} </h3>
+          <p>{{p.exam_name.name}} {{ p.which_year }}</p>
+
+            <a href="{{p.paper.url}}" target="_blank" class="button">Download</a>
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <div class="year" style="width:50%">
+      <div class="down">
+        <h3>No Available Content</h3>
+    </div>
+    </div>
+    {% endif %}
+
+
+  </div>
+</body>
+</html>

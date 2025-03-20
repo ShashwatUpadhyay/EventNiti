@@ -29,7 +29,8 @@ urlpatterns = [
     path('events/', include('events.urls')),
     path('memories/', include('memories.urls')),
     path('blog/', include('blog.urls')),
+    path('previous-year-question-paper/', include('question_papers.urls')),
 ]+ debug_toolbar_urls()
-
+handler404 = 'base.views.custom_404'
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
