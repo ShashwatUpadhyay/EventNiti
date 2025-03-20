@@ -6,6 +6,7 @@ from events.models import Event
 class Memories(models.Model):
     event = models.ForeignKey(Event,on_delete=models.CASCADE)
     memory_title = models.CharField(max_length=100, null=True,blank=True)
+    memory_description = models.TextField(null=True, blank=True)
     memory_date  = models.DateField(auto_now_add=True)
     
     def __str__(self):

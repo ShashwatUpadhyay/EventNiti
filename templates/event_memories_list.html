@@ -6,89 +6,117 @@
 
 {% block content %}
 {% load static %}
-<div class="bg-gray-100 font-sans pt-12">
-    <header class="text-white py-6 pt-12 bg-gradient-to-r from-blue-600 to-purple-500">
-      <div class="container mx-auto px-6 text-center">
-        <h1 class="text-4xl font-bold">{{ event.title }}</h1>
-        <p class="mt-2 text-lg text-center">A gallery of moments worth remembering</p>
-      </div>
-    </header>
+<div class="bg-gray-50 pt-20">
 
-    <section id="memories" class="py-16 bg-blue-50">
+  <div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8  mb-4 md:mb-6 px-4">
       
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-3xl font-bold text-blue-600">Memories from {{ event.title }} event on {{ event.start_date|date:'M d, Y' }}.</h2>
-        {% comment %} <p class="mt-4 text-gray-600"><h1>Memories for </h1></p> {% endcomment %}
-         {% if user.is_authenticated %}
+          {% if user.is_authenticated %}
          {% if not user.is_student %}
-         <a href='{% url "event_memory_upload" event.slug %}'>
-           <button  class="bg-blue-600 text-white font-semibold py-2 my-3 px-6 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300">
-             Upload Photo
-            </button>
-          </a>
+         <a class="border-2 rounded-sm py-1 px-3 text-sm md:text-base hover:border-red-400" href="{% url "event_memory_upload" event.slug %}">Upload Here</a>
           {% endif %}
           {% endif %}
-          <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4  mt-3">
-            {% for memory in memories %}
-                {% for img in memory.memory_img.all %}
-                    <div class="relative group">
-                        <img src="{{ img.image.url }}" alt="Memory"
-                            class="w-full h-48 object-cover rounded-lg shadow-lg cursor-pointer transform transition duration-300 ease-in-out group-hover:scale-105"
-                            onclick="openModal('{{ img.image.url }}', '{{ img.image_title }}', '{{ img.image_date }}')">
-                        <div class="absolute bottom-0 left-0 w-full bg-black bg-opacity-50 text-white text-center py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            {{ img.image_title|default:"No Title" }}
-                        </div>
-                    </div>
-                    
-                {% endfor %}
-            {% endfor %}
-        </div>
-        <div id="imageModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center hidden" onclick="closeModal()">
-          <div class="relative bg-white p-4 rounded-lg">
-              <img id="modalImage" class="w-full max-w-4xl max-h-screen object-contain" />
-              <p id="modalImageTitle" class="mt-4 text-center text-xl font-semibold text-blue-600"><p class="text-center mt-2"></p></p>
-              <span id="modalImageDate" class="block text-center text-sm text-gray-500"></span>
-              <button onclick="closeModal()" class="absolute top-4 right-4 text-white text-xl font-bold"><svg fill="#00FF00" height="20px" width="20px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 490 490" xml:space="preserve" stroke="#fafafa"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <polygon points="456.851,0 245,212.564 33.149,0 0.708,32.337 212.669,245.004 0.708,457.678 33.149,490 245,277.443 456.851,490 489.292,457.678 277.331,245.004 489.292,32.337 "></polygon> </g></svg></button>
-        </div>
-      </div>
-                      {% comment %} {% if vdo %}
-                      <h1 class='text-center'>Videos</h1>
-                      {% for vdo in memory.memory_vdo.all %}
-                      <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                        <video controls class="w-full">
-                          <source src="{{ vdo.video.url }}" type="video/mp4">
-                          Your browser does not support the video tag.
-                        </video>
-                        <p>{{ vdo.video_title }}</p>
-                        
-                      </div>
-                      {% endfor %}
-                      {% endif %} {% endcomment %}
-                    
-        </div>
-    </section>
+      <h1 class="text-4xl text-center font-bold text-purple-700 my-6">"Unforgettable Moments"📸🎥
+      </h1>
   </div>
-  <script>
-    // Function to open the modal
-    function openModal(imageUrl, imageTitle, imageDate) {
-        const modal = document.getElementById('imageModal');
-        const modalImage = document.getElementById('modalImage');
-        const modalImageTitle = document.getElementById('modalImageTitle');
-        const modalImageDate = document.getElementById('modalImageDate');
-        
-        // Set the image source and title
-        modalImage.src = imageUrl;
-        modalImageTitle.textContent = imageTitle;
-        modalImageDate.textContent = imageDate;
-        
-        // Display the modal
-        modal.classList.remove('hidden');
-    }
 
-    // Function to close the modal
-    function closeModal() {
-        const modal = document.getElementById('imageModal');
-        modal.classList.add('hidden');
-    }
-</script>
+  <!-- Description -->
+  <div class="flex justify-center items-center mt-20 p-4">
+      <div class="max-w-5xl w-full bg-gray-100 p-6 md:p-8 border border-gray-700 rounded-lg shadow-lg">
+          <h2 class="text-2xl md:text-3xl font-bold text-gray-800">{{event.title}}</h2>
+          <p class="text-gray-600 text-sm md:text-base mt-1">{{event.start_date|date:'d F Y'}}</p>
+          <p class="text-gray-700 mt-4 md:mt-8 text-sm md:text-base leading-relaxed">
+              {{ memory.memory_description|default:'Description' }}
+          </p>
+      </div>
+  </div>
+
+  <!-- image albums -->
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-4 my-8 mx-8">
+    {% for memory in memories %}
+    {% for img in memory.memory_img.all %}
+      <figure class="text-center border-2 bg-white p-4 rounded-lg hover:border-orange-500">
+          <img class="h-auto max-w-full rounded-lg"
+              src="{{ img.image.url }}" alt="">
+          <figcaption class="mt-3 text-sm text-gray-600">{{ img.image_title|default:"No Title" }}</figcaption>
+      </figure>
+      {% endfor %}
+            {% endfor %}
+      
+  </div>
+
+  <script>
+      document.addEventListener("DOMContentLoaded", () => {
+          const images = document.querySelectorAll("figure img");
+          const modal = document.createElement("div");
+          modal.classList.add("fixed", "top-0", "left-0", "w-full", "h-full", "bg-black/80", "flex", "items-center", "justify-center", "hidden", "z-30");
+          modal.innerHTML = `
+  <div class="relative">
+      <button id="closeModal" class="absolute top-2 right-2 bg-gray-200 px-3 py-1 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+</svg>
+</button>
+      <button id="prevImage" class="absolute left-2 top-1/2 -translate-y-1/2 bg-gray-200 px-3 py-1 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+</svg>
+</button>
+      <img id="modalImage" class="max-w-full max-h-[90vh] rounded-lg" src="" alt="">
+      <button id="nextImage" class="absolute right-2 top-1/2 -translate-y-1/2 bg-gray-200 px-3 py-1 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+</svg>
+</button>
+      <p id="modalCaption" class="text-center text-white mt-2"></p>
+  </div>
+`;
+          document.body.appendChild(modal);
+
+          let currentIndex = 0;
+
+          images.forEach((img, index) => {
+              img.addEventListener("click", () => {
+                  currentIndex = index;
+                  openModal();
+              });
+          });
+
+          function openModal() {
+              modal.classList.remove("hidden");
+              updateModal();
+          }
+
+          function closeModal() {
+              modal.classList.add("hidden");
+          }
+
+          function updateModal() {
+              const img = images[currentIndex];
+              document.getElementById("modalImage").src = img.src;
+              document.getElementById("modalCaption").textContent = img.nextElementSibling.textContent;
+          }
+
+          document.getElementById("closeModal").addEventListener("click", closeModal);
+
+          document.getElementById("nextImage").addEventListener("click", () => {
+              if (currentIndex < images.length - 1) {
+                  currentIndex++;
+                  updateModal();
+              }
+          });
+
+          document.getElementById("prevImage").addEventListener("click", () => {
+              if (currentIndex > 0) {
+                  currentIndex--;
+                  updateModal();
+              }
+          });
+
+          modal.addEventListener("click", (event) => {
+              if (event.target === modal) closeModal();
+          });
+      });
+
+  </script>
+
+</div>
+
+
 {% endblock content %}

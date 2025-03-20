@@ -11,8 +11,9 @@ def memories(request):
 
 def event_memories_list(request, event_slug):
     event = get_object_or_404(Event, slug=event_slug)
+    memory = models.Memories.objects.get(event = event)
     memories = event.memories_set.prefetch_related('memory_img', 'memory_vdo')
-    return render(request, 'event_memories_list.html', {'event': event, 'memories': memories})
+    return render(request, 'event_memories_list.html', {'event': event, 'memories': memories,'memory':memory})
 
 @login_required(login_url='login')
 def UploadMemories(request, event_slug):
