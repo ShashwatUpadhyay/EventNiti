@@ -33,9 +33,7 @@ class Event(models.Model):
     text_status = models.CharField(
         max_length=100, null=True, blank=True, help_text=('let he backend handle it'))
 
-    def __str__(self):
-        return str(self.title)
-
+   
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
