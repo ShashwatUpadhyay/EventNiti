@@ -3,17 +3,24 @@ from . import models
 from events.models import Event
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.paginator import Paginator
 from base.views import is_student
 # Create your views here.
 def memories(request):
     mem = models.Memories.objects.prefetch_related('memory_img').order_by('-event__start_date')
     return render(request, 'memories.html',{'mem':mem})
 
-def event_memories_list(request, event_slug):
-    event = get_object_or_404(Event, slug=event_slug)
-    memory = models.Memories.objects.get(event = event)
-    memories = event.memories_set.prefetch_related('memory_img', 'memory_vdo')
-    return render(request, 'event_memories_list.html', {'event': event, 'memories': memories,'memory':memory})
+# def event_memories_list(request, event_slug):
+#     event = get_object_or_404(Event, slug=event_slug)
+#     memory = models.Memories.objects.get(event = event)
+#     memories = event.memories_set.prefetch_related('memory_img', 'memory_vdo')
+#     return render(request, 'event_memories_list.html', {'event': event, 'memories': memories,'memory':memory})
+def event_memories_list(request):
+    memories = models.MemoryImages.objects.all().order_by('-image_date')
+    p = Paginator(memories,20)
+    page = request.GET.get('page')
+    memories = p.get_page(page)
+    return render(request, 'all_memory_images.html', {'memories': memories})
 
 @login_required(login_url='login')
 def UploadMemories(request, event_slug):

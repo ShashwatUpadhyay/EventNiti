@@ -32,29 +32,6 @@ Prerogative Pointers
     </div>
 </section>
 
-<!-- Memories Section -->
-<section id="memories" class="py-16 bg-gray-50 z-0">
-    <div class="max-w-7xl mx-auto px-6 text-center">
-        <h2 class="text-4xl font-extrabold text-purple-500">Memories</h2>
-        <p class="mt-2 text-gray-600">Relive the moments that matter most to you.</p>
-        <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-            {% for mems in mem %}
-                <a href=" {% url 'event_memories_list' mems.event.slug %} " class="hover:scale-105 transition duration-300">
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl">
-                    <img src="{{ mems.memory_img.latest.image.url }}" alt="Memory" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg text-gray-800">{{mems.memory_title}}</h3>
-                        <p class="text-gray-500 mt-1">{{ mems.event.title }} Event</p>
-                        <p class="text-gray-500">{{ mems.event.start_date|date:"F d, Y" }}</p>
-                    </div>
-                </div>
-                </a>
-            {% endfor %}
-        </div>
-        <a href="{% url "memories" %}" class="text-blue-600 mt-4 inline-block">See more ➡️</a>
-    </div>
-</section>
 
 <!-- Events Section -->
 <main id='events' class="container mx-auto px-6 py-16 z-0">
@@ -171,6 +148,8 @@ Prerogative Pointers
     </div>
 </section>
 
+
+
 <script>
     const sliderContainer = document.getElementById('slider-container');
     const slider = document.getElementById('slider');
@@ -196,6 +175,32 @@ Prerogative Pointers
         });
     });
 </script>
+<!-- Memories Section -->
+<section id="memories" class="py-16 bg-gray-50 z-0">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+        <h2 class="text-4xl font-extrabold text-purple-500">Memories</h2>
+        <p class="mt-2 text-gray-600">Relive the moments that matter most to you.</p>
+        <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            {% for mems in mem %}
+                <a href=" {% url 'event_memories_list' mems.event.slug %} " class="hover:scale-105 transition duration-300">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl">
+                    <img src="{{ mems.memory_img.latest.image.url }}" alt="Memory" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg text-gray-800">{{mems.memory_title}}</h3>
+                        <p class="text-gray-500 mt-1">{{ mems.event.title }} Event</p>
+                        <p class="text-gray-500">{{ mems.event.start_date|date:"F d, Y" }}</p>
+                    </div>
+                </div>
+                </a>
+            {% endfor %}
+        </div>
+        <a href="{% url "memories" %}" class="text-blue-600 mt-4 inline-block">See more ➡️</a>
+    </div>
+</section>
+
+
+
 <!-- Contact Section -->
 <section id="contact" class="py-16 bg-gradient-to-r from-blue-600 to-purple-500 text-black">
     <div class="bg-white shadow-xl rounded-lg p-8 max-w-2xl mx-auto lg:w-2/3 backdrop-blur-md bg-opacity-80">
