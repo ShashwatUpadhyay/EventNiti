@@ -12,7 +12,7 @@
       
           {% if user.is_authenticated %}
          {% if not user.is_student %}
-         <a class="border-2 rounded-sm py-1 px-3 text-sm md:text-base hover:border-red-400" href="{% url "event_memory_upload" event.slug %}">Upload Here</a>
+         {% comment %} <a class="border-2 rounded-sm py-1 px-3 text-sm md:text-base hover:border-red-400" href="{% url "event_memory_upload" event.slug %}">Upload Here</a> {% endcomment %}
           {% endif %}
           {% endif %}
       <h1 class="text-4xl border-b-2 text-center font-bold text-purple-700 my-6">GLIMPS OF PREVIOUS EVENTS
@@ -22,7 +22,7 @@
   <!-- image albums -->
   <div class="columns-2 md:columns-4 gap-4 space-y-4 lg:mx-10 md:lg:mx-4">    
     {% for memory in memories %}
-          <img  class="figimg w-full rounded-xl shadow" src="{{ memory.image.url }}" alt="">
+          <img  class="figimg w-full rounded-xl shadow transition-transform duration-300 hover:scale-105" src="{{ memory.image.url }}" alt="">
     {% endfor %}
   </div>
   {% if memories.paginator.num_pages >= 2 %}
