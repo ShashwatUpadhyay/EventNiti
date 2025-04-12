@@ -1,195 +1,444 @@
 {% extends "index.html" %}
 
 {% block title %}
-EventSphere Pro - Elevate Your Event Experience
+EventSphere Pro | Orchestrate Unforgettable Event Experiences
 {% endblock title %}
 
 {% block content %}
 {% load static %}
 
-<!-- Animated Hero Section -->
-<section class="relative overflow-hidden  bg-gradient-to-br from-grey-900 to-blue-800 h-screen flex items-center justify-center">
-  <!-- Animated background elements -->
-  <div class="absolute inset-0 overflow-hidden bg-center bg-no-repeat bg-cover bg-[url('{{rand_mem}}')] bg-gray-700 bg-blend-multiply h-screen"></div>
-    <div class="absolute top-0 left-0 w-64 h-64 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-    <div class="absolute top-0 right-0 w-96 h-96 bg-indigo-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-    <div class="absolute bottom-0 left-1/2 w-80 h-80 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
-  </div>
-  
-  <div class="relative z-10 px-4 mx-auto max-w-7xl text-center ">
-    <h1 class="mb-6 text-5xl font-bold tracking-tight text-white md:text-6xl lg:text-7xl">
-      <span class="block">Transform Events</span>
-      <span class="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-300">Into Experiences</span>
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<script src="https://unpkg.com/@heroicons/react@1.0.6/dist/heroicons.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #F8F9FA; /* Light base background */
+    color: #343a40; /* Darker default text */
+  }
+
+  /* -- Hero Section Specific -- */
+  #hero-section {
+    position: relative;
+    height: 100vh;
+    background: linear-gradient(135deg, #1a2980 0%, #26d0ce 100%); /* Deep Blue to Teal gradient */
+    overflow: hidden;
+  }
+  #hero-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    /* Using particles.js or similar would go here - placeholder for now */
+     background-image: radial-gradient(circle at 10% 15%, rgba(255,255,255,0.08) 0%, transparent 30%),
+                      radial-gradient(circle at 90% 85%, rgba(255,255,255,0.06) 0%, transparent 40%);
+     opacity: 0.7;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+  }
+  .hero-headline span {
+    display: inline-block; /* Needed for animation */
+  }
+
+  /* -- General Section Styling -- */
+  .section-padding {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+  .section-title {
+    font-size: 2.5rem; /* 40px */
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #1a237e; /* Dark Indigo */
+  }
+  .section-subtitle {
+    font-size: 1.125rem; /* 18px */
+    color: #5a67d8; /* Indigo */
+    margin-bottom: 4rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* -- Feature Card Styling -- */
+  .feature-card {
+    background-color: white;
+    border-radius: 1rem; /* 16px */
+    padding: 2rem; /* 32px */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e2e8f0; /* Subtle border */
+  }
+  .feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.15), 0 10px 10px -5px rgba(99, 102, 241, 0.1);
+  }
+  .feature-icon-wrapper {
+    width: 4rem; /* 64px */
+    height: 4rem; /* 64px */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem; /* 24px */
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%);
+  }
+  .feature-icon {
+    width: 2rem; /* 32px */
+    height: 2rem; /* 32px */
+    color: #5a67d8; /* Indigo */
+  }
+
+  /* -- Event Card Styling -- */
+  .event-card {
+    background-color: white;
+    border-radius: 0.75rem; /* 12px */
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e2e8f0;
+  }
+  .event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.08);
+  }
+  .event-card-img-wrapper {
+    position: relative;
+    height: 14rem; /* 224px */
+    overflow: hidden;
+  }
+  .event-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  .event-card:hover .event-card-img {
+    transform: scale(1.05);
+  }
+  .event-status-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem; /* 12px */
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    z-index: 1;
+  }
+  .badge-concluded { background-color: #6b7280; color: white; }
+  .badge-open { background-color: #10b981; color: white; }
+  .badge-closed { background-color: #ef4444; color: white; }
+
+  /* -- Testimonial Styling -- */
+  .testimonial-card {
+    background-color: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    position: relative;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 1rem; /* Space for potential quote icon */
+  }
+  .testimonial-card::before { /* Quote icon */
+      content: '\201C'; /* Unicode for left double quote */
+      position: absolute;
+      top: -0.5rem;
+      left: 1rem;
+      font-size: 4rem;
+      color: rgba(99, 102, 241, 0.15); /* Light Indigo */
+      font-family: serif;
+      z-index: 0;
+  }
+  .testimonial-content {
+      position: relative; /* Keep content above quote */
+      z-index: 1;
+  }
+
+  /* -- Memories Gallery Styling -- */
+  .memory-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+   .memory-item:hover {
+    transform: scale(1.03);
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+  }
+  .memory-img {
+    width: 100%;
+    height: 16rem; /* 256px */
+    object-fit: cover;
+    display: block;
+  }
+  .memory-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.5rem; /* 24px */
+  }
+  .memory-item:hover .memory-overlay {
+    opacity: 1;
+  }
+
+  /* -- Swiper Customization -- */
+  .swiper-button-prev, .swiper-button-next {
+    background-color: rgba(99, 102, 241, 0.8); /* Indigo */
+    color: white;
+    width: 3rem; /* 48px */
+    height: 3rem; /* 48px */
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: background-color 0.3s ease;
+  }
+  .swiper-button-prev:hover, .swiper-button-next:hover {
+    background-color: #4338ca; /* Darker Indigo */
+  }
+  .swiper-button-prev::after, .swiper-button-next::after {
+    font-size: 1rem; /* 16px */
+    font-weight: 700;
+  }
+  .swiper-pagination-bullet-active {
+      background-color: #5a67d8 !important; /* Indigo */
+  }
+
+  /* -- Button Styles -- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.875rem 2rem; /* 14px 32px */
+    border-radius: 0.5rem; /* 8px */
+    font-weight: 600;
+    font-size: 1rem; /* 16px */
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    border: 2px solid transparent;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  .btn-primary {
+    background-color: #5a67d8; /* Indigo */
+    color: white;
+  }
+  .btn-primary:hover {
+    background-color: #4338ca; /* Darker Indigo */
+    box-shadow: 0 7px 14px rgba(67, 56, 202, 0.2);
+    transform: translateY(-2px);
+  }
+  .btn-secondary {
+    background-color: transparent;
+    color: white; /* Assuming white background like hero or CTA */
+    border-color: white;
+  }
+  .btn-secondary:hover {
+    background-color: white;
+    color: #5a67d8; /* Indigo */
+    box-shadow: 0 7px 14px rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+  }
+  .btn-outline {
+     background-color: white;
+     color: #5a67d8;
+     border-color: #c7d2fe; /* Light Indigo border */
+  }
+   .btn-outline:hover {
+     background-color: #eef2ff; /* Lighter Indigo bg */
+     border-color: #a5b4fc;
+     box-shadow: 0 7px 14px rgba(90, 103, 216, 0.1);
+     transform: translateY(-2px);
+  }
+
+  /* -- Form Styling -- */
+  .form-input, .form-textarea {
+      width: 100%;
+      padding: 0.75rem 1rem; /* 12px 16px */
+      border: 1px solid #d1d5db; /* Gray 300 */
+      border-radius: 0.5rem; /* 8px */
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      font-size: 1rem;
+  }
+  .form-input:focus, .form-textarea:focus {
+      outline: none;
+      border-color: #5a67d8; /* Indigo */
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); /* Indigo focus ring */
+  }
+
+</style>
+
+<section id="hero-section" class="flex items-center text-white">
+  <div id="hero-particles"></div> <div class="container px-6 mx-auto hero-content text-center">
+    <h1 class="mb-4 text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl hero-headline" data-aos="fade-down">
+      <span>Orchestrate</span> <span class="text-teal-300">Unforgettable</span>
+      <span class="block mt-2">Event Experiences</span>
     </h1>
-    <p class="max-w-3xl mx-auto mb-10 text-xl text-purple-100">
-      EventSphere Pro delivers seamless event management, ticketing, and certification for organizations that demand excellence.
+    <p class="max-w-3xl mx-auto mb-10 text-lg md:text-xl text-indigo-100" data-aos="fade-up" data-aos-delay="200">
+      EventSphere Pro: The all-in-one platform designed for seamless event management, ticketing, certification, and engagement. Elevate your events from start to finish.
     </p>
-    <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
-      <a href="{% url 'events' %}" class="px-8 py-4 text-lg font-semibold text-white transition-all duration-300 bg-purple-600 rounded-lg shadow-lg hover:bg-white hover:text-purple-700 hover:shadow-xl hover:scale-105">
+    <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4" data-aos="fade-up" data-aos-delay="400">
+      <a href="{% url 'events' %}" class="btn btn-primary">
         Explore Events
-        <i class="ml-2 fas fa-arrow-right"></i>
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
       </a>
-      <a href="#features" class="px-8 py-4 text-lg font-semibold text-white transition-all duration-300 border-2 border-white rounded-lg hover:bg-white hover:text-purple-700 hover:shadow-lg">
-        Learn More
+      <a href="#features" class="btn btn-secondary">
+        Discover Features
       </a>
     </div>
   </div>
-  
-  <!-- Scrolling indicator -->
-  <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-    </svg>
-  </div>
+   <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce z-10">
+     <svg class="w-6 h-6 text-white opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+     </svg>
+   </div>
 </section>
 
-<!-- Features Section -->
-<section id="features" class="py-20 bg-gray-50">
+<section id="features" class="section-padding bg-gray-50">
   <div class="container px-6 mx-auto">
     <div class="mb-16 text-center">
-      <h2 class="mb-4 text-4xl font-bold text-gray-900">Why Choose EventSphere Pro?</h2>
-      <p class="max-w-2xl mx-auto text-lg text-gray-600">Comprehensive tools for every stage of your event journey</p>
+      <h2 class="section-title">The Ultimate Event Toolkit</h2>
+      <p class="section-subtitle">Everything you need to plan, execute, and analyze successful events, all in one place.</p>
     </div>
-    
-    <div class="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
-      <!-- Feature 1 -->
-      <div class="p-8 transition-all duration-300 bg-white rounded-xl shadow-lg hover:shadow-2xl hover:-translate-y-2">
-        <div class="flex items-center justify-center w-16 h-16 mb-6 text-purple-600 bg-purple-100 rounded-full">
-          <i class="text-2xl fas fa-ticket-alt"></i>
+
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="feature-icon-wrapper">
+          <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+          </svg>
         </div>
-        <h3 class="mb-3 text-xl font-semibold">Smart Ticketing</h3>
-        <p class="text-gray-600">Customizable ticketing with QR codes, early bird pricing, and group discounts.</p>
+        <h3 class="mb-3 text-xl font-semibold text-gray-800">Intelligent Ticketing</h3>
+        <p class="text-gray-600">Flexible ticket types, secure payments, QR code check-in, and detailed sales reports.</p>
       </div>
-      
-      <!-- Feature 2 -->
-      <div class="p-8 transition-all duration-300 bg-white rounded-xl shadow-lg hover:shadow-2xl hover:-translate-y-2">
-        <div class="flex items-center justify-center w-16 h-16 mb-6 text-blue-600 bg-blue-100 rounded-full">
-          <i class="text-2xl fas fa-id-card"></i>
+
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="feature-icon-wrapper">
+          <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+          </svg>
         </div>
-        <h3 class="mb-3 text-xl font-semibold">Digital Certificates</h3>
-        <p class="text-gray-600">Automated certificate generation with blockchain verification for authenticity.</p>
+        <h3 class="mb-3 text-xl font-semibold text-gray-800">Verified Certificates</h3>
+        <p class="text-gray-600">Automated generation of digital certificates with optional blockchain verification for ultimate credibility.</p>
       </div>
-      
-      <!-- Feature 3 -->
-      <div class="p-8 transition-all duration-300 bg-white rounded-xl shadow-lg hover:shadow-2xl hover:-translate-y-2">
-        <div class="flex items-center justify-center w-16 h-16 mb-6 text-green-600 bg-green-100 rounded-full">
-          <i class="text-2xl fas fa-chart-line"></i>
+
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="feature-icon-wrapper">
+           <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+           </svg>
         </div>
-        <h3 class="mb-3 text-xl font-semibold">Real-time Analytics</h3>
-        <p class="text-gray-600">Track attendance, engagement, and revenue with our powerful dashboard.</p>
+        <h3 class="mb-3 text-xl font-semibold text-gray-800">Insightful Analytics</h3>
+        <p class="text-gray-600">Real-time dashboards tracking attendance, engagement metrics, revenue, and attendee demographics.</p>
       </div>
-      
-      <!-- Feature 4 -->
-      <div class="p-8 transition-all duration-300 bg-white rounded-xl shadow-lg hover:shadow-2xl hover:-translate-y-2">
-        <div class="flex items-center justify-center w-16 h-16 mb-6 text-red-600 bg-red-100 rounded-full">
-          <i class="text-2xl fas fa-users-cog"></i>
+
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+        <div class="feature-icon-wrapper">
+           <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+           </svg>
         </div>
-        <h3 class="mb-3 text-xl font-semibold">Host Tools</h3>
-        <p class="text-gray-600">Everything event organizers need from registration to post-event follow-up.</p>
+        <h3 class="mb-3 text-xl font-semibold text-gray-800">Powerful Host Controls</h3>
+        <p class="text-gray-600">Effortless event creation, attendee management, communication tools, and post-event follow-up features.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Upcoming Events Section -->
-<section id="events" class="py-20 bg-white">
+<section id="events" class="section-padding bg-white">
   <div class="container px-6 mx-auto">
     <div class="flex flex-col items-center justify-between mb-12 md:flex-row">
-      <div class="mb-6 md:mb-0">
-        <h2 class="text-4xl font-bold text-gray-900">Upcoming Events</h2>
-        <p class="mt-2 text-gray-600">Don't miss these exciting opportunities</p>
+      <div class="mb-6 text-center md:text-left md:mb-0" data-aos="fade-right">
+        <h2 class="section-title">Upcoming Events</h2>
+        <p class="mt-2 text-lg text-gray-600">Explore exciting opportunities hosted on EventSphere Pro</p>
       </div>
-      <a href="{% url 'events' %}" class="flex items-center px-6 py-3 font-medium text-purple-700 transition-all duration-300 border border-purple-200 rounded-lg hover:bg-purple-50 hover:shadow-md">
-        View All Events
-        <i class="ml-2 fas fa-chevron-right"></i>
-      </a>
+      <div data-aos="fade-left">
+        <a href="{% url 'events' %}" class="btn btn-outline">
+          View All Events
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
     </div>
-    
+
     <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
       {% if event %}
-        {% for events in event %}
-          <div class="overflow-hidden transition-all duration-300 bg-white border border-gray-200 rounded-xl hover:shadow-xl hover:-translate-y-2 group">
-            <!-- Event Poster -->
-            <div class="relative overflow-hidden h-60">
-              {% if events.poster %}
-                <img src="{{ events.poster.url }}" alt="Event Poster" class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105">
-              {% else %}
-                <div class="flex items-center justify-center w-full h-full bg-gradient-to-r from-gray-100 to-gray-200">
-                  <i class="text-4xl text-gray-400 fas fa-calendar-alt"></i>
-                </div>
-              {% endif %}
-              
-              <!-- Event Status Badge -->
-              <div class="absolute top-4 right-4">
-                {% if events.event_over %}
-                  <span class="inline-flex items-center px-3 py-1 text-sm font-semibold text-white bg-gray-500 rounded-full">
-                    Event Concluded
-                  </span>
-                {% else %}
-                  {% if events.registration_open %}
-                    <span class="inline-flex items-center px-3 py-1 text-sm font-semibold text-white bg-green-500 rounded-full">
-                      <i class="mr-1 fas fa-check-circle"></i> Open
+        {% for events_item in event|slice:":3" %} {# Show only first 3 upcoming events #}
+          <div class="event-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
+             <div class="event-card-img-wrapper">
+               {% if events_item.poster %}
+                 <img src="{{ events_item.poster.url }}" alt="{{ events_item.title }} Poster" class="event-card-img">
+               {% else %}
+                 <div class="flex items-center justify-center w-full h-full bg-gradient-to-br from-gray-100 to-gray-200">
+                    <svg class="w-16 h-16 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                 </div>
+               {% endif %}
+                <div class="event-status-badge {% if events_item.event_over %}badge-concluded{% elif events_item.registration_open %}badge-open{% else %}badge-closed{% endif %}">
+                 {% if events_item.event_over %} Concluded {% elif events_item.registration_open %} Open {% else %} Closed {% endif %}
+               </div>
+             </div>
+
+             <div class="p-5">
+                 <div class="flex items-center justify-between mb-3 text-sm text-gray-500">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                       {{ events_item.category|default:"General" }}
                     </span>
-                  {% else %}
-                    <span class="inline-flex items-center px-3 py-1 text-sm font-semibold text-white bg-red-500 rounded-full">
-                      <i class="mr-1 fas fa-times-circle"></i> Closed
-                    </span>
-                  {% endif %}
-                {% endif %}
-              </div>
-            </div>
-            
-            <!-- Event Details -->
-            <div class="p-6">
-              <div class="flex items-center mb-2">
-                <span class="px-3 py-1 text-xs font-semibold text-purple-700 bg-purple-100 rounded-full">{{ events.category|default:"General" }}</span>
-                <span class="ml-2 text-sm text-gray-500"><i class="mr-1 far fa-clock"></i> {{ events.duration|default:"1 day" }}</span>
-              </div>
-              
-              <h3 class="mb-2 text-xl font-bold text-gray-900">{{ events.title }}</h3>
-              
-              <div class="flex items-center mb-3 text-gray-600">
-                <i class="mr-2 far fa-calendar-alt"></i>
-                <span>{{ events.start_date|date:"F d, Y"|default:"Date TBA" }}</span>
-              </div>
-              
-              <div class="flex items-center mb-4 text-gray-600">
-                <i class="mr-2 fas fa-map-marker-alt"></i>
-                <span>{{ events.location|default:"Virtual" }}</span>
-              </div>
-              
-              <div class="flex justify-between">
-                <div class="flex items-center">
-                  <i class="mr-1 text-yellow-400 fas fa-star"></i>
-                  <span class="font-medium">4.8</span>
-                  <span class="ml-1 text-gray-500">(120)</span>
-                </div>
-                
-                {% if user.is_authenticated %}
-                  {% if not user.is_student %}
-                    <a href="{% url 'teacherEvent' events.slug %}" class="px-4 py-2 text-sm font-semibold text-white transition-all duration-300 bg-purple-600 rounded-lg hover:bg-purple-700 hover:shadow-md">
-                      Details <i class="ml-1 fas fa-arrow-right"></i>
-                    </a>
-                  {% else %}
-                    <a href="{% url 'event' events.slug %}" class="px-4 py-2 text-sm font-semibold text-white transition-all duration-300 bg-purple-600 rounded-lg hover:bg-purple-700 hover:shadow-md">
-                      Details <i class="ml-1 fas fa-arrow-right"></i>
-                    </a>
-                  {% endif %}
-                {% else %}
-                  <a href="{% url 'event' events.slug %}" class="px-4 py-2 text-sm font-semibold text-white transition-all duration-300 bg-purple-600 rounded-lg hover:bg-purple-700 hover:shadow-md">
-                    Details <i class="ml-1 fas fa-arrow-right"></i>
-                  </a>
-                {% endif %}
-              </div>
-            </div>
+                    <span><svg class="inline w-4 h-4 mr-1 -mt-px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> {{ events_item.duration|default:"TBA" }}</span>
+                 </div>
+
+               <h3 class="mb-2 text-lg font-semibold text-gray-900 truncate">{{ events_item.title }}</h3>
+
+               <div class="flex items-center mb-4 text-sm text-gray-600">
+                  <svg class="flex-shrink-0 w-4 h-4 mr-2 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                 <span>{{ events_item.start_date|date:"M d, Y"|default:"Date TBA" }}</span>
+                 <span class="mx-2">·</span>
+                 <svg class="flex-shrink-0 w-4 h-4 mr-1.5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                 <span>{{ events_item.location|default:"Online" }}</span>
+               </div>
+
+               <div class="pt-3 mt-3 border-t border-gray-100">
+                 {% comment %} Determine correct URL based on user type {% endcomment %}
+                 {% if user.is_authenticated and not user.is_student %}
+                    {% url 'teacherEvent' events_item.slug as event_url %}
+                 {% else %}
+                    {% url 'event' events_item.slug as event_url %}
+                 {% endif %}
+                 <a href="{{ event_url }}" class="inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-800 group">
+                   View Details
+                   <svg class="w-4 h-4 ml-1 transition-transform duration-200 ease-in-out group-hover:translate-x-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                   </svg>
+                 </a>
+               </div>
+             </div>
           </div>
         {% endfor %}
       {% else %}
-        <div class="col-span-full">
-          <div class="flex flex-col items-center justify-center p-8 text-center bg-yellow-50 border border-yellow-200 rounded-xl">
-            <i class="mb-4 text-4xl text-yellow-500 far fa-calendar-times"></i>
-            <h3 class="mb-2 text-xl font-semibold text-yellow-800">No Upcoming Events</h3>
-            <p class="text-yellow-600">Check back later for new events or contact us to host your own!</p>
+        <div class="col-span-full" data-aos="fade-up">
+          <div class="flex flex-col items-center justify-center p-10 text-center bg-indigo-50 border border-indigo-100 rounded-xl">
+             <svg class="w-12 h-12 mb-4 text-indigo-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+            <h3 class="mb-2 text-xl font-semibold text-indigo-800">No Upcoming Events Found</h3>
+            <p class="text-indigo-600">Keep an eye on this space, or consider hosting your own event with EventSphere Pro!</p>
           </div>
         </div>
       {% endif %}
@@ -197,220 +446,218 @@ EventSphere Pro - Elevate Your Event Experience
   </div>
 </section>
 
-<!-- Past Events Carousel -->
-<section class="py-20 bg-gray-50">
+<section class="section-padding bg-gray-50">
   <div class="container px-6 mx-auto">
-    <div class="mb-12 text-center">
-      <h2 class="text-4xl font-bold text-gray-900">Past Event Highlights</h2>
-      <p class="mt-2 text-gray-600">Relive our most successful events</p>
+    <div class="mb-16 text-center" data-aos="fade-up">
+      <h2 class="section-title">Explore Past Events</h2>
+      <p class="section-subtitle">See the impact and success stories from previous events managed through our platform.</p>
     </div>
-    
-    <div class="relative">
-      <div class="swiper-container past-events-carousel">
-        <div class="swiper-wrapper">
-          {% for event in events %}
-            <div class="swiper-slide">
-              <a href='{% url "eventResult" event.slug %}'>
-                <div class="relative overflow-hidden transition-all duration-300 bg-white border border-gray-200 rounded-xl group hover:shadow-lg">
-                  <div class="relative h-64 overflow-hidden">
-                    {% if event.poster %}
-                      <img src="{{ event.poster.url }}" alt="Event Image" class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105">
-                    {% else %}
-                      <div class="flex items-center justify-center w-full h-full bg-gradient-to-r from-gray-100 to-gray-200">
-                        <i class="text-4xl text-gray-400 fas fa-image"></i>
-                      </div>
-                    {% endif %}
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 right-0 p-6">
-                      <h3 class="mb-1 text-xl font-bold text-white">{{ event.title}}</h3>
-                      <p class="text-sm text-purple-200">{{ event.start_date|date:"F d, Y"}}</p>
-                    </div>
-                  </div>
-                  <div class="p-6">
-                    <div class="flex items-center justify-between">
-                      <span class="inline-flex items-center px-3 py-1 text-xs font-semibold text-purple-700 bg-purple-100 rounded-full">
-                        <i class="mr-1 fas fa-users"></i> {{ event.attendee_count|default:"120" }} attended
-                      </span>
-                      <button class="px-4 py-2 text-sm font-medium text-purple-700 transition-all duration-300 bg-white border border-purple-200 rounded-lg hover:bg-purple-50">
-                        View Recap
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </a>
-            </div>
-          {% endfor %}
-        </div>
-      </div>
-      
-      <!-- Navigation buttons -->
-      <div class="absolute top-0 bottom-0 left-0 flex items-center justify-center w-12 h-12 my-auto -ml-6 text-white transition-all duration-300 cursor-pointer swiper-button-prev  hover:shadow-xl">
-        <i class="fas fa-chevron-left"></i>
-      </div>
-      <div class="absolute top-0 bottom-0 right-0 flex items-center justify-center w-12 h-12 my-auto -mr-6 text-white transition-all duration-300  cursor-pointer swiper-button-next  hover:shadow-xl">
-        <i class="fas fa-chevron-right"></i>
-      </div>
+
+    <div class="relative" data-aos="fade-up">
+       <div class="swiper past-events-swiper">
+         <div class="swiper-wrapper pb-8"> {# Add padding-bottom for pagination #}
+           {% if events %} {# Use the full events list here #}
+             {% for past_event in events %} {# Assuming 'events' contains past events too, or fetch separately #}
+                 {% if past_event.event_over %} {# Filter for past events #}
+                   <div class="swiper-slide h-auto"> {# Ensure slide height adapts #}
+                     <a href='{% url "eventResult" past_event.slug %}' class="block h-full">
+                       <div class="event-card h-full flex flex-col"> {# Use flex column #}
+                          <div class="event-card-img-wrapper flex-shrink-0">
+                             {% if past_event.poster %}
+                                <img src="{{ past_event.poster.url }}" alt="{{ past_event.title }} Poster" class="event-card-img">
+                             {% else %}
+                                <div class="flex items-center justify-center w-full h-full bg-gradient-to-br from-gray-100 to-gray-200">
+                                    <svg class="w-16 h-16 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                </div>
+                             {% endif %}
+                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                             <div class="absolute bottom-0 left-0 p-4 text-white">
+                                <h4 class="text-lg font-semibold">{{ past_event.title }}</h4>
+                                <p class="text-sm opacity-80">{{ past_event.start_date|date:"M d, Y" }}</p>
+                             </div>
+                          </div>
+                          <div class="p-5 flex-grow flex flex-col justify-between"> {# Grow to fill space #}
+                              <div>
+                                <span class="inline-flex items-center mb-3 px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                    <svg class="w-4 h-4 mr-1.5 -ml-0.5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>
+                                    {{ past_event.attendee_count|default:"N/A" }} Attendees
+                                </span>
+                                <p class="text-sm text-gray-600 line-clamp-2 mb-3">
+                                    {{ past_event.description|striptags|truncatewords:15|default:"View the event results and highlights." }}
+                                </p>
+                              </div>
+                              <div class="mt-auto pt-3 border-t border-gray-100"> {# Push link to bottom #}
+                                  <span class="inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-800 group">
+                                   View Results
+                                   <svg class="w-4 h-4 ml-1 transition-transform duration-200 ease-in-out group-hover:translate-x-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                   </svg>
+                                 </span>
+                             </div>
+                          </div>
+                       </div>
+                     </a>
+                   </div>
+                 {% endif %}
+             {% endfor %}
+           {% else %}
+             <div class="swiper-slide"><p>No past events found.</p></div>
+           {% endif %}
+         </div>
+         <div class="swiper-pagination"></div>
+       </div>
+       <div class="swiper-button-prev -left-4"></div>
+       <div class="swiper-button-next -right-4"></div>
     </div>
   </div>
 </section>
 
-<!-- Testimonials Section -->
-<section class="py-20 bg-gradient-to-r from-indigo-700 to-purple-800">
+
+<section class="section-padding bg-gradient-to-br from-indigo-600 to-purple-700 text-white">
   <div class="container px-6 mx-auto">
-    <div class="mb-12 text-center">
-      <h2 class="text-4xl font-bold text-white">Trusted by Event Organizers Worldwide</h2>
-      <p class="mt-2 text-purple-200">Join thousands of professionals who rely on EventSphere Pro</p>
+    <div class="mb-16 text-center" data-aos="fade-up">
+      <h2 class="text-4xl font-bold mb-4">Hear From Our Happy Hosts</h2>
+      <p class="text-xl text-indigo-100 max-w-3xl mx-auto">Thousands trust EventSphere Pro to power their most important events.</p>
     </div>
-    
-    <div class="grid gap-8 md:grid-cols-3">
-      <!-- Testimonial 1 -->
-      <div class="p-8 transition-all duration-300 bg-white rounded-xl hover:shadow-xl hover:-translate-y-2">
-        <div class="flex items-center mb-4">
-          <div class="flex items-center justify-center w-12 h-12 mr-4 text-xl font-semibold text-white bg-purple-600 rounded-full">JD</div>
-          <div>
-            <h4 class="font-semibold text-gray-900">Jane Doe</h4>
-            <p class="text-sm text-gray-600">Marketing Director, TechConf</p>
-          </div>
-        </div>
-        <p class="mb-4 text-gray-700">"EventSphere Pro transformed our annual conference. The ticketing system reduced no-shows by 40%, and the analytics helped us optimize our sessions."</p>
-        <div class="flex text-yellow-400">
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-        </div>
-      </div>
-      
-      <!-- Testimonial 2 -->
-      <div class="p-8 transition-all duration-300 bg-white rounded-xl hover:shadow-xl hover:-translate-y-2">
-        <div class="flex items-center mb-4">
-          <div class="flex items-center justify-center w-12 h-12 mr-4 text-xl font-semibold text-white bg-blue-600 rounded-full">AS</div>
-          <div>
-            <h4 class="font-semibold text-gray-900">Alex Smith</h4>
-            <p class="text-sm text-gray-600">CEO, EduSummit</p>
-          </div>
-        </div>
-        <p class="mb-4 text-gray-700">"The certificate automation saved us hundreds of hours. Attendees love the digital credentials they can share on LinkedIn immediately."</p>
-        <div class="flex text-yellow-400">
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-        </div>
-      </div>
-      
-      <!-- Testimonial 3 -->
-      <div class="p-8 transition-all duration-300 bg-white rounded-xl hover:shadow-xl hover:-translate-y-2">
-        <div class="flex items-center mb-4">
-          <div class="flex items-center justify-center w-12 h-12 mr-4 text-xl font-semibold text-white bg-green-600 rounded-full">MJ</div>
-          <div>
-            <h4 class="font-semibold text-gray-900">Maria Johnson</h4>
-            <p class="text-sm text-gray-600">Events Manager, Global NGO</p>
-          </div>
-        </div>
-        <p class="mb-4 text-gray-700">"From registration to post-event surveys, EventSphere Pro provides everything we need in one platform. The mobile check-in app is a game-changer."</p>
-        <div class="flex text-yellow-400">
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star-half-alt"></i>
-        </div>
-      </div>
+
+    <div class="swiper testimonials-swiper" data-aos="fade-up">
+       <div class="swiper-wrapper pb-12">
+         <div class="swiper-slide h-auto">
+           <div class="testimonial-card h-full">
+             <div class="testimonial-content">
+               <p class="mb-6 text-gray-700 italic">"EventSphere Pro transformed our annual conference. The ticketing system was seamless, check-in was a breeze, and the analytics helped us prove ROI to our stakeholders."</p>
+               <div class="flex items-center">
+                  <img class="w-12 h-12 rounded-full mr-4 object-cover" src="https://randomuser.me/api/portraits/women/68.jpg" alt="Jane Doe">
+                 <div>
+                   <h4 class="font-semibold text-gray-900">Jane Doe</h4>
+                   <p class="text-sm text-indigo-700 font-medium">Marketing Director, TechConf</p>
+                 </div>
+               </div>
+             </div>
+           </div>
+         </div>
+         <div class="swiper-slide h-auto">
+           <div class="testimonial-card h-full">
+              <div class="testimonial-content">
+                 <p class="mb-6 text-gray-700 italic">"The automated certificate generation is a lifesaver! It saved our team countless hours and attendees loved receiving their verified digital credentials instantly."</p>
+                 <div class="flex items-center">
+                    <img class="w-12 h-12 rounded-full mr-4 object-cover" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Alex Smith">
+                    <div>
+                       <h4 class="font-semibold text-gray-900">Alex Smith</h4>
+                       <p class="text-sm text-indigo-700 font-medium">CEO, EduSummit</p>
+                    </div>
+                 </div>
+             </div>
+           </div>
+         </div>
+         <div class="swiper-slide h-auto">
+           <div class="testimonial-card h-full">
+              <div class="testimonial-content">
+                 <p class="mb-6 text-gray-700 italic">"As an NGO, efficiency is key. EventSphere Pro provides everything we need in one intuitive platform, from registration to post-event reporting. Highly recommended!"</p>
+                 <div class="flex items-center">
+                    <img class="w-12 h-12 rounded-full mr-4 object-cover" src="https://randomuser.me/api/portraits/women/44.jpg" alt="Maria Johnson">
+                    <div>
+                       <h4 class="font-semibold text-gray-900">Maria Johnson</h4>
+                       <p class="text-sm text-indigo-700 font-medium">Events Manager, Global Aid Org</p>
+                    </div>
+                 </div>
+             </div>
+           </div>
+         </div>
+           </div>
+       <div class="swiper-pagination"></div>
     </div>
   </div>
 </section>
 
-<!-- Memories Gallery -->
-<section class="py-20 bg-white">
+
+<section class="section-padding bg-white">
   <div class="container px-6 mx-auto">
     <div class="flex flex-col items-center justify-between mb-12 md:flex-row">
-      <div class="mb-6 md:mb-0">
-        <h2 class="text-4xl font-bold text-gray-900">Event Memories</h2>
-        <p class="mt-2 text-gray-600">Captured moments from our community</p>
-      </div>
-      <a href="{% url 'memories' %}" class="flex items-center px-6 py-3 font-medium text-purple-700 transition-all duration-300 border border-purple-200 rounded-lg hover:bg-purple-50 hover:shadow-md">
-        View All Memories
-        <i class="ml-2 fas fa-images"></i>
-      </a>
+       <div class="mb-6 text-center md:text-left md:mb-0" data-aos="fade-right">
+          <h2 class="section-title">Event Memories</h2>
+          <p class="mt-2 text-lg text-gray-600">A glimpse into the vibrant moments captured at events hosted with us.</p>
+       </div>
+       <div data-aos="fade-left">
+          <a href="{% url 'memories' %}" class="btn btn-outline">
+             View Full Gallery
+             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ml-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" /></svg>
+          </a>
+       </div>
     </div>
-    
-    <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-      {% for mems in mem %}
-        <a href="{% url 'memories' %}" class="group relative block overflow-hidden rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-          <img src="{{ mems.memory_img.latest.image.url }}" alt="Memory" class="object-cover w-full h-64 transition-transform duration-500 group-hover:scale-105">
-          <div class="absolute inset-0 flex flex-col justify-end p-6 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <h3 class="mb-1 text-lg font-semibold text-white">{{ mems.memory_title }}</h3>
-            <p class="text-sm text-purple-200">{{ mems.event.title }}</p>
-          </div>
-        </a>
-      {% endfor %}
+
+    <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+       {% if mem %}
+          {% for mem_item in mem|slice:":10" %} {# Show first 10 memories #}
+             <a href="{% url 'memories' %}" class="memory-item block" data-aos="zoom-in" data-aos-delay="{{ forloop.counter0 }}50">
+                {% if mem_item.memory_img.latest.image.url %}
+                   <img src="{{ mem_item.memory_img.latest.image.url }}" alt="{{ mem_item.memory_title }}" class="memory-img">
+                {% else %}
+                   <div class="flex items-center justify-center w-full h-64 bg-gray-200"><svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg></div>
+                {% endif %}
+                <div class="memory-overlay">
+                   <h3 class="text-base font-semibold text-white truncate">{{ mem_item.memory_title }}</h3>
+                   <p class="text-xs text-indigo-200 truncate">{{ mem_item.event.title }}</p>
+                </div>
+             </a>
+          {% endfor %}
+       {% else %}
+          <p class="col-span-full text-center text-gray-500">No event memories uploaded yet.</p>
+       {% endif %}
     </div>
   </div>
 </section>
 
-<!-- CTA Section -->
-<section class="py-20 bg-gradient-to-r from-blue-600 to-indigo-700">
-  <div class="container px-6 mx-auto text-center">
-    <h2 class="mb-6 text-4xl font-bold text-white">Ready to Elevate Your Events?</h2>
-    <p class="max-w-2xl mx-auto mb-10 text-xl text-blue-100">Join thousands of organizations creating unforgettable experiences with EventSphere Pro.</p>
+<section class="py-20 bg-indigo-800">
+  <div class="container px-6 mx-auto text-center" data-aos="fade-up">
+    <h2 class="mb-6 text-3xl font-bold text-white md:text-4xl">Ready to Revolutionize Your Events?</h2>
+    <p class="max-w-2xl mx-auto mb-10 text-lg text-indigo-100 md:text-xl">Join leading organizations creating seamless, engaging, and impactful experiences with EventSphere Pro.</p>
     <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
-      <a href="#" class="px-8 py-4 text-lg font-semibold text-blue-700 transition-all duration-300 bg-white rounded-lg shadow-lg hover:bg-gray-100 hover:shadow-xl hover:scale-105">
-        Get Started Today
-        <i class="ml-2 fas fa-rocket"></i>
+      <a href="#" class="btn bg-white text-indigo-700 hover:bg-gray-100">
+        Get Started Free
+         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+        </svg>
       </a>
-      <a href="#contact" class="px-8 py-4 text-lg font-semibold text-white transition-all duration-300 border-2 border-white rounded-lg hover:bg-white hover:text-blue-700 hover:shadow-lg">
-        Contact Sales
+      <a href="#contact" class="btn btn-secondary">
+        Request a Demo
       </a>
     </div>
   </div>
 </section>
 
-<!-- Contact Form Section -->
-<section id="contact" class="py-20 bg-gray-50">
+<section id="contact" class="section-padding bg-gray-50">
   <div class="container px-6 mx-auto">
-    <div class="max-w-4xl p-8 mx-auto bg-white rounded-xl shadow-lg">
-      <div class="mb-12 text-center">
-        <h2 class="text-4xl font-bold text-gray-900">Let's Connect</h2>
-        <p class="mt-2 text-gray-600">Have questions? Our team is here to help.</p>
+    <div class="max-w-3xl p-8 mx-auto bg-white rounded-xl shadow-lg border border-gray-200" data-aos="fade-up">
+      <div class="mb-10 text-center">
+        <h2 class="section-title">Get in Touch</h2>
+        <p class="mt-2 text-lg text-gray-600">Have questions or need a custom solution? We're here to help.</p>
       </div>
-      
+
       <form action="#" method="POST" class="space-y-6">
         {% csrf_token %}
-        
         <div class="grid gap-6 md:grid-cols-2">
-          <!-- Name Input -->
           <div>
-            <label for="name" class="block mb-2 text-sm font-medium text-gray-700">Your Name *</label>
-            <input type="text" id="name" name="name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all" placeholder="John Doe" required>
+            <label for="contact-name" class="block mb-2 text-sm font-medium text-gray-700">Your Name</label>
+            <input type="text" id="contact-name" name="name" class="form-input" placeholder="e.g., John Doe" required>
           </div>
-          
-          <!-- Email Input -->
           <div>
-            <label for="email" class="block mb-2 text-sm font-medium text-gray-700">Email Address *</label>
-            <input type="email" id="email" name="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all" placeholder="you@example.com" required>
+            <label for="contact-email" class="block mb-2 text-sm font-medium text-gray-700">Email Address</label>
+            <input type="email" id="contact-email" name="email" class="form-input" placeholder="you@company.com" required>
           </div>
         </div>
-        
-        <!-- Subject Input -->
         <div>
-          <label for="subject" class="block mb-2 text-sm font-medium text-gray-700">Subject *</label>
-          <input type="text" id="subject" name="subject" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all" placeholder="How can we help?" required>
+          <label for="contact-subject" class="block mb-2 text-sm font-medium text-gray-700">Subject</label>
+          <input type="text" id="contact-subject" name="subject" class="form-input" placeholder="Inquiry about..." required>
         </div>
-        
-        <!-- Message Input -->
         <div>
-          <label for="message" class="block mb-2 text-sm font-medium text-gray-700">Your Message *</label>
-          <textarea id="message" name="message" rows="5" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all" placeholder="Tell us about your event needs..." required></textarea>
+          <label for="contact-message" class="block mb-2 text-sm font-medium text-gray-700">Message</label>
+          <textarea id="contact-message" name="message" rows="5" class="form-textarea" placeholder="How can we assist you today?" required></textarea>
         </div>
-        
-        <!-- Submit Button -->
-        <div class="text-center">
-          <button type="submit" class="px-8 py-4 font-semibold text-white transition-all duration-300 bg-purple-600 rounded-lg hover:bg-purple-700 hover:shadow-lg">
-            Send Message
-            <i class="ml-2 fas fa-paper-plane"></i>
+        <div class="text-center pt-2">
+          <button type="submit" class="btn btn-primary w-full sm:w-auto">
+            Send Your Message
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ml-2" viewBox="0 0 20 20" fill="currentColor"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" /></svg>
           </button>
         </div>
       </form>
@@ -418,98 +665,150 @@ EventSphere Pro - Elevate Your Event Experience
   </div>
 </section>
 
-<!-- Add Swiper JS for carousel functionality -->
-<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+<footer class="bg-gray-800 text-gray-400 py-12">
+    <div class="container px-6 mx-auto">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+            <div>
+                <h5 class="text-lg font-semibold text-white mb-4">EventSphere Pro</h5>
+                <p class="text-sm">Orchestrating unforgettable event experiences.</p>
+                </div>
+            <div>
+                <h5 class="text-lg font-semibold text-white mb-4">Quick Links</h5>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#features" class="hover:text-white transition-colors">Features</a></li>
+                    <li><a href="#events" class="hover:text-white transition-colors">Upcoming Events</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Pricing</a></li>
+                    <li><a href="#contact" class="hover:text-white transition-colors">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                 <h5 class="text-lg font-semibold text-white mb-4">Resources</h5>
+                 <ul class="space-y-2 text-sm">
+                    <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Case Studies</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Help Center</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">API Documentation</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="text-lg font-semibold text-white mb-4">Connect</h5>
+                 <div class="flex space-x-4">
+                     <a href="#" class="hover:text-white transition-colors"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" /></svg></a>
+                     <a href="#" class="hover:text-white transition-colors"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" /></svg></a>
+                     <a href="#" class="hover:text-white transition-colors"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12.014c0 4.43 2.965 8.187 7.06 9.493.513.094.7-.222.7-.493 0-.243-.009-.886-.014-1.74C6.734 20.138 5.89 18.13 5.89 18.13c-.465-1.18-.968-1.492-.968-1.492-1.03-.704.078-.69.078-.69 1.138.08 1.737 1.168 1.737 1.168 1.01 1.732 2.648 1.23 3.292.94.103-.73.396-1.23.723-1.513-2.518-.287-5.168-1.258-5.168-5.604 0-1.238.442-2.25 1.168-3.044-.118-.288-.505-1.44.11-3.002 0 0 .95-.304 3.11 1.163A10.77 10.77 0 0112 6.817c.975 0 1.968.13 2.876.385 2.16-1.467 3.106-1.163 3.106-1.163.616 1.562.23 2.714.11 3.002.728.794 1.166 1.806 1.166 3.044 0 4.358-2.655 5.313-5.18 5.594.407.35.768.94.768 1.896 0 1.37-.013 2.474-.013 2.81 0 .273.185.59.706.493C19.038 20.198 22 16.44 22 12.014 22 6.477 17.523 2 12 2z" clip-rule="evenodd" /></svg></a>
+                     <a href="#" class="hover:text-white transition-colors"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.498 9.763H6.5v-8.59H3.507v8.59zM17.668 1H6.329C4.08 1 2.366 2.613 2.366 4.856v14.288C2.366 21.387 4.08 23 6.329 23h11.34c2.246 0 3.961-1.613 3.961-3.856V4.856C21.629 2.613 19.912 1 17.668 1z" clip-rule="evenodd" /></svg></a>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-gray-700 pt-8 text-center text-sm">
+            &copy; {% now "Y" %} EventSphere Pro. All rights reserved. | <a href="#" class="hover:text-white">Privacy Policy</a> | <a href="#" class="hover:text-white">Terms of Service</a>
+        </div>
+    </div>
+</footer>
+
+
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<!-- Add Font Awesome for icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
-<style>
-  /* Animation for the blob background elements */
-  @keyframes blob {
-    0% {
-      transform: translate(0px, 0px) scale(1);
-    }
-    33% {
-      transform: translate(30px, -50px) scale(1.1);
-    }
-    66% {
-      transform: translate(-20px, 20px) scale(0.9);
-    }
-    100% {
-      transform: translate(0px, 0px) scale(1);
-    }
-  }
-  
-  .animate-blob {
-    animation: blob 7s infinite;
-  }
-  
-  .animation-delay-2000 {
-    animation-delay: 2s;
-  }
-  
-  .animation-delay-4000 {
-    animation-delay: 4s;
-  }
-  
-  /* Custom styles for the past events carousel */
-  .past-events-carousel {
-    padding: 20px 0;
-  }
-  
-  .past-events-carousel .swiper-slide {
-    width: 300px;
-    opacity: 0.7;
-    transition: opacity 0.3s;
-  }
-  
-  .past-events-carousel .swiper-slide-active,
-  .past-events-carousel .swiper-slide-duplicate-active {
-    opacity: 1;
-  }
-</style>
 
 <script>
-  // Initialize Swiper for past events carousel
   document.addEventListener('DOMContentLoaded', function() {
-    const swiper = new Swiper('.past-events-carousel', {
-      slidesPerView: 'auto',
-      spaceBetween: 20,
-      centeredSlides: true,
-      loop: true,
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
+    // Initialize AOS (Animate on Scroll)
+    AOS.init({
+      duration: 800, // Animation duration
+      once: true, // Whether animation should happen only once - while scrolling down
+      offset: 100, // Offset (in px) from the original trigger point
     });
-    
+
+    // Initialize Past Events Swiper
+    const pastEventsSwiper = new Swiper('.past-events-swiper', {
+        slidesPerView: 1.2,
+        spaceBetween: 20,
+        centeredSlides: false, // Don't center slides initially
+        loop: false, // Avoid loop if you don't have many items
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        breakpoints: {
+          // when window width is >= 640px
+          640: {
+            slidesPerView: 2.5,
+            spaceBetween: 25,
+          },
+          // when window width is >= 1024px
+          1024: {
+            slidesPerView: 3.5,
+            spaceBetween: 30,
+          }
+        }
+    });
+
+    // Initialize Testimonials Swiper
+    const testimonialsSwiper = new Swiper('.testimonials-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        loop: true,
+        autoplay: {
+          delay: 5000, // Autoplay every 5 seconds
+          disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+         breakpoints: {
+          768: {
+            slidesPerView: 2,
+            spaceBetween: 30,
+          },
+          1024: {
+            slidesPerView: 3,
+            spaceBetween: 30,
+          }
+        }
+    });
+
     // Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
         e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-          behavior: 'smooth'
-        });
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start' // Scrolls so the element's top aligns with the viewport's top
+          });
+        }
       });
     });
+
+    // Django Messages with SweetAlert2
+    {% if messages %}
+      {% for message in messages %}
+        Swal.fire({
+          toast: true, // Make it a toast notification
+          position: 'top-end',
+          icon: '{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}',
+          title: "{{ message|escapejs }}", // Escape JS characters in message
+          showConfirmButton: false,
+          timer: 3500, // Show for 3.5 seconds
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+        });
+      {% endfor %}
+    {% endif %}
+
   });
 </script>
 
-{% if messages %}
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      {% for message in messages %}
-        Swal.fire({
-          position: "top-end",
-          icon: "{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}",
-          title: "{{ message }}",
-          showConfirmButton: false,
-          timer: 1500
-        });
-      {% endfor %}
-    });
-  </script>
-{% endif %}
 {% endblock content %}
