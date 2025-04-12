@@ -1,110 +1,389 @@
 {% extends "index.html" %}
 
 {% block title %}
-
-{{ event.title }} Event
-
+{{ event.title }} | EventHub Pro
 {% endblock title %}
 
 {% block content %}
 
-<div class="bg-gray-100  py-20">
-
-    <!-- Header -->
-    <header class="bg-blue-600 py-6 shadow-md">
-        <div class="container mx-auto px-6 text-center">
-            <h1 class="text-3xl md:text-4xl font-bold text-white">Event Details</h1>
-            <p class="text-blue-200 text-sm md:text-base mt-2">Discover everything about this event</p>
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 pt-20">
+    <!-- Animated Header -->
+    <header class="relative overflow-hidden bg-gradient-to-r from-indigo-600 to-purple-600 py-12 shadow-xl">
+        <div class="absolute inset-0 bg-gradient-to-r from-indigo-700/20 to-purple-700/20 animate-pulse"></div>
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-2 animate-fade-in-down">
+                {{ event.title }}
+            </h1>
+            <p class="text-indigo-100 text-lg md:text-xl max-w-2xl mx-auto animate-fade-in-up delay-100">
+                {% if event.tagline %}
+                    {{ event.tagline }}
+                {% else %}
+                    An unforgettable experience awaits. Join us for this exclusive event.
+                {% endif %}
+            </p>
+            <div class="mt-6 animate-fade-in-up delay-200">
+                <span class="inline-block bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm">
+                    <i class="fas fa-calendar-alt mr-2"></i>
+                    {{ event.start_date|date:"F d, Y" }} • {{ event.start_date|time:"h:i A" }}
+                </span>
+            </div>
         </div>
+        <div class="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500"></div>
     </header>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-6 py-10">
-        <div class="bg-white shadow-lg rounded-lg p-8 max-w-4xl mx-auto">
-            {% if messages %}
-            <ul class="messages text-red-600 text-lg text-center">
-                {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            <!-- Event Header -->
-            <div class="mb-6">
-                <h2 class="text-2xl md:text-3xl font-bold text-blue-600">{{ event.title }}</h2>
-                <p class="text-gray-600 text-sm italic mt-1">Organized by {{ event.organized_by  }}</p>
-            </div>
-
-            <!-- Event Details -->
-            <div class="space-y-6">
-                <!-- Event Poster -->
-                {% if event.poster %}
-                <div class="w-full flex justify-center">
-                    <img src="{{ event.poster.url }}" alt="Event Poster" class="w-full md:w-2/3 lg:w-1/2 h-auto rounded-lg shadow-lg">
+    <main class="container mx-auto px-6 py-12 -mt-8 relative z-20">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column - Event Details -->
+            <div class="lg:col-span-2 space-y-8">
+                <!-- Event Card -->
+                <div class="bg-white rounded-xl shadow-2xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+                    <!-- Poster with badge -->
+                    <div class="relative">
+                        {% if event.poster %}
+                        <img src="{{ event.poster.url }}" alt="Event Poster" class="w-full h-auto max-h-96 object-cover">
+                        {% else %}
+                        <div class="w-full h-64 bg-gradient-to-r from-gray-200 to-gray-300 flex items-center justify-center">
+                            <span class="text-gray-500">Event Poster Coming Soon</span>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Status Badge -->
+                        <div class="absolute top-4 right-4">
+                            {% if event.event_over %}
+                            <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                                EVENT ENDED
+                            </span>
+                            {% elif event.registration_open %}
+                            <span class="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg animate-pulse">
+                                REGISTER NOW
+                            </span>
+                            {% else %}
+                            <span class="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                                REGISTRATION CLOSED
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Event Details -->
+                    <div class="p-6 md:p-8">
+                        <!-- Organizer -->
+                        <div class="flex items-center mb-6">
+                            <div class="bg-indigo-100 p-2 rounded-full">
+                                <i class="fas fa-user-circle text-indigo-600 text-xl"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-gray-500">Organized by</p>
+                                <p class="font-semibold text-indigo-700">{{ event.organized_by }}</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Description -->
+                        <div class="mb-8">
+                            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                                <span class="w-4 h-4 bg-indigo-500 rounded-full mr-2"></span>
+                                About This Event
+                            </h3>
+                            <div class="prose max-w-none text-gray-600">
+                                {{ event.description|linebreaks }}
+                            </div>
+                        </div>
+                        
+                        <!-- Highlights -->
+                        <div class="mb-8">
+                            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                                <span class="w-4 h-4 bg-indigo-500 rounded-full mr-2"></span>
+                                Event Highlights
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="flex items-start">
+                                    <div class="bg-indigo-100 p-2 rounded-lg mr-3">
+                                        <i class="fas fa-map-marker-alt text-indigo-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">Venue</h4>
+                                        <p class="text-gray-600">{{ event.location }}</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="bg-indigo-100 p-2 rounded-lg mr-3">
+                                        <i class="fas fa-calendar-day text-indigo-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">Date & Time</h4>
+                                        <p class="text-gray-600">
+                                            {{ event.start_date|date:"F d, Y" }}<br>
+                                            {{ event.start_date|time:"h:i A" }}
+                                            {% if event.end_date %}
+                                            - {{ event.end_date|time:"h:i A" }}
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+                                {% if event.certification_available %}
+                                <div class="flex items-start">
+                                    <div class="bg-indigo-100 p-2 rounded-lg mr-3">
+                                        <i class="fas fa-certificate text-indigo-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">Certification</h4>
+                                        <p class="text-gray-600">Digital certificate provided</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% if event.refund_policy %}
+                                <div class="flex items-start">
+                                    <div class="bg-indigo-100 p-2 rounded-lg mr-3">
+                                        <i class="fas fa-shield-alt text-indigo-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">Refund Policy</h4>
+                                        <p class="text-gray-600">{{ event.refund_policy }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Schedule (if available) -->
+                        {% if event.schedule %}
+                        <div class="mb-8">
+                            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                                <span class="w-4 h-4 bg-indigo-500 rounded-full mr-2"></span>
+                                Event Schedule
+                            </h3>
+                            <div class="border-l-2 border-indigo-200 pl-4 space-y-4">
+                                {% for item in event.schedule %}
+                                <div class="relative pl-6">
+                                    <div class="absolute -left-1.5 top-2 w-3 h-3 bg-indigo-500 rounded-full"></div>
+                                    <div class="bg-indigo-50 p-4 rounded-lg">
+                                        <div class="flex justify-between items-start">
+                                            <h4 class="font-semibold text-indigo-700">{{ item.time }}</h4>
+                                            {% if item.speaker %}
+                                            <span class="bg-white px-2 py-1 rounded text-xs text-indigo-600 font-medium">
+                                                {{ item.speaker }}
+                                            </span>
+                                            {% endif %}
+                                        </div>
+                                        <p class="text-gray-700 mt-1">{{ item.activity }}</p>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
                 </div>
-                {% else %}
-                <div class="w-full h-64 bg-gray-200 flex items-center justify-center text-gray-500 rounded-lg">
-                    No Poster Available
+                
+                <!-- Speakers Section (if available) -->
+                {% if event.speakers %}
+                <div class="bg-white rounded-xl shadow-xl p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+                        Featured Speakers
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                        {% for speaker in event.speakers %}
+                        <div class="text-center">
+                            <div class="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg">
+                                <img src="{{ speaker.image.url }}" alt="{{ speaker.name }}" class="w-full h-full object-cover">
+                            </div>
+                            <h4 class="font-bold text-gray-800">{{ speaker.name }}</h4>
+                            <p class="text-indigo-600 text-sm mb-2">{{ speaker.title }}</p>
+                            <p class="text-gray-600 text-sm">{{ speaker.company }}</p>
+                            <div class="flex justify-center space-x-2 mt-2">
+                                {% if speaker.twitter %}
+                                <a href="{{ speaker.twitter }}" class="text-blue-400 hover:text-blue-600">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                {% endif %}
+                                {% if speaker.linkedin %}
+                                <a href="{{ speaker.linkedin }}" class="text-blue-700 hover:text-blue-900">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
                 {% endif %}
+            </div>
             
-                <!-- Date and Time -->
-                <div class="flex flex-wrap items-center justify-between bg-blue-50 border border-blue-200 p-4 rounded-md">
-                    <p class="text-gray-700 text-lg">
-                        <span class="font-semibold">Date:</span> {{ event.start_date|date:"F d, Y" }}
-                    </p>
-                    <p class="text-gray-700 text-lg">
-                        <span class="font-semibold">Time:</span> {{ event.start_date|time:"h:i A"  }}
-                    </p>
-                </div>
-            
-                <!-- Location -->
-                <div class="bg-green-50 border border-green-200 p-4 rounded-md">
-                    <p class="text-gray-700 text-lg">
-                        <span class="font-semibold">Location:</span> {{ event.location }}
-                    </p>
-                </div>
-            
-                <!-- Description -->
-                <div>
-                    <h3 class="text-xl font-semibold text-gray-800">About the Event</h3>
-                    <p class="text-gray-600 mt-2">
-                        {{ event.description }}
-                    </p>
-                </div>
-            
-                <!-- Registration Section -->
-                <div class="bg-gray-100 border border-gray-300 p-6 rounded-lg text-center">
-                    {% if not event.event_over %}
-                        {% if event.registration_open %}
-                            <h3 class="text-lg font-semibold text-gray-800">Want to Join?</h3>
-                            <p class="text-gray-600 mt-2">Register now to be part of this exciting event!</p>
-                            <a 
-                                href="{% url 'eventregister' event.slug %}" 
-                                class="mt-4 inline-block bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            >
-                                Register Now
-                            </a>
-                        {% else %}
-                            <a 
-                                href="{% url 'eventregister' event.slug %}" 
-                                class="mt-4 inline-block bg-transparent text-red-600 font-semibold py-3 px-6 rounded-lg border-2 border-red-600 shadow-md hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500"
-                            >
-                                Registration Closed
-                            </a>
+            <!-- Right Column - Registration & Details -->
+            <div class="space-y-6 ">
+                <!-- Registration Card -->
+                <div class="bg-white rounded-xl shadow-xl overflow-hidden sticky top-[100px] transition-all duration-300 hover:shadow-2xl">
+                    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 text-white">
+                        <h3 class="text-xl font-bold mb-1">Join This Event</h3>
+                        <p class="text-indigo-100 text-sm">Secure your spot now</p>
+                    </div>
+                    
+                    <div class="p-6">
+                        {% if messages %}
+                        <div class="mb-6">
+                            {% for message in messages %}
+                            <div class="p-3 rounded-lg {% if message.tags %}{{ message.tags }}{% else %}bg-blue-100 text-blue-800{% endif %}">
+                                {{ message }}
+                            </div>
+                            {% endfor %}
+                        </div>
                         {% endif %}
-                    {% else %}
-                        <a 
-                            href="{% url 'eventregister' event.slug %}" 
-                            class="mt-4 inline-block bg-transparent text-gray-500 font-semibold py-3 px-6 rounded-lg border-2 border-gray-500 shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                        >
-                            Registration Over
-                        </a>
-                    {% endif %}
+                        
+                        <!-- Pricing -->
+                        <div class="mb-6">
+                            {% if event.price > 0 %}
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-600">Standard Ticket</span>
+                                <span class="font-bold text-gray-800">${{ event.price|floatformat:2 }}</span>
+                            </div>
+                            {% if event.early_bird_price %}
+                            <div class="flex justify-between items-center text-sm text-green-600 mb-2">
+                                <span>Early Bird (Limited)</span>
+                                <span class="font-bold">${{ event.early_bird_price|floatformat:2 }}</span>
+                            </div>
+                            {% endif %}
+                            {% if event.vip_price %}
+                            <div class="flex justify-between items-center text-sm text-purple-600">
+                                <span>VIP Experience</span>
+                                <span class="font-bold">${{ event.vip_price|floatformat:2 }}</span>
+                            </div>
+                            {% endif %}
+                            {% else %}
+                            <div class="text-center py-4 bg-green-50 rounded-lg">
+                                <span class="font-bold text-green-700">FREE REGISTER</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Registration CTA -->
+                        <div class="text-center">
+                            {% if not event.event_over %}
+                                {% if event.registration_open %}
+                                    <a href="{% url 'eventregister' event.slug %}" 
+                                        class="block w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300 mb-3">
+                                        Register Now
+                                    </a>
+                                    {% if event.price > 0 %}
+                                    <p class="text-xs text-gray-500">Secure payment processing</p>
+                                    {% endif %}
+                                {% else %}
+                                    <button class="block w-full bg-gray-300 text-gray-700 font-bold py-3 px-6 rounded-lg shadow cursor-not-allowed mb-3" disabled>
+                                        Registration Closed
+                                    </button>
+                                    <p class="text-xs text-gray-500">Contact organizer for availability</p>
+                                {% endif %}
+                            {% else %}
+                                <button class="block w-full bg-gray-300 text-gray-700 font-bold py-3 px-6 rounded-lg shadow cursor-not-allowed mb-3" disabled>
+                                    Event Concluded
+                                </button>
+                                {% if event.certification_available %}
+                                <a href="#" class="text-indigo-600 text-sm font-medium hover:underline">
+                                    Request Certificate <i class="fas fa-arrow-right ml-1"></i>
+                                </a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Additional Info -->
+                    <div class="border-t border-gray-200 p-6 bg-gray-50">
+                        <div class="space-y-3">
+                            <div class="flex items-center">
+                                <i class="fas fa-ticket-alt text-indigo-600 mr-3"></i>
+                                <span class="text-sm text-gray-600">
+                                    {% if event.seats_available %}
+                                    {{ event.seats_available }} seats remaining
+                                    {% else %}
+                                    Limited seating available
+                                    {% endif %}
+                                </span>
+                            </div>
+                            {% if event.recording_available %}
+                            <div class="flex items-center">
+                                <i class="fas fa-video text-indigo-600 mr-3"></i>
+                                <span class="text-sm text-gray-600">Recording available after event</span>
+                            </div>
+                            {% endif %}
+                            <div class="flex items-center">
+                                <i class="fas fa-share-alt text-indigo-600 mr-3"></i>
+                                <div class="text-sm text-gray-600">
+                                    Share this event:
+                                    <div class="flex space-x-2 mt-1">
+                                        <a href="#" class="text-blue-400 hover:text-blue-600"><i class="fab fa-twitter"></i></a>
+                                        <a href="#" class="text-blue-700 hover:text-blue-900"><i class="fab fa-facebook"></i></a>
+                                        <a href="#" class="text-red-500 hover:text-red-700"><i class="fab fa-instagram"></i></a>
+                                        <a href="#" class="text-gray-700 hover:text-gray-900"><i class="fab fa-linkedin-in"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                
+                <!-- Location Card -->
+                {% comment %} <div class="bg-white rounded-xl shadow-xl overflow-hidden">
+                    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 text-white">
+                        <h3 class="text-xl font-bold mb-1">Event Location</h3>
+                        <p class="text-indigo-100 text-sm">Where to find us</p>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-start mb-4">
+                            <i class="fas fa-map-marker-alt text-indigo-600 mt-1 mr-3"></i>
+                            <div>
+                                <p class="font-semibold text-gray-800">{{ event.location }}</p>
+                                {% if event.address %}
+                                <p class="text-gray-600 text-sm">{{ event.address }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <!-- Map Placeholder -->
+                        <div class="h-48 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">
+                            <i class="fas fa-map-marked-alt text-2xl mr-2"></i>
+                            Interactive Map
+                        </div>
+                        <div class="mt-4">
+                            <a href="#" class="text-indigo-600 text-sm font-medium hover:underline">
+                                Get Directions <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Organizer Contact -->
+                <div class="bg-white rounded-xl shadow-xl overflow-hidden">
+                    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 text-white">
+                        <h3 class="text-xl font-bold mb-1">Have Questions?</h3>
+                        <p class="text-indigo-100 text-sm">Contact the organizer</p>
+                    </div>
+                    <div class="p-6">
+                        <form class="space-y-4">
+                            <div>
+                                <label class="block text-gray-700 text-sm font-medium mb-1">Your Email</label>
+                                <input type="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 text-sm font-medium mb-1">Message</label>
+                                <textarea rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors">
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div> {% endcomment %}
             </div>
         </div>
     </main>
+</div>
 
+<!-- Floating Action Button (mobile) -->
+<div class="lg:hidden fixed bottom-6 right-6 z-50">
+    {% if not event.event_over and event.registration_open %}
+    <a href="{% url 'eventregister' event.slug %}" class="block bg-indigo-600 text-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center hover:bg-indigo-700 transition-colors animate-bounce">
+        <i class="fas fa-ticket-alt text-xl"></i>
+    </a>
+    {% endif %}
 </div>
 
 {% endblock content %}

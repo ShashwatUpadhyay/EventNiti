@@ -1,49 +1,199 @@
 {% extends "index.html" %}
 
 {% block title %}
-Certificates
+My Certificates | Prerogatory Pointers United University
 {% endblock title %}
 
 {% block content %}
-<div class="bg-gray-50 py-20 px-6 sm:px-10">
-    <h1 class="text-3xl sm:text-4xl mt-10 font-semibold text-center text-blue-700 mb-10">
-        Certificates
-    </h1>
-    
-    <!-- Certificates Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {% if certi_obj %}
-            {% for certi_objs in certi_obj %}
-            <a href="{% url 'certificate' certi_objs.hash %}"
-               class="flex flex-col bg-white border border-gray-200 shadow-lg rounded-lg p-6 transform transition-transform duration-300 hover:shadow-2xl hover:scale-105">
-                
-                <h2 class="text-xl font-medium text-blue-600">
-                    Certificate of {{ certi_objs.certificate_for }}
-                </h2>
-                
-                <p class="text-gray-700 mt-3">
-                    <strong>Awarded to:</strong> <span class="text-gray-900">{{ certi_objs.user.first_name }} {{ certi_objs.user.last_name }}</span>
-                </p>
-                
-                <p class="text-gray-700 mt-2">
-                    <strong>Issue Date:</strong> <span class="text-gray-900">{{ certi_objs.issue_date|date:"F d, Y" }}</span>
-                </p>
-                
-                <div class="mt-4 text-right">
-                    <span class="inline-block bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg text-sm transform transition-all duration-200 hover:bg-blue-700">
-                        View Certificate
-                    </span>
-                </div>
-            </a>
-            {% endfor %}
-        {% else %}
-        <!-- No certificates message -->
-        <div class="col-span-full">
-            <div class="flex flex-col items-center justify-center bg-yellow-100 border border-yellow-300 text-yellow-800 font-semibold rounded-lg py-8 px-10 mt-10 shadow-lg">
-                <p>No certificates are available at the moment.</p>
+<div class="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 py-12 animate-gradient">
+
+    <!-- Animated Header Section -->
+    <header class="relative overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-700 py-16 shadow-2xl">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute top-0 left-0 w-64 h-64 bg-blue-500 rounded-full opacity-20 animate-pulse"></div>
+            <div class="absolute bottom-0 right-0 w-64 h-64 bg-indigo-500 rounded-full opacity-20 animate-pulse"></div>
+        </div>
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <h1 class="text-4xl md:text-6xl font-bold text-white tracking-tight mb-4 animate-fade-in-down">
+                Your Achievements
+            </h1>
+            <p class="text-blue-100 text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed animate-fade-in-up">
+                Verified digital certificates for all your completed events and programs
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-12">
+        <!-- Verification Tool -->
+        <div class="bg-white shadow-2xl rounded-xl p-8 mb-12 border-l-8 border-blue-500">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                Verify a Certificate
+            </h2>
+            <p class="text-gray-600 mb-6">Enter a certificate ID to verify its authenticity</p>
+            <div class="flex flex-col md:flex-row gap-4">
+                <input 
+                    type="text" 
+                    placeholder="Enter Certificate ID" 
+                    class="flex-grow px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                >
+                <button class="bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform transition duration-300 hover:scale-105">
+                    Verify Now
+                </button>
             </div>
         </div>
-        {% endif %}
-    </div>
+
+        <!-- Certificates Grid -->
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                My Certificates
+            </h2>
+            
+            {% if certi_obj %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {% for certi_objs in certi_obj %}
+                    <div class="bg-white border border-gray-200 shadow-lg rounded-xl overflow-hidden transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+                        <div class="bg-gradient-to-r from-blue-500 to-indigo-600 p-4 text-white">
+                            <h3 class="text-xl font-semibold">{{ certi_objs.certificate_for }}</h3>
+                            <p class="text-blue-100 text-sm">{{ certi_objs.issue_date|date:"F d, Y" }}</p>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-blue-100 text-blue-800 font-bold rounded-full w-12 h-12 flex items-center justify-center mr-3">
+                                    {{ certi_objs.user.first_name|first }}{{ certi_objs.user.last_name|first }}
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-800">{{ certi_objs.user.first_name }} {{ certi_objs.user.last_name }}</h4>
+                                    <p class="text-sm text-gray-500">{{ certi_objs.event.title }} Year</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-between items-center mt-6">
+                                <span class="inline-flex items-center text-sm text-gray-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                    </svg>
+                                    Verified
+                                </span>
+                                <a href="{% url 'certificate' certi_objs.hash %}" 
+                                   class="inline-flex items-center text-blue-600 font-medium hover:text-blue-800 transition-colors">
+                                    View Certificate
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <!-- No certificates message -->
+                <div class="bg-white shadow-lg rounded-xl p-10 text-center">
+                    <div class="mx-auto w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">No Certificates Yet</h3>
+                    <p class="text-gray-600 mb-6">You haven't earned any certificates yet. Attend events to earn verifiable certificates.</p>
+                    <a href="{% url 'events' %}" class="inline-block bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform transition duration-300 hover:scale-105">
+                        Browse Events
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Certificate Features -->
+        <div class="bg-white shadow-2xl rounded-xl p-8 mt-12 border-t-8 border-blue-500">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">About Our Certificates</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="flex items-start">
+                    <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-1">Blockchain Verified</h3>
+                        <p class="text-gray-600">Each certificate is secured with blockchain technology for tamper-proof verification.</p>
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-1">Shareable</h3>
+                        <p class="text-gray-600">Easily share your achievements on LinkedIn and other professional networks.</p>
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-1">Secure</h3>
+                        <p class="text-gray-600">Unique digital signatures prevent forgery and ensure authenticity.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- CTA Section -->
+    <section class="bg-gradient-to-r from-blue-600 to-indigo-700 py-16">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold text-white mb-6">Ready to Earn Your Next Certificate?</h2>
+            <p class="text-blue-100 text-xl max-w-2xl mx-auto mb-8">Join our upcoming events and add more achievements to your collection.</p>
+            <a href="{% url 'events' %}" class="inline-block bg-white text-blue-600 font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 transform transition duration-300 hover:scale-105">
+                Browse Events
+            </a>
+        </div>
+    </section>
+
+    <!-- Animation Styles -->
+    <style>
+        .animate-gradient {
+            animation: gradientShift 15s ease infinite;
+            background-size: 200% 200%;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .animate-fade-in-down {
+            animation: fadeInDown 0.8s ease-out;
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        @keyframes fadeInDown {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-pulse {
+            animation: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.2; }
+            50% { transform: scale(1.2); opacity: 0.3; }
+        }
+    </style>
 </div>
 {% endblock content %}

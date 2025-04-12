@@ -1,148 +1,327 @@
 {% extends "index.html" %}
 
 {% block title %}
-All Events | Prerogatory Pointers United University
+Events Hub | Prerogatory Pointers United University
 {% endblock title %}
 
 {% block content %}
 
-<div class="bg-gray-100 pt-12">
-    {% comment %} <div class="bg-blue-600 py-6 shadow-md bg-gradient-to-r from-blue-600 to-purple-500 pt-12">
-        <div class="container mx-auto px-6 text-center">
-            <!-- Header Text with Faster Animation -->
-            <h1 class="text-3xl md:text-4xl font-bold text-white animate__animated animate__fadeIn animate__fast">
-                All Events
-            </h1>
-            <p class="text-blue-200 text-sm md:text-base mt-2 animate__animated animate__fadeIn animate__delay-0.5s animate__fast">
-                Explore all ongoing and upcoming events
-            </p>
-        </div>
-    </div> {% endcomment %}
-    <h1 class="text-3xl animate-slide-in md:text-4xl mt-20 font-bold text-center text-purple-500 animate__animated animate__fadeIn animate__fast">
-        All Events
-    </h1>
-    <p class="text-black text-sm md:text-base text-center mt-2 animate__animated animate__fadeIn animate__delay-0.5s animate__fast">
-        Explore all ongoing and upcoming events
-    </p>
-    <!-- Include Animate.css for animation effects -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-r from-indigo-800 to-purple-700 py-20 mt-20 overflow-hidden">
+    <!-- Animated background elements -->
+    <div class="absolute top-0 left-0 w-full h-full opacity-10">
+        <div class="absolute top-20 left-10 w-40 h-40 rounded-full bg-purple-400 animate-pulse"></div>
+        <div class="absolute bottom-10 right-20 w-60 h-60 rounded-full bg-blue-400 animate-pulse animation-delay-2000"></div>
+    </div>
     
-    <!-- Events Section -->
-    <main class="container mx-auto px-6 py-10 ">
-        {% if messages %}
-            <ul class="messages text-green-600 text-lg text-center mb-4">
-                {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-            {% if event %}
-            {% for events in event %}
-                <div class="bg-white border border-gray-200 shadow-lg rounded-lg overflow-hidden hover:shadow-xl hover:scale-105 transform transition duration-300">
-        
-            <!-- Event Poster -->
-            {% if events.poster %}
-            <img src="{{ events.poster.url }}" alt="Event Poster" class="w-full h-48 object-cover">
-            {% else %}
-            <div class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">
-                No Poster Available
-            </div>
-            {% endif %}
-        
-        <!-- Event Details -->
-        <div class="p-6">
-            <h2 class="text-xl font-bold text-blue-600">{{ events.title }}</h2>
-            <p class="text-gray-700 mt-2">📅 Date: <span class="font-medium text-gray-900">{{ events.start_date|date:"F d, Y"|default:"To be Announced..." }}</span></p>
-            <p class="text-gray-700 mt-1">📍 Location: <span class="font-medium text-gray-900">{{ events.location }}</span></p>
-            
-            <!-- Registration Status Badge -->
-            <div class="mt-4">
-                {% if events.event_over %}
-                <span class="inline-block bg-cyan-500 text-white font-semibold py-1 px-3 rounded-full text-sm">
-                    Event Over
-                </span>
-                {% else %}
-                    {% if events.registration_open %}
-                        {% if events.text_status %}
-                        <span class="inline-block bg-green-600 text-white font-semibold py-1 px-3 rounded-full text-sm">
-                            {{ events.text_status }}
-                        </span>
-                        {% else %}
-                        <span class="inline-block bg-green-600 text-white font-semibold py-1 px-3 rounded-full text-sm">
-                            Registration Open
-                        </span>
-                        {% endif %}
-                    {% else %}
-                        {% if events.text_status %}
-                        <span class="inline-block bg-red-600 text-white font-semibold py-1 px-3 rounded-full text-sm">
-                            {{ events.text_status }}
-                        </span>
-                        {% else %}
-                        <span class="inline-block bg-red-600 text-white font-semibold py-1 px-3 rounded-full text-sm">
-                            Registration Closed
-                        </span>
-                        {% endif %}
-                    {% endif %}
-                {% endif %}
-            </div>
-
-            <!-- Event Description -->
-            <p class="text-gray-700 mt-4 line-clamp-3">
-                {{ events.description }}
+    <div class="container mx-auto px-6 relative z-10">
+        <div class="text-center animate__animated animate__fadeIn">
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">
+                Discover <span class="text-yellow-300">Transformative</span> Events
+            </h1>
+            <p class="text-xl text-indigo-100 max-w-3xl mx-auto">
+                Engage, learn, and network at our premier university events. Earn certifications, expand your horizons.
             </p>
-
-            <!-- View Details Button -->
-            <div class="text-right mt-4">
-                <a href="{% url 'event' events.slug %}" class="inline-block bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-blue-700">
-                    View Details
+            
+            <!-- Call-to-action buttons -->
+            <div class="mt-10 flex flex-col sm:flex-row justify-center gap-4 animate__animated animate__fadeInUp animate__delay-1s">
+                <a href="#events" class="bg-white text-indigo-800 font-bold py-3 px-8 rounded-full hover:bg-indigo-100 transition-all transform hover:scale-105 shadow-lg">
+                    Browse Events
                 </a>
+                {% if user.is_authenticated %}
+                <a href="" class="bg-yellow-400 text-indigo-900 font-bold py-3 px-8 rounded-full hover:bg-yellow-300 transition-all transform hover:scale-105 shadow-lg">
+                    Host an Event
+                </a>
+                {% else %}
+                <a href="{% url 'register' %}" class="bg-transparent border-2 border-white text-white font-bold py-3 px-8 rounded-full hover:bg-white hover:text-indigo-800 transition-all transform hover:scale-105">
+                    Join Our Community
+                </a>
+                {% endif %}
             </div>
         </div>
     </div>
-    {% endfor %}
-        {% else %}
+</section>
 
-        <div class="col-span-full">
-            <div class="flex flex-col items-center justify-center bg-yellow-100 border border-yellow-300 text-yellow-700 font-semibold rounded-lg py-6 px-8 mt-6">
-                <p>No Ongoing Events</p>
+<!-- Features Highlights -->
+<section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Feature 1 -->
+            <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="text-indigo-600 mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Verified Certifications</h3>
+                <p class="text-gray-600">Earn blockchain-verified certificates for all completed events and workshops.</p>
+            </div>
+            
+            <!-- Feature 2 -->
+            <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="text-indigo-600 mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Seamless Ticketing</h3>
+                <p class="text-gray-600">Secure digital tickets with QR codes for easy event access and management.</p>
+            </div>
+            
+            <!-- Feature 3 -->
+            <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="text-indigo-600 mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Networking Opportunities</h3>
+                <p class="text-gray-600">Connect with like-minded peers and industry professionals at every event.</p>
             </div>
         </div>
+    </div>
+</section>
 
-        {% endif %}
+<!-- Events Section -->
+<section id="events" class="py-16 bg-gray-100">
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4 animate__animated animate__fadeIn">
+                Upcoming <span class="text-indigo-600">Experiences</span>
+            </h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                From academic workshops to career-building conferences, find events that inspire growth.
+            </p>
+            
+            {% comment %} <!-- Event Filter Tabs -->
+            <div class="flex flex-wrap justify-center mt-8 gap-2">
+                <button class="px-4 py-2 bg-indigo-600 text-white rounded-full font-medium text-sm">
+                    All Events
+                </button>
+                <button class="px-4 py-2 bg-white text-gray-700 rounded-full font-medium text-sm hover:bg-gray-200">
+                    Workshops
+                </button>
+                <button class="px-4 py-2 bg-white text-gray-700 rounded-full font-medium text-sm hover:bg-gray-200">
+                    Conferences
+                </button>
+                <button class="px-4 py-2 bg-white text-gray-700 rounded-full font-medium text-sm hover:bg-gray-200">
+                    Networking
+                </button>
+                <button class="px-4 py-2 bg-white text-gray-700 rounded-full font-medium text-sm hover:bg-gray-200">
+                    Certifications
+                </button>
+            </div> {% endcomment %}
         </div>
-    </main>
-</div>
+        
+        {% if messages %}
+        <div class="max-w-4xl mx-auto mb-8">
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }} bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded"{% endif %}>
+                    {{ message }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <!-- Events Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% if event %}
+                {% for events in event %}
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 group">
+                    <!-- Event Poster with Ribbon -->
+                    <div class="relative">
+                        {% if events.poster %}
+                        <img src="{{ events.poster.url }}" alt="Event Poster" class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500">
+                        {% else %}
+                        <div class="w-full h-56 bg-gradient-to-r from-indigo-100 to-purple-100 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Status Ribbon -->
+                        <div class="absolute top-4 right-4">
+                            {% if events.event_over %}
+                            <span class="inline-block bg-gray-600 text-white font-semibold py-1 px-3 rounded-full text-xs uppercase tracking-wide">
+                                Event Over
+                            </span>
+                            {% else %}
+                                {% if events.registration_open %}
+                                <span class="inline-block bg-green-500 text-white font-semibold py-1 px-3 rounded-full text-xs uppercase tracking-wide">
+                                    {{ events.text_status|default:"Registration Open" }}
+                                </span>
+                                {% else %}
+                                <span class="inline-block bg-red-500 text-white font-semibold py-1 px-3 rounded-full text-xs uppercase tracking-wide">
+                                    {{ events.text_status|default:"Registration Closed" }}
+                                </span>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Certification Badge -->
+                        {% if events.offers_certification %}
+                        <div class="absolute top-4 left-4 bg-yellow-400 text-indigo-900 font-bold py-1 px-2 rounded text-xs flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Certification
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Event Details -->
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-gray-800">{{ events.title }}</h3>
+                            {% if events.price > 0 %}
+                            <span class="bg-indigo-100 text-indigo-800 font-bold py-1 px-3 rounded-full text-sm">
+                                ₹{{ events.price }}
+                            </span>
+                            {% else %}
+                            <span class="bg-green-100 text-green-800 font-bold py-1 px-3 rounded-full text-sm">
+                                FREE
+                            </span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="flex items-center text-gray-500 text-sm mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            {{ events.location|default:"Virtual Event" }}
+                        </div>
+                        
+                        <div class="flex items-center text-gray-500 text-sm mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            {{ events.start_date|date:"F d, Y"|default:"Date TBD" }}
+                            {% if events.end_date %}
+                            - {{ events.end_date|date:"F d, Y" }}
+                            {% endif %}
+                        </div>
+                        
+                        <p class="text-gray-600 mb-5 line-clamp-2">
+                            {{ events.description }}
+                        </p>
+                        
+                        <div class="flex justify-between items-center">
+                            <div class="flex -space-x-2">
+                                <!-- Attendee avatars (sample) -->
+                                <img class="w-8 h-8 rounded-full border-2 border-white" src="https://randomuser.me/api/portraits/women/12.jpg" alt="Attendee">
+                                <img class="w-8 h-8 rounded-full border-2 border-white" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Attendee">
+                                <img class="w-8 h-8 rounded-full border-2 border-white" src="https://randomuser.me/api/portraits/women/44.jpg" alt="Attendee">
+                                <div class="w-8 h-8 rounded-full border-2 border-white bg-indigo-100 text-indigo-800 flex items-center justify-center text-xs font-bold">
+                                    +{{ events.attendees.count|default:"12" }}
+                                </div>
+                            </div>
+                            
+                            <a href="{% url 'event' events.slug %}" class="text-indigo-600 font-semibold text-sm hover:text-indigo-800 flex items-center">
+                                View Details
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+            <div class="col-span-full py-12">
+                <div class="text-center bg-white p-8 rounded-xl shadow-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h3 class="text-xl font-bold text-gray-700 mb-2">No Upcoming Events</h3>
+                    <p class="text-gray-500 mb-4">Check back soon for our next exciting events!</p>
+                    {% if user.is_staff %}
+                    <a href="" class="inline-block bg-indigo-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-indigo-700">
+                        Create Your First Event
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Pagination (sample) -->
+        {% if event and event.paginator.num_pages > 1 %}
+        <div class="mt-12 flex justify-center">
+            <nav class="flex items-center space-x-2">
+                <a href="#" class="px-4 py-2 border rounded-lg text-indigo-600 border-indigo-600 hover:bg-indigo-50">
+                    Previous
+                </a>
+                <a href="#" class="px-4 py-2 border rounded-lg bg-indigo-600 text-white border-indigo-600">
+                    1
+                </a>
+                <a href="#" class="px-4 py-2 border rounded-lg text-gray-600 border-gray-300 hover:bg-gray-50">
+                    2
+                </a>
+                <a href="#" class="px-4 py-2 border rounded-lg text-gray-600 border-gray-300 hover:bg-gray-50">
+                    3
+                </a>
+                <span class="px-2 text-gray-500">...</span>
+                <a href="#" class="px-4 py-2 border rounded-lg text-gray-600 border-gray-300 hover:bg-gray-50">
+                    8
+                </a>
+                <a href="#" class="px-4 py-2 border rounded-lg text-indigo-600 border-indigo-600 hover:bg-indigo-50">
+                    Next
+                </a>
+            </nav>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-16 bg-indigo-700 text-white">
+    <div class="container mx-auto px-6 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Transform Your Experience?</h2>
+        <p class="text-xl text-indigo-100 max-w-3xl mx-auto mb-8">
+            Join thousands of students and professionals in our vibrant event community.
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="{% url 'register' %}" class="bg-white text-indigo-800 font-bold py-3 px-8 rounded-full hover:bg-indigo-100 transition-all transform hover:scale-105 shadow-lg">
+                Sign Up Free
+            </a>
+            <a href="{% url 'contact' %}" class="bg-transparent border-2 border-white text-white font-bold py-3 px-8 rounded-full hover:bg-white hover:text-indigo-800 transition-all transform hover:scale-105">
+                Contact Our Team
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Include Animate.css for animation effects -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
 <style>
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
     }
-
-    @keyframes slideIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    
+    .animation-delay-2000 {
+        animation-delay: 2s;
     }
-
-    .animate-fade-in {
-        animation: fadeIn 1s ease-out;
+    
+    .hover-float:hover {
+        animation: float 3s ease-in-out infinite;
     }
-
-    .animate-slide-in {
-        animation: slideIn 1s ease-in-out;
+    
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    
+    .group:hover .group-hover\:scale-105 {
+        transform: scale(1.05);
     }
 </style>
 {% endblock content %}

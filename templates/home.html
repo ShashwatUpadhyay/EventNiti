@@ -1,265 +1,515 @@
 {% extends "index.html" %}
 
 {% block title %}
-Prerogative Pointers
+EventSphere Pro - Elevate Your Event Experience
 {% endblock title %}
 
 {% block content %}
 {% load static %}
 
-<!-- Hero Section -->
-
-<br>
-<br>
-<section class="bg-center bg-no-repeat bg-cover bg-[url('{{rand_mem}}')] bg-gray-700 bg-blend-multiply h-screen">
-    <div class="px-4 mx-auto max-w-screen-xl text-center py-24 lg:py-56">
-        <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-purple-500 md:text-5xl lg:text-6xl">Welcome to Prerogative Pointers <br> United University</h1>
-        <p class="mb-8 text-lg font-normal text-gray-300 lg:text-xl sm:px-16 lg:px-48">Your journey to unforgettable experiences starts here.
-
-        </p>
-        <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0">
-            <a href="{% url 'ourTeam' %}" class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-purple-500 hover:bg-white hover:text-purple-500 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900">
-                Our Team
-                <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-                </svg>
-            </a>
-            <a href="#events" class="inline-flex justify-center hover:text-gray-900 items-center py-3 px-5 sm:ms-4 text-base font-medium text-center text-white rounded-lg border border-purple-500 hover:bg-gray-100 focus:ring-4 focus:ring-gray-400">
-                Join Events
-            </a>  
-        </div>
+<!-- Animated Hero Section -->
+<section class="relative overflow-hidden  bg-gradient-to-br from-grey-900 to-blue-800 h-screen flex items-center justify-center">
+  <!-- Animated background elements -->
+  <div class="absolute inset-0 overflow-hidden bg-center bg-no-repeat bg-cover bg-[url('{{rand_mem}}')] bg-gray-700 bg-blend-multiply h-screen"></div>
+    <div class="absolute top-0 left-0 w-64 h-64 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+    <div class="absolute top-0 right-0 w-96 h-96 bg-indigo-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+    <div class="absolute bottom-0 left-1/2 w-80 h-80 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+  </div>
+  
+  <div class="relative z-10 px-4 mx-auto max-w-7xl text-center ">
+    <h1 class="mb-6 text-5xl font-bold tracking-tight text-white md:text-6xl lg:text-7xl">
+      <span class="block">Transform Events</span>
+      <span class="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-300">Into Experiences</span>
+    </h1>
+    <p class="max-w-3xl mx-auto mb-10 text-xl text-purple-100">
+      EventSphere Pro delivers seamless event management, ticketing, and certification for organizations that demand excellence.
+    </p>
+    <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
+      <a href="{% url 'events' %}" class="px-8 py-4 text-lg font-semibold text-white transition-all duration-300 bg-purple-600 rounded-lg shadow-lg hover:bg-white hover:text-purple-700 hover:shadow-xl hover:scale-105">
+        Explore Events
+        <i class="ml-2 fas fa-arrow-right"></i>
+      </a>
+      <a href="#features" class="px-8 py-4 text-lg font-semibold text-white transition-all duration-300 border-2 border-white rounded-lg hover:bg-white hover:text-purple-700 hover:shadow-lg">
+        Learn More
+      </a>
     </div>
+  </div>
+  
+  <!-- Scrolling indicator -->
+  <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+    </svg>
+  </div>
 </section>
 
-
-<!-- Events Section -->
-<main id='events' class="container mx-auto px-6 py-16 z-0">
-    <h2 class="text-4xl text-center font-extrabold text-purple-500">Upcoming Events</h2> 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-        {% if event %}
-        {% for events in event %}
-            <div class="bg-white border border-gray-200 shadow-lg rounded-lg overflow-hidden hover:shadow-xl hover:scale-105 transform transition duration-300">
+<!-- Features Section -->
+<section id="features" class="py-20 bg-gray-50">
+  <div class="container px-6 mx-auto">
+    <div class="mb-16 text-center">
+      <h2 class="mb-4 text-4xl font-bold text-gray-900">Why Choose EventSphere Pro?</h2>
+      <p class="max-w-2xl mx-auto text-lg text-gray-600">Comprehensive tools for every stage of your event journey</p>
+    </div>
     
-                <!-- Event Poster -->
-                {% if events.poster %}
-                <img src="{{ events.poster.url }}" alt="Event Poster" class="w-full h-48 object-cover">
-                {% else %}
-                <div class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">
-                    No Poster Available
-                </div>
-                {% endif %}
-        
-                <!-- Event Details -->
-                <div class="p-6">
-                    <h2 class="text-xl font-bold text-blue-600">{{ events.title }}</h2>
-                    <p class="text-gray-600 mt-2">📅 Date: <span class="font-medium text-gray-900">{{ events.start_date|date:"F d, Y"|default:"To be Announced..." }}</span></p>
-                    <p class="text-gray-600">📍 Location: <span class="font-medium text-gray-900">{{ events.location }}</span></p>
-                    
-                    <!-- Registration Status Badge -->
-                    <div class="mt-4">
-                        {% if events.event_over %}
-                        <span class="inline-block bg-gray-500 text-white font-semibold py-1 px-3 rounded-full text-sm">
-                            Event Over
-                        </span>
-                        {% else %}
-                            {% if events.registration_open %}
-                                <span class="inline-block bg-green-500 text-white font-semibold py-1 px-3 rounded-full text-sm">
-                                    Registration Open ✅
-                                </span>
-                            {% else %}
-                                <span class="inline-block bg-red-500 text-white font-semibold py-1 px-3 rounded-full text-sm">
-                                    Registration Closed ❌
-                                </span>
-                            {% endif %}
-                        {% endif %}
-                    </div>
-
-                    <!-- View Details Button -->
-                    <div class="text-right mt-4">
-                        {% if user.is_authenticated %}
-                        {% if not user.is_student %}
-                            <a href="{% url 'teacherEvent' events.slug %}" class="inline-block bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-blue-700">
-                                View Details
-                            </a>
-                        {% else %}
-                        <a href="{% url 'event' events.slug %}" class="inline-block bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-blue-700">
-                            View Details
-                        </a>
-                        {% endif %}
-                        
-                        {% else %}
-                        <a href="{% url 'event' events.slug %}" class="inline-block bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-blue-700">
-                            View Details
-                        </a>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        {% endfor %}    
-        {% else %}
-            <div class="col-span-full">
-                <div class="flex flex-col items-center justify-center bg-yellow-100 border border-yellow-300 text-yellow-700 font-semibold rounded-lg py-6 px-8 mt-6">
-                    <p>No Ongoing Events</p>
-                </div>
-            </div>
-        {% endif %} 
-    </div>
-    {% if user.is_authenticated %}
-        {% if not user.is_student %}
-            <a href="{% url "teacherEventList" %}" class="text-blue-600 mt-4 inline-block">See more ➡️</a>
-        {% else %}
-            <a href="{% url "events" %}" class="text-blue-600 mt-4 inline-block">See more ➡️</a>
-        {% endif %}
-    {% else %}
-        <a href="{% url "events" %}" class="text-blue-600 mt-4 inline-block">See more ➡️</a>
-    {% endif %}
-</main>
-<section class="container mx-auto px-6 py-16">
-    <h1 class="text-4xl text-center font-extrabold text-purple-500 mb-8">Our Past Successful Events</h1>
-    <div class="relative">
-        <!-- Slider Container -->
-        <div id="slider-container" class="past-events__container flex overflow-x-auto scroll-smooth">
-            <div id="slider" class="past-events__slider flex space-x-4">
-                {% for event in events %}
-                <a href='{% url "eventResult" event.slug %}'>
-                <div class="past-events__card bg-white rounded-lg shadow-lg overflow-hidden w-64 flex-shrink-0" height='200px'>
-                    <div class="past-events__image">
-                        <img src="{{event.poster.url}}" alt="Event Image" class="w-full h-48 object-cover">
-                    </div>
-                    <div class="past-events__details p-4">
-                        <h3 class="past-events__event-title text-2xl font-semibold text-gray-800 mb-2">{{ event.title}}</h3>
-                        <p class="past-events__date text-sm text-gray-500 mb-2">{{ event.start_date|date:"F d, Y"}}</p>
-                        {% comment %} <p class="past-events__description text-sm text-gray-600">{{event.description}}</p> {% endcomment %}
-                    </div>
-                </div>
-            </a>
-                {% endfor %}
-            </div>
+    <div class="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+      <!-- Feature 1 -->
+      <div class="p-8 transition-all duration-300 bg-white rounded-xl shadow-lg hover:shadow-2xl hover:-translate-y-2">
+        <div class="flex items-center justify-center w-16 h-16 mb-6 text-purple-600 bg-purple-100 rounded-full">
+          <i class="text-2xl fas fa-ticket-alt"></i>
         </div>
-
-        <!-- Left and Right Navigation Buttons -->
-        <button id="prev-btn" class="bg-purple-500 absolute left-0 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white p-2 rounded-full focus:outline-none">
-            &#60;
-        </button>
-        <button id="next-btn" class="bg-purple-500 absolute right-0 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white p-2 rounded-full focus:outline-none">
-            &#62;
-        </button>
+        <h3 class="mb-3 text-xl font-semibold">Smart Ticketing</h3>
+        <p class="text-gray-600">Customizable ticketing with QR codes, early bird pricing, and group discounts.</p>
+      </div>
+      
+      <!-- Feature 2 -->
+      <div class="p-8 transition-all duration-300 bg-white rounded-xl shadow-lg hover:shadow-2xl hover:-translate-y-2">
+        <div class="flex items-center justify-center w-16 h-16 mb-6 text-blue-600 bg-blue-100 rounded-full">
+          <i class="text-2xl fas fa-id-card"></i>
+        </div>
+        <h3 class="mb-3 text-xl font-semibold">Digital Certificates</h3>
+        <p class="text-gray-600">Automated certificate generation with blockchain verification for authenticity.</p>
+      </div>
+      
+      <!-- Feature 3 -->
+      <div class="p-8 transition-all duration-300 bg-white rounded-xl shadow-lg hover:shadow-2xl hover:-translate-y-2">
+        <div class="flex items-center justify-center w-16 h-16 mb-6 text-green-600 bg-green-100 rounded-full">
+          <i class="text-2xl fas fa-chart-line"></i>
+        </div>
+        <h3 class="mb-3 text-xl font-semibold">Real-time Analytics</h3>
+        <p class="text-gray-600">Track attendance, engagement, and revenue with our powerful dashboard.</p>
+      </div>
+      
+      <!-- Feature 4 -->
+      <div class="p-8 transition-all duration-300 bg-white rounded-xl shadow-lg hover:shadow-2xl hover:-translate-y-2">
+        <div class="flex items-center justify-center w-16 h-16 mb-6 text-red-600 bg-red-100 rounded-full">
+          <i class="text-2xl fas fa-users-cog"></i>
+        </div>
+        <h3 class="mb-3 text-xl font-semibold">Host Tools</h3>
+        <p class="text-gray-600">Everything event organizers need from registration to post-event follow-up.</p>
+      </div>
     </div>
+  </div>
 </section>
 
+<!-- Upcoming Events Section -->
+<section id="events" class="py-20 bg-white">
+  <div class="container px-6 mx-auto">
+    <div class="flex flex-col items-center justify-between mb-12 md:flex-row">
+      <div class="mb-6 md:mb-0">
+        <h2 class="text-4xl font-bold text-gray-900">Upcoming Events</h2>
+        <p class="mt-2 text-gray-600">Don't miss these exciting opportunities</p>
+      </div>
+      <a href="{% url 'events' %}" class="flex items-center px-6 py-3 font-medium text-purple-700 transition-all duration-300 border border-purple-200 rounded-lg hover:bg-purple-50 hover:shadow-md">
+        View All Events
+        <i class="ml-2 fas fa-chevron-right"></i>
+      </a>
+    </div>
+    
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      {% if event %}
+        {% for events in event %}
+          <div class="overflow-hidden transition-all duration-300 bg-white border border-gray-200 rounded-xl hover:shadow-xl hover:-translate-y-2 group">
+            <!-- Event Poster -->
+            <div class="relative overflow-hidden h-60">
+              {% if events.poster %}
+                <img src="{{ events.poster.url }}" alt="Event Poster" class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105">
+              {% else %}
+                <div class="flex items-center justify-center w-full h-full bg-gradient-to-r from-gray-100 to-gray-200">
+                  <i class="text-4xl text-gray-400 fas fa-calendar-alt"></i>
+                </div>
+              {% endif %}
+              
+              <!-- Event Status Badge -->
+              <div class="absolute top-4 right-4">
+                {% if events.event_over %}
+                  <span class="inline-flex items-center px-3 py-1 text-sm font-semibold text-white bg-gray-500 rounded-full">
+                    Event Concluded
+                  </span>
+                {% else %}
+                  {% if events.registration_open %}
+                    <span class="inline-flex items-center px-3 py-1 text-sm font-semibold text-white bg-green-500 rounded-full">
+                      <i class="mr-1 fas fa-check-circle"></i> Open
+                    </span>
+                  {% else %}
+                    <span class="inline-flex items-center px-3 py-1 text-sm font-semibold text-white bg-red-500 rounded-full">
+                      <i class="mr-1 fas fa-times-circle"></i> Closed
+                    </span>
+                  {% endif %}
+                {% endif %}
+              </div>
+            </div>
+            
+            <!-- Event Details -->
+            <div class="p-6">
+              <div class="flex items-center mb-2">
+                <span class="px-3 py-1 text-xs font-semibold text-purple-700 bg-purple-100 rounded-full">{{ events.category|default:"General" }}</span>
+                <span class="ml-2 text-sm text-gray-500"><i class="mr-1 far fa-clock"></i> {{ events.duration|default:"1 day" }}</span>
+              </div>
+              
+              <h3 class="mb-2 text-xl font-bold text-gray-900">{{ events.title }}</h3>
+              
+              <div class="flex items-center mb-3 text-gray-600">
+                <i class="mr-2 far fa-calendar-alt"></i>
+                <span>{{ events.start_date|date:"F d, Y"|default:"Date TBA" }}</span>
+              </div>
+              
+              <div class="flex items-center mb-4 text-gray-600">
+                <i class="mr-2 fas fa-map-marker-alt"></i>
+                <span>{{ events.location|default:"Virtual" }}</span>
+              </div>
+              
+              <div class="flex justify-between">
+                <div class="flex items-center">
+                  <i class="mr-1 text-yellow-400 fas fa-star"></i>
+                  <span class="font-medium">4.8</span>
+                  <span class="ml-1 text-gray-500">(120)</span>
+                </div>
+                
+                {% if user.is_authenticated %}
+                  {% if not user.is_student %}
+                    <a href="{% url 'teacherEvent' events.slug %}" class="px-4 py-2 text-sm font-semibold text-white transition-all duration-300 bg-purple-600 rounded-lg hover:bg-purple-700 hover:shadow-md">
+                      Details <i class="ml-1 fas fa-arrow-right"></i>
+                    </a>
+                  {% else %}
+                    <a href="{% url 'event' events.slug %}" class="px-4 py-2 text-sm font-semibold text-white transition-all duration-300 bg-purple-600 rounded-lg hover:bg-purple-700 hover:shadow-md">
+                      Details <i class="ml-1 fas fa-arrow-right"></i>
+                    </a>
+                  {% endif %}
+                {% else %}
+                  <a href="{% url 'event' events.slug %}" class="px-4 py-2 text-sm font-semibold text-white transition-all duration-300 bg-purple-600 rounded-lg hover:bg-purple-700 hover:shadow-md">
+                    Details <i class="ml-1 fas fa-arrow-right"></i>
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="col-span-full">
+          <div class="flex flex-col items-center justify-center p-8 text-center bg-yellow-50 border border-yellow-200 rounded-xl">
+            <i class="mb-4 text-4xl text-yellow-500 far fa-calendar-times"></i>
+            <h3 class="mb-2 text-xl font-semibold text-yellow-800">No Upcoming Events</h3>
+            <p class="text-yellow-600">Check back later for new events or contact us to host your own!</p>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
 
+<!-- Past Events Carousel -->
+<section class="py-20 bg-gray-50">
+  <div class="container px-6 mx-auto">
+    <div class="mb-12 text-center">
+      <h2 class="text-4xl font-bold text-gray-900">Past Event Highlights</h2>
+      <p class="mt-2 text-gray-600">Relive our most successful events</p>
+    </div>
+    
+    <div class="relative">
+      <div class="swiper-container past-events-carousel">
+        <div class="swiper-wrapper">
+          {% for event in events %}
+            <div class="swiper-slide">
+              <a href='{% url "eventResult" event.slug %}'>
+                <div class="relative overflow-hidden transition-all duration-300 bg-white border border-gray-200 rounded-xl group hover:shadow-lg">
+                  <div class="relative h-64 overflow-hidden">
+                    {% if event.poster %}
+                      <img src="{{ event.poster.url }}" alt="Event Image" class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105">
+                    {% else %}
+                      <div class="flex items-center justify-center w-full h-full bg-gradient-to-r from-gray-100 to-gray-200">
+                        <i class="text-4xl text-gray-400 fas fa-image"></i>
+                      </div>
+                    {% endif %}
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6">
+                      <h3 class="mb-1 text-xl font-bold text-white">{{ event.title}}</h3>
+                      <p class="text-sm text-purple-200">{{ event.start_date|date:"F d, Y"}}</p>
+                    </div>
+                  </div>
+                  <div class="p-6">
+                    <div class="flex items-center justify-between">
+                      <span class="inline-flex items-center px-3 py-1 text-xs font-semibold text-purple-700 bg-purple-100 rounded-full">
+                        <i class="mr-1 fas fa-users"></i> {{ event.attendee_count|default:"120" }} attended
+                      </span>
+                      <button class="px-4 py-2 text-sm font-medium text-purple-700 transition-all duration-300 bg-white border border-purple-200 rounded-lg hover:bg-purple-50">
+                        View Recap
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      
+      <!-- Navigation buttons -->
+      <div class="absolute top-0 bottom-0 left-0 flex items-center justify-center w-12 h-12 my-auto -ml-6 text-white transition-all duration-300 cursor-pointer swiper-button-prev  hover:shadow-xl">
+        <i class="fas fa-chevron-left"></i>
+      </div>
+      <div class="absolute top-0 bottom-0 right-0 flex items-center justify-center w-12 h-12 my-auto -mr-6 text-white transition-all duration-300  cursor-pointer swiper-button-next  hover:shadow-xl">
+        <i class="fas fa-chevron-right"></i>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-20 bg-gradient-to-r from-indigo-700 to-purple-800">
+  <div class="container px-6 mx-auto">
+    <div class="mb-12 text-center">
+      <h2 class="text-4xl font-bold text-white">Trusted by Event Organizers Worldwide</h2>
+      <p class="mt-2 text-purple-200">Join thousands of professionals who rely on EventSphere Pro</p>
+    </div>
+    
+    <div class="grid gap-8 md:grid-cols-3">
+      <!-- Testimonial 1 -->
+      <div class="p-8 transition-all duration-300 bg-white rounded-xl hover:shadow-xl hover:-translate-y-2">
+        <div class="flex items-center mb-4">
+          <div class="flex items-center justify-center w-12 h-12 mr-4 text-xl font-semibold text-white bg-purple-600 rounded-full">JD</div>
+          <div>
+            <h4 class="font-semibold text-gray-900">Jane Doe</h4>
+            <p class="text-sm text-gray-600">Marketing Director, TechConf</p>
+          </div>
+        </div>
+        <p class="mb-4 text-gray-700">"EventSphere Pro transformed our annual conference. The ticketing system reduced no-shows by 40%, and the analytics helped us optimize our sessions."</p>
+        <div class="flex text-yellow-400">
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+        </div>
+      </div>
+      
+      <!-- Testimonial 2 -->
+      <div class="p-8 transition-all duration-300 bg-white rounded-xl hover:shadow-xl hover:-translate-y-2">
+        <div class="flex items-center mb-4">
+          <div class="flex items-center justify-center w-12 h-12 mr-4 text-xl font-semibold text-white bg-blue-600 rounded-full">AS</div>
+          <div>
+            <h4 class="font-semibold text-gray-900">Alex Smith</h4>
+            <p class="text-sm text-gray-600">CEO, EduSummit</p>
+          </div>
+        </div>
+        <p class="mb-4 text-gray-700">"The certificate automation saved us hundreds of hours. Attendees love the digital credentials they can share on LinkedIn immediately."</p>
+        <div class="flex text-yellow-400">
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+        </div>
+      </div>
+      
+      <!-- Testimonial 3 -->
+      <div class="p-8 transition-all duration-300 bg-white rounded-xl hover:shadow-xl hover:-translate-y-2">
+        <div class="flex items-center mb-4">
+          <div class="flex items-center justify-center w-12 h-12 mr-4 text-xl font-semibold text-white bg-green-600 rounded-full">MJ</div>
+          <div>
+            <h4 class="font-semibold text-gray-900">Maria Johnson</h4>
+            <p class="text-sm text-gray-600">Events Manager, Global NGO</p>
+          </div>
+        </div>
+        <p class="mb-4 text-gray-700">"From registration to post-event surveys, EventSphere Pro provides everything we need in one platform. The mobile check-in app is a game-changer."</p>
+        <div class="flex text-yellow-400">
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star-half-alt"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Memories Gallery -->
+<section class="py-20 bg-white">
+  <div class="container px-6 mx-auto">
+    <div class="flex flex-col items-center justify-between mb-12 md:flex-row">
+      <div class="mb-6 md:mb-0">
+        <h2 class="text-4xl font-bold text-gray-900">Event Memories</h2>
+        <p class="mt-2 text-gray-600">Captured moments from our community</p>
+      </div>
+      <a href="{% url 'memories' %}" class="flex items-center px-6 py-3 font-medium text-purple-700 transition-all duration-300 border border-purple-200 rounded-lg hover:bg-purple-50 hover:shadow-md">
+        View All Memories
+        <i class="ml-2 fas fa-images"></i>
+      </a>
+    </div>
+    
+    <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+      {% for mems in mem %}
+        <a href="{% url 'memories' %}" class="group relative block overflow-hidden rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+          <img src="{{ mems.memory_img.latest.image.url }}" alt="Memory" class="object-cover w-full h-64 transition-transform duration-500 group-hover:scale-105">
+          <div class="absolute inset-0 flex flex-col justify-end p-6 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <h3 class="mb-1 text-lg font-semibold text-white">{{ mems.memory_title }}</h3>
+            <p class="text-sm text-purple-200">{{ mems.event.title }}</p>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-20 bg-gradient-to-r from-blue-600 to-indigo-700">
+  <div class="container px-6 mx-auto text-center">
+    <h2 class="mb-6 text-4xl font-bold text-white">Ready to Elevate Your Events?</h2>
+    <p class="max-w-2xl mx-auto mb-10 text-xl text-blue-100">Join thousands of organizations creating unforgettable experiences with EventSphere Pro.</p>
+    <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
+      <a href="#" class="px-8 py-4 text-lg font-semibold text-blue-700 transition-all duration-300 bg-white rounded-lg shadow-lg hover:bg-gray-100 hover:shadow-xl hover:scale-105">
+        Get Started Today
+        <i class="ml-2 fas fa-rocket"></i>
+      </a>
+      <a href="#contact" class="px-8 py-4 text-lg font-semibold text-white transition-all duration-300 border-2 border-white rounded-lg hover:bg-white hover:text-blue-700 hover:shadow-lg">
+        Contact Sales
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Form Section -->
+<section id="contact" class="py-20 bg-gray-50">
+  <div class="container px-6 mx-auto">
+    <div class="max-w-4xl p-8 mx-auto bg-white rounded-xl shadow-lg">
+      <div class="mb-12 text-center">
+        <h2 class="text-4xl font-bold text-gray-900">Let's Connect</h2>
+        <p class="mt-2 text-gray-600">Have questions? Our team is here to help.</p>
+      </div>
+      
+      <form action="#" method="POST" class="space-y-6">
+        {% csrf_token %}
+        
+        <div class="grid gap-6 md:grid-cols-2">
+          <!-- Name Input -->
+          <div>
+            <label for="name" class="block mb-2 text-sm font-medium text-gray-700">Your Name *</label>
+            <input type="text" id="name" name="name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all" placeholder="John Doe" required>
+          </div>
+          
+          <!-- Email Input -->
+          <div>
+            <label for="email" class="block mb-2 text-sm font-medium text-gray-700">Email Address *</label>
+            <input type="email" id="email" name="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all" placeholder="you@example.com" required>
+          </div>
+        </div>
+        
+        <!-- Subject Input -->
+        <div>
+          <label for="subject" class="block mb-2 text-sm font-medium text-gray-700">Subject *</label>
+          <input type="text" id="subject" name="subject" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all" placeholder="How can we help?" required>
+        </div>
+        
+        <!-- Message Input -->
+        <div>
+          <label for="message" class="block mb-2 text-sm font-medium text-gray-700">Your Message *</label>
+          <textarea id="message" name="message" rows="5" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all" placeholder="Tell us about your event needs..." required></textarea>
+        </div>
+        
+        <!-- Submit Button -->
+        <div class="text-center">
+          <button type="submit" class="px-8 py-4 font-semibold text-white transition-all duration-300 bg-purple-600 rounded-lg hover:bg-purple-700 hover:shadow-lg">
+            Send Message
+            <i class="ml-2 fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- Add Swiper JS for carousel functionality -->
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+<!-- Add Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<style>
+  /* Animation for the blob background elements */
+  @keyframes blob {
+    0% {
+      transform: translate(0px, 0px) scale(1);
+    }
+    33% {
+      transform: translate(30px, -50px) scale(1.1);
+    }
+    66% {
+      transform: translate(-20px, 20px) scale(0.9);
+    }
+    100% {
+      transform: translate(0px, 0px) scale(1);
+    }
+  }
+  
+  .animate-blob {
+    animation: blob 7s infinite;
+  }
+  
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+  
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+  
+  /* Custom styles for the past events carousel */
+  .past-events-carousel {
+    padding: 20px 0;
+  }
+  
+  .past-events-carousel .swiper-slide {
+    width: 300px;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+  }
+  
+  .past-events-carousel .swiper-slide-active,
+  .past-events-carousel .swiper-slide-duplicate-active {
+    opacity: 1;
+  }
+</style>
 
 <script>
-    const sliderContainer = document.getElementById('slider-container');
-    const slider = document.getElementById('slider');
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
-
-    // Scroll amount (adjust as needed)
-    const scrollAmount = 300;
-
-    // Scroll left on previous button click
-    prevBtn.addEventListener('click', () => {
-        sliderContainer.scrollBy({
-            left: -scrollAmount,
-            behavior: 'smooth'
-        });
+  // Initialize Swiper for past events carousel
+  document.addEventListener('DOMContentLoaded', function() {
+    const swiper = new Swiper('.past-events-carousel', {
+      slidesPerView: 'auto',
+      spaceBetween: 20,
+      centeredSlides: true,
+      loop: true,
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
     });
-
-    // Scroll right on next button click
-    nextBtn.addEventListener('click', () => {
-        sliderContainer.scrollBy({
-            left: scrollAmount,
-            behavior: 'smooth'
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
         });
+      });
     });
+  });
 </script>
-<!-- Memories Section -->
-<section id="memories" class="py-16 bg-gray-50 z-0">
-    <div class="max-w-7xl mx-auto px-6 text-center">
-        <h2 class="text-4xl font-extrabold text-purple-500">Memories</h2>
-        <p class="mt-2 text-gray-600">Relive the moments that matter most to you.</p>
-        <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-            {% for mems in mem %}
-                <a href=" {% url 'event_memories_list' mems.event.slug %} " class="hover:scale-105 transition duration-300">
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl">
-                    <img src="{{ mems.memory_img.latest.image.url }}" alt="Memory" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg text-gray-800">{{mems.memory_title}}</h3>
-                        <p class="text-gray-500 mt-1">{{ mems.event.title }} Event</p>
-                        <p class="text-gray-500">{{ mems.event.start_date|date:"F d, Y" }}</p>
-                    </div>
-                </div>
-                </a>
-            {% endfor %}
-        </div>
-        <a href="{% url "memories" %}" class="text-blue-600 mt-4 inline-block">See more ➡️</a>
-    </div>
-</section>
-
-
-
-<!-- Contact Section -->
-<section id="contact" class="py-16 bg-gradient-to-r from-blue-600 to-purple-500 text-black">
-    <div class="bg-white shadow-xl rounded-lg p-8 max-w-2xl mx-auto lg:w-2/3 backdrop-blur-md bg-opacity-80">
-        <h2 class="text-3xl font-bold text-gray-800 text-center">📩 Get in Touch</h2>
-        <p class="text-gray-600 text-center mt-2 mb-6">Fill out the form below, and we'll get back to you soon.</p>
-        
-        <form action="#" method="POST" class="space-y-6">
-            {% csrf_token %}
-            
-            <!-- Name Input -->
-            <div>
-                <label for="name" class="block text-sm font-medium text-gray-700">Your Name</label>
-                <input type="text" id="name" name="name" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                    placeholder="Enter your full name" required>
-            </div>
-
-            <!-- Email Input -->
-            <div>
-                <label for="email" class="block text-sm font-medium text-gray-700">Your Email</label>
-                <input type="email" id="email" name="email" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                    placeholder="Enter your email address" required>
-            </div>
-
-            <!-- Subject Input -->
-            <div>
-                <label for="subject" class="block text-sm font-medium text-gray-700">Subject</label>
-                <input type="text" id="subject" name="subject" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                    placeholder="Enter the subject" required>
-            </div>
-
-            <!-- Message Input -->
-            <div>
-                <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
-                <textarea id="message" name="message" rows="5" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                    placeholder="Type your message here" required></textarea>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="text-center">
-                <button type="submit" class="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:scale-105 transform transition duration-300 hover:bg-blue-700 focus:ring-2 focus:ring-blue-400">
-                    🚀 Send Message
-                </button>
-            </div>
-        </form>
-    </div>
-</section>
 {% if messages %}
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            {% for message in messages %}
-                Swal.fire({
-                    position: "top-end",
-                    icon: "{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}",
-                    title: "{{ message }}",
-                    showConfirmButton: false,
-                    timer: 1500
-                  });
-                  
-            {% endfor %}
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      {% for message in messages %}
+        Swal.fire({
+          position: "top-end",
+          icon: "{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}",
+          title: "{{ message }}",
+          showConfirmButton: false,
+          timer: 1500
         });
-    </script>
+      {% endfor %}
+    });
+  </script>
 {% endif %}
 {% endblock content %}
