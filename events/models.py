@@ -153,3 +153,16 @@ def new_event_anouncement(sender, instance, created, **kwargs):
 def event_submission_deleted(sender, instance, **kwargs):
     instance.event.count -= 1
     instance.event.save()
+
+
+
+class EventCordinator(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.user.get_full_name()) + " - " + str(self.event.title)
+
+    class Meta:
+        verbose_name = '5. Event Cordinator'
