@@ -1,178 +1,173 @@
 {% extends "index.html" %}
+{% load static %}
 
 {% block title %}
-
-Registered Students
-
+Registered Students - {{ event.title }}
 {% endblock title %}
 
 {% block content %}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<div class="bg-gray-100">
-    <div class="min-h-screen flex flex-col pt-12">
-        <!-- Header -->
-        <header class="bg-blue-600 text-white py-12">
-            <div class="container mx-auto px-4">
-                <h1 class="text-2xl font-bold">Registered Students</h1>
-                <p class="mt-1">Event: <span class="font-semibold text-green-500">{{event.title}} | {{ event.start_date }}</span></p>
-            </div>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+
+<div class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white p-4 md:p-8 font-sans">
+    <div class="container pt-[150px] mx-auto">
+
+        <header class="mb-10 text-center backdrop-blur-sm bg-white/5 p-6 rounded-xl shadow-lg border border-white/10">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 via-red-500 to-orange-500 mb-2">
+                Attendee Dashboard
+            </h1>
+            <p class="text-lg text-purple-300 mb-4">Real-time insights for <span class="font-semibold text-white">{{ event.title }}</span></p>
+            <p class="text-sm text-cyan-300"><i class="far fa-calendar-alt mr-1.5 opacity-80"></i> {{ event.start_date }}</p>
         </header>
 
-        <!-- Main Content -->
-        <main class="flex-grow">
-            <div class="container mx-auto px-4 py-8">
-                {% if students %}
-                <div class="overflow-x-auto bg-white rounded-lg shadow">
-                    <table id='table' class="min-w-full table-auto border-collapse border border-gray-200">
-                        <thead class="bg-blue-600 text-white">
-                            <tr>
-                                <th class="px-4 py-2 text-left">UUID</th>
-                                <th class="px-4 py-2 text-left">Full Name</th>
-                                <th class="px-4 py-2 text-left">Email</th>
-                                <th class="px-4 py-2 text-left">Course</th>
-                                <th class="px-4 py-2 text-left">Section</th>
-                                <th class="px-4 py-2 text-left">Year</th>
-                                <th class="px-4 py-2 text-left">Attendance</th>
-                                <th class="px-4 py-2 text-left">Attendance Taken By</th>
-                                <th class="px-4 py-2 text-left">Allowed</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for student in students %}
-                            <!-- Example row -->
-                            <tr class="bg-gray-50">
-
-                                <td class="border px-4 py-2">{{ student.uu_id }}</td>
-                                <td class="border px-4 py-2">{{ student.full_name }}</td>
-                                <td class="border px-4 py-2">{{ student.email }}</td>
-                                <td class="border px-4 py-2">{{ student.course }}</td>
-                                <td class="border px-4 py-2">{{ student.section }}</td>
-                                <td class="border px-4 py-2">{{ student.year }}</td>
-                                {% if student.attendence == 'Present' %}
-                                <td class="border px-4 py-2">
-                                    <span class="px-2 py-1 rounded bg-green-100 text-green-600">Present</span>
-                                </td>
-                                {% else %}
-                                <td class="border px-4 py-2">
-                                    <span class="px-2 py-1 rounded bg-red-100 text-red-600">Absent</span>
-                                </td>
-                                {% endif %}
-                                <td class="border px-4 py-2">{{ student.attendence_taken_by|default:"-" }}</td>
-                                {% if student.allowed %}
-                                <td class="border px-4 py-2">
-                                    <span class="px-2 py-1 rounded bg-green-100 text-green-600">Yes</span>
-                                </td>
-                                {% else %}
-                                <td class="border px-4 py-2">
-                                    <span class="px-2 py-1 rounded bg-red-100 text-red-600">No</span>
-                                </td>   
-                                {% endif %}
-                            </tr>
-                                {% endfor %}
-                                <!-- Repeat rows dynamically -->
-                            </tbody>
-                        </table>
-                        {% else %}
-                        
-
-                        <div class="col-span-full">
-                            <div class="flex flex-col items-center justify-center bg-yellow-100 border border-yellow-300 text-yellow-700 font-semibold rounded-lg py-6 px-8 mt-6">
-                                <p>No Registrations</p>
-                            </div>
-                        </div>
-
-                    </div>
-                    {% endif %}
+        <main class="bg-white/10 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden border border-white/20">
+            <div class="p-5 md:p-6 border-b border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+                <h2 class="text-2xl font-semibold text-gray-100">Registration Status</h2>
+                 <button id="download-btn" class="group relative inline-flex items-center justify-center px-6 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg shadow-lg overflow-hidden hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-indigo-500 transition-all duration-300 ease-in-out transform hover:scale-105 active:scale-100">
+                    <span class="absolute inset-0 bg-gradient-to-r from-fuchsia-500 via-red-500 to-orange-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></span>
+                    <i class="fas fa-cloud-download-alt mr-2 transition-transform duration-300 group-hover:rotate-[-5deg]"></i>
+                    <span class="relative z-10">Download Report</span>
+                </button>
             </div>
-            <!-- Download Button -->
-    <button id="download-btn" class="ml-4 mt-8 bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        Download Current Status
-    </button>
-        </main>
-    </div>
-</div>
-<script>
-    const formatter = new Intl.DateTimeFormat("en-US", {
-        timeZone: "Asia/Kolkata",
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: true,
-    });
-      
-    const indiaTime = formatter.format(new Date());
 
-    document.getElementById("download-btn").addEventListener("click", () => {
+            <div class="overflow-x-auto p-3 md:p-5">
+                {% if students %}
+                <table id='table' class="min-w-full table-auto border-collapse">
+                    <thead class="sticky top-0 z-10">
+                        <tr class="bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 bg-opacity-80 backdrop-blur-sm shadow-md">
+                            <th class="px-5 py-3.5 text-left text-xs font-semibold text-purple-300 uppercase tracking-wider rounded-tl-lg">UUID</th>
+                            <th class="px-5 py-3.5 text-left text-xs font-semibold text-purple-300 uppercase tracking-wider">Full Name</th>
+                            <th class="px-5 py-3.5 text-left text-xs font-semibold text-purple-300 uppercase tracking-wider">Email</th>
+                            <th class="px-5 py-3.5 text-left text-xs font-semibold text-purple-300 uppercase tracking-wider">Course</th>
+                            <th class="px-5 py-3.5 text-left text-xs font-semibold text-purple-300 uppercase tracking-wider">Section</th>
+                            <th class="px-5 py-3.5 text-left text-xs font-semibold text-purple-300 uppercase tracking-wider">Year</th>
+                            <th class="px-5 py-3.5 text-left text-xs font-semibold text-purple-300 uppercase tracking-wider">Attendance</th>
+                            <th class="px-5 py-3.5 text-left text-xs font-semibold text-purple-300 uppercase tracking-wider">Marked By</th>
+                            <th class="px-5 py-3.5 text-left text-xs font-semibold text-purple-300 uppercase tracking-wider rounded-tr-lg">Allowed</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/10">
+                        {% for student in students %}
+                        <tr class="hover:bg-white/10 transition-colors duration-200 ease-in-out group">
+                            <td class="px-5 py-4 whitespace-nowrap text-sm text-gray-300 font-mono border-r border-white/5 group-hover:border-transparent">{{ student.uu_id }}</td>
+                            <td class="px-5 py-4 whitespace-nowrap text-sm font-medium text-white border-r border-white/5 group-hover:border-transparent">{{ student.full_name }}</td>
+                            <td class="px-5 py-4 whitespace-nowrap text-sm text-cyan-300 border-r border-white/5 group-hover:border-transparent">{{ student.email }}</td>
+                            <td class="px-5 py-4 whitespace-nowrap text-sm text-gray-300 border-r border-white/5 group-hover:border-transparent">{{ student.course }}</td>
+                            <td class="px-5 py-4 whitespace-nowrap text-sm text-gray-300 border-r border-white/5 group-hover:border-transparent">{{ student.section }}</td>
+                            <td class="px-5 py-4 whitespace-nowrap text-sm text-gray-300 border-r border-white/5 group-hover:border-transparent">{{ student.year }}</td>
+                            <td class="px-5 py-4 whitespace-nowrap border-r border-white/5 group-hover:border-transparent">
+                                {% if student.attendence == 'Present' %}
+                                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-md border border-green-300/50"><i class="fas fa-check-circle mr-1.5 opacity-90"></i>Present</span>
+                                {% else %}
+                                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gradient-to-r from-red-500 to-rose-600 text-white shadow-md border border-red-300/50"><i class="fas fa-times-circle mr-1.5 opacity-90"></i>Absent</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-5 py-4 whitespace-nowrap text-sm text-gray-400 border-r border-white/5 group-hover:border-transparent">{{ student.attendence_taken_by|default:"-" }}</td>
+                            <td class="px-5 py-4 whitespace-nowrap">
+                                {% if student.allowed %}
+                                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gradient-to-r from-sky-500 to-cyan-600 text-white shadow-md border border-sky-300/50"><i class="fas fa-user-check mr-1.5 opacity-90"></i>Yes</span>
+                                {% else %}
+                                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gradient-to-r from-gray-500 to-slate-600 text-white shadow-md border border-gray-300/50"><i class="fas fa-user-times mr-1.5 opacity-90"></i>No</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                </table>
+                {% else %}
+                <div class="col-span-full">
+                    <div class="flex flex-col items-center justify-center text-center bg-gradient-to-br from-yellow-600/20 via-orange-600/20 to-red-600/20 border border-yellow-500/30 text-yellow-200 font-semibold rounded-lg py-12 px-8 mt-6 shadow-lg backdrop-blur-sm">
+                        <i class="fas fa-ghost text-6xl text-yellow-300 mb-6 opacity-70 animate-pulse"></i>
+                        <p class="text-2xl mb-2">It's Quiet Here...</p>
+                        <p class="text-yellow-300/80">No students have registered for <span class="font-bold text-white">{{ event.title }}</span> yet.</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div> </main> <footer class="text-center mt-12 text-sm text-purple-400/60">
+            Event Management System &copy; {{ "now"|date:"Y" }}
+        </footer>
+
+    </div> </div> <script>
+    // Your original JavaScript code that handles AJAX polling
+    // and the html2pdf download functionality goes here.
+    // It should correctly select '#table' for the PDF and
+    // update the content within '#table tbody'.
+
+    // Example of just the PDF part from your original code (ensure it works with the #table ID)
+    const formatter = new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Kolkata", year: "numeric", month: "short", day: "numeric",
+        hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true,
+    });
+
+    document.getElementById("download-btn")?.addEventListener("click", () => { // Added null check just in case
         const element = document.getElementById("table");
+        if (!element) {
+            console.error("Table element with ID 'table' not found for PDF generation.");
+            alert("Could not find the table to generate PDF.");
+            return;
+        }
+        const indiaTime = formatter.format(new Date());
         const opt = {
             margin: [0.5, 0.5, 0.5, 0.5], // Adjust margins
             filename: `{{ event.title }}_${indiaTime}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { 
-                scale: 3, // Increase scale for better resolution
-                useCORS: true // Ensures cross-origin images are rendered properly
-            },
-            jsPDF: { 
-                unit: 'in', 
-                format: 'a4', // A4 format ensures better width handling
-                orientation: 'landscape' // Adjust orientation
-            }
+            html2canvas: { scale: 3, useCORS: true },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' }
         };
-
-        // Add temporary styles to ensure proper width
-        element.style.width = "100%";
-        element.style.maxWidth = "100%";
-
-        // Generate PDF
+        // Add temporary styles if needed for width (might not be necessary with overflow container)
+        // element.style.width = "100%"; element.style.maxWidth = "100%";
         html2pdf().set(opt).from(element).save();
     });
 
+    // Example of just the AJAX part structure (keep your original implementation)
     const eventSlug = "{{ event.slug }}";
-
-    // Function to fetch the latest student data using AJAX
     function fetchStudents() {
         $.ajax({
             url: "{% url 'registeredStudentListAjax' event.slug %}",
-            type: 'GET',
-            dataType: 'json',
+            type: 'GET', dataType: 'json',
             success: function(data) {
-                updateStudentTable(data.students);
+                updateStudentTable(data.students); // Your original update function
             },
-            error: function() {
-                console.log("Failed to fetch data");
-            }
+            error: function() { console.log("Failed to fetch data"); }
         });
     }
-
-    // Function to update the student table with the latest data
     function updateStudentTable(students) {
-        let tableBody = document.querySelector("#table tbody");
-        tableBody.innerHTML = "";  // Clear existing rows
-        
+        let tableBody = document.querySelector("#table tbody"); // Selects the correct tbody
+        if (!tableBody) return; // Exit if table body isn't found
+        tableBody.innerHTML = ""; // Clear existing rows (original simple method)
+
+        // --- Regenerate the rows using the new styling ---
+        // --- IMPORTANT: This part MUST match the structure and classes used in the HTML above ---
         students.forEach(student => {
+             const attendanceHtml = student.attendence === 'Present'
+                ? `<span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-md border border-green-300/50"><i class="fas fa-check-circle mr-1.5 opacity-90"></i>Present</span>`
+                : `<span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gradient-to-r from-red-500 to-rose-600 text-white shadow-md border border-red-300/50"><i class="fas fa-times-circle mr-1.5 opacity-90"></i>Absent</span>`;
+
+            const allowedHtml = student.allowed
+                ? `<span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gradient-to-r from-sky-500 to-cyan-600 text-white shadow-md border border-sky-300/50"><i class="fas fa-user-check mr-1.5 opacity-90"></i>Yes</span>`
+                : `<span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gradient-to-r from-gray-500 to-slate-600 text-white shadow-md border border-gray-300/50"><i class="fas fa-user-times mr-1.5 opacity-90"></i>No</span>`;
+
+            const attendanceTakenBy = student.attendence_taken_by || "-";
+
             tableBody.innerHTML += `
-                <tr class="bg-gray-50">
-                    <td class="border px-4 py-2">${student.uu_id}</td>
-                    <td class="border px-4 py-2">${student.full_name}</td>
-                    <td class="border px-4 py-2">${student.email}</td>
-                    <td class="border px-4 py-2">${student.course}</td>
-                    <td class="border px-4 py-2">${student.section}</td>
-                    <td class="border px-4 py-2">${student.year}</td>
-                    <td class="border px-4 py-2">${student.attendence}</td>
-                    <td class="border px-4 py-2">${student.attendence_taken_by}</td>
-                    <td class="border px-4 py-2">${student.allowed}</td>
+                <tr class="hover:bg-white/10 transition-colors duration-200 ease-in-out group">
+                    <td class="px-5 py-4 whitespace-nowrap text-sm text-gray-300 font-mono border-r border-white/5 group-hover:border-transparent">${student.uu_id}</td>
+                    <td class="px-5 py-4 whitespace-nowrap text-sm font-medium text-white border-r border-white/5 group-hover:border-transparent">${student.full_name}</td>
+                    <td class="px-5 py-4 whitespace-nowrap text-sm text-cyan-300 border-r border-white/5 group-hover:border-transparent">${student.email}</td>
+                    <td class="px-5 py-4 whitespace-nowrap text-sm text-gray-300 border-r border-white/5 group-hover:border-transparent">${student.course}</td>
+                    <td class="px-5 py-4 whitespace-nowrap text-sm text-gray-300 border-r border-white/5 group-hover:border-transparent">${student.section}</td>
+                    <td class="px-5 py-4 whitespace-nowrap text-sm text-gray-300 border-r border-white/5 group-hover:border-transparent">${student.year}</td>
+                    <td class="px-5 py-4 whitespace-nowrap border-r border-white/5 group-hover:border-transparent">${attendanceHtml}</td>
+                    <td class="px-5 py-4 whitespace-nowrap text-sm text-gray-400 border-r border-white/5 group-hover:border-transparent">${attendanceTakenBy}</td>
+                    <td class="px-5 py-4 whitespace-nowrap">${allowedHtml}</td>
                 </tr>
             `;
         });
     }
 
-    // Set interval to call the fetchStudents function every 5 seconds (5000 ms)
+    // Set interval to call the fetchStudents function every 2 seconds (as per original)
     setInterval(fetchStudents, 2000);
-    
     // Initial call to fetch students when the page loads
     fetchStudents();
 </script>
+
 {% endblock content %}

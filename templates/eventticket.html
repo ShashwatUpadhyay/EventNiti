@@ -1,82 +1,110 @@
-{% extends "index.html" %} {% block title %} Event Ticket | Prerogatory Pointers
-United University {% endblock title %} {% block content %}
+{% extends "index.html" %}
 {% load static %}
-<div
-  id="ticket"
-  class="bg-white rounded-lg shadow-lg max-w-4xl mx-auto p-12"
-  style="
-    {% comment %} background-image: url('{% static 'images/logo.png' %}'); {% endcomment %}
-  "
->
-  <!-- Ticket Header -->
-  <div class="text-center mb-6 mt-20 ">
-    <h2 class="text-3xl font-bold text-gray-800 mb-2">Event Ticket</h2>
-    <p class="text-xl text-gray-600">
-      Your Ticket for {{ ticket.event.title }}
-    </p>
-  </div>
+{% block title %}
+Event Ticket | United University – Your Official Entry Pass
+{% endblock title %}
 
-  <!-- Ticket Information -->
-  <div class="space-y-4">
-    <div class="flex justify-between">
-      <p class="text-lg font-semibold text-gray-700">Ticket Owner:</p>
-      <p class="text-lg text-gray-600">{{ ticket.user.get_full_name }}</p>
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet" />
+
+<div class="min-h-screen bg-gradient-to-tr pt-[150px] from-white via-blue-50 to-blue-100 px-4 py-16 font-[Outfit]">
+  <div id="ticket" class="max-w-4xl mx-auto flex flex-col md:flex-row overflow-hidden rounded-3xl shadow-2xl border-4 border-blue-300 bg-white relative print:shadow-none print:border-none transition-all duration-500 animate-fade-up">
+
+    <!-- Decorative Side Strip -->
+    <div class="bg-gradient-to-b from-blue-600  to-indigo-500 text-white py-12 px-6 w-full md:w-1/3 flex flex-col justify-between items-center relative">
+      <div class="space-y-2 text-center">
+        <h3 class="text-2xl font-bold">🎟 United Pass</h3>
+        <p class="text-sm text-blue-100 italic">Official Ticket</p>
+      </div>
+
+      <div class="mt-10">
+        <img src="{% static 'images/logo.png' %}" alt="Logo" class="w-20 h-20 rounded-xl border-2 border-white shadow-lg" />
+      </div>
+
+      <div class="mt-auto">
+        <p class="text-xs text-blue-100 text-center">Scan on entry to validate</p>
+      </div>
     </div>
-    <div class="flex justify-between">
-      <p class="text-lg font-semibold text-gray-700">Event Date:</p>
-      <p class="text-lg text-gray-600">{{ ticket.event.start_date }}</p>
+
+    <!-- Ticket Main Body -->
+    <div class="w-full md:w-2/3 px-8 py-10">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-3xl font-extrabold text-blue-700">Event Entry Ticket</h2>
+        <span class="bg-blue-100 text-blue-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">#{{ ticket.uid }}</span>
+      </div>
+
+      <div class="space-y-4 text-gray-700">
+        <p><strong>👤 Attendee:</strong> {{ ticket.user.get_full_name }}</p>
+        <p><strong>📅 Date:</strong> {{ ticket.event.start_date|date:"F j, Y – g:i A" }}</p>
+        <p><strong>📌 Event:</strong> {{ ticket.event.title }}</p>
+      </div>
+
+      <!-- QR Code -->
+      <div class="my-8 flex justify-center">
+        <div class="border-2 border-blue-200 p-4 rounded-xl shadow-sm">
+          <img src="data:image/png;base64,{{ qrCode }}" alt="QR Code" class="w-32 h-32" />
+        </div>
+      </div>
+
+      <p class="text-sm text-center text-gray-500">
+        This ticket is non-transferable. Carry a valid ID for verification.
+      </p>
     </div>
-  </div>
-
-  <!-- QR Code Section -->
-  <div class="my-8 flex justify-center">
-
-    
-    <img
-      src="data:image/png;base64,{{ qrCode }}"
-      alt="QR Code"
-      class="w-32 h-32 rounded-lg shadow-md border-2 border-gray-300"
-    />
-
-    <img
-      src="{% static 'images/logo.png' %}"
-      alt="QR Code"
-      class="w-32 h-32 rounded-lg ml-2"
-    />
-  </div>
-
-  <!-- Instructions -->
-  <div class="text-center">
-    <p class="text-sm text-gray-600">
-      Please present this QR code at the entrance to get attendance.
-    </p>
   </div>
 
   <!-- Download Button -->
+  <div class="text-center mt-10">
+    <button
+      id="download-btn"
+      class="bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold py-3 px-12 rounded-full shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300"
+    >
+      ⬇️ Download Ticket as PDF
+    </button>
+  </div>
 </div>
 
-<div class="text-center mt-8 mb-8">
-  <button
-    id="download-btn"
-    class="bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
-  >
-    Download Ticket
-  </button>
-</div>
+<!-- Animations -->
+<style>
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .animate-fade-up {
+    animation: fade-up 0.8s ease-out;
+  }
+  @media print {
+    #download-btn,
+    .animate-fade-up {
+      display: none !important;
+    }
+    body {
+      background: white !important;
+    }
+    #ticket {
+      box-shadow: none !important;
+      border: none !important;
+    }
+  }
+</style>
 
+<!-- HTML2PDF Script -->
 <script>
   document.getElementById("download-btn").addEventListener("click", () => {
     const element = document.getElementById("ticket");
     const opt = {
-      margin: 1,
-      filename:
-        "Ticket_{{ ticket.event.title }}_{{ ticket.user.get_full_name }}.pdf",
+      margin: 0,
+      filename: "Ticket_{{ ticket.event.title|slugify }}_{{ ticket.user.get_full_name|slugify }}.pdf",
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: 2 },
-      jsPDF: { unit: "in", format: "letter", orientation: "landscape" },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" }
     };
     html2pdf().set(opt).from(element).save();
   });
 </script>
-
 {% endblock content %}

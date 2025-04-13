@@ -24,6 +24,7 @@ class Event(models.Model):
     count = models.IntegerField(default=0)
     upload_time = models.DateTimeField(auto_now_add=True)
     start_date = models.DateTimeField(null=True, blank=True)
+    offers_certification = models.BooleanField(default=False)
     event_open = models.BooleanField(default=True)
     registration_open = models.BooleanField(default=True)
     notify = models.BooleanField(default=True, help_text=(
@@ -33,6 +34,8 @@ class Event(models.Model):
     text_status = models.CharField(
         max_length=100, null=True, blank=True, help_text=('let he backend handle it'))
 
+    def __str__(self):
+        return self.title
    
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -63,16 +66,11 @@ class EventSubmission(models.Model):
         choices=choice, default='Absent', max_length=10)
     attendence_taken_by = models.CharField(
         max_length=60, null=True, blank=True, verbose_name='Attendence Taken By/At ')
-    uid = models.CharField(max_length=100, null=True, blank=True)
+    uid = models.CharField(max_length=100, default=uuid.uuid4 ,null=True, blank=True)
     allowed = models.BooleanField(default=True)
 
     def __str__(self):
         return str(self.full_name + " - " + self.event.title)
-
-    def save(self, *args, **kwargs):
-        if not self.uid:
-            self.uid = uuid.uuid4()
-        super(EventSubmission, self).save(*args, **kwargs)
     
     class Meta:
         verbose_name = '2. Event Submission'
@@ -127,17 +125,17 @@ def generate_ticket(sender, instance, created, **kwargs):
     if created:
         ticket = EventTicket.objects.create(
             user=instance.user, submission_uid=instance.uid, event=instance.event)
-        send_mail(
-            'Ticket Issued',
-            'You received a ticket from PPUU',
-            settings.EMAIL_HOST_USER,
-            [instance.user.email],
-            fail_silently=False,
-            html_message=f"""<p>
-                <h1>Received {instance.event.title} ticket</h1>
-                <a href='{settings.DOMAIN_NAME}events/ticket/{ticket.uid}'><button>OPEN</button></a>
-            </p>"""
-        )
+        # send_mail(
+        #     'Ticket Issued',
+        #     'You received a ticket from PPUU',
+        #     settings.EMAIL_HOST_USER,
+        #     [instance.user.email],
+        #     fail_silently=False,
+        #     html_message=f"""<p>
+        #         <h1>Received {instance.event.title} ticket</h1>
+        #         <a href='{settings.DOMAIN_NAME}events/ticket/{ticket.uid}'><button>OPEN</button></a>
+        #     </p>"""
+        # )
         print('Ticket Created!')
 
 
@@ -153,3 +151,17 @@ def new_event_anouncement(sender, instance, created, **kwargs):
 def event_submission_deleted(sender, instance, **kwargs):
     instance.event.count -= 1
     instance.event.save()
+
+
+
+class EventCordinator(models.Model):
+    uid = models.CharField(max_length=100, default=uuid.uuid4, null=True,blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE,  related_name='cordinator')
+    event = models.ForeignKey(Event, on_delete=models.CASCADE,related_name='cordinators')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.user.get_full_name()) + " - " + str(self.event.title)
+
+    class Meta:
+        verbose_name = '5. Event Cordinator'

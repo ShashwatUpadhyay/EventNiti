@@ -1,86 +1,226 @@
-{% extends "index.html" %}
+{% extends "index.html" %} {% comment %} chat GPT {% endcomment %} {% block
+title %} {{ certi_obj.event.title }} Certificate | Verified Recognition {%
+endblock title %} {% block content %}
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@700&display=swap"
+  rel="stylesheet"
+/>
 
-{% block title %}
-{{certi_obj.event.title}} Certificate
-{% endblock title %}
+<div
+  class="min-h-screen pt-[150px] bg-gradient-to-br from-blue-50 via-white to-indigo-100 dark:from-gray-900 dark:to-gray-800 text-gray-800 dark:text-gray-200 px-4 py-16 flex flex-col items-center justify-start font-[Inter]"
+>
+  <!-- Header -->
+  <div class="text-center mb-10 animate-fade-in-down">
+    <h1 class="text-4xl sm:text-5xl font-bold text-blue-700 dark:text-blue-400">
+      Your Certificate is Ready 🎉
+    </h1>
+    <p class="text-gray-600 dark:text-gray-300 text-base sm:text-lg mt-2">
+      Proudly issued by <strong>{{ certi_obj.event.title }}</strong> through
+      EventStack.
+    </p>
+  </div>
 
-{% block content %}
-<div class="flex flex-wrap bg-gray-100 items-center justify-center min-h-screen p-4 py-20">
+  <!-- Certificate Card -->
+  <div
+    id="certificate"
+    class="relative bg-white dark:bg-gray-900 border-4 border-blue-600 rounded-2xl shadow-2xl overflow-hidden max-w-5xl w-full p-10 md:p-14 animate-slide-up hover:scale-[1.01] transition-transform duration-500 ease-out"
+  >
+    <!-- SVG Frame -->
+    <svg
+      class="absolute inset-0 w-full h-full pointer-events-none"
+      viewBox="0 0 1000 700"
+      preserveAspectRatio="none"
+    >
+      <rect
+        x="10"
+        y="10"
+        width="980"
+        height="680"
+        rx="30"
+        ry="30"
+        fill="none"
+        stroke="#2563EB"
+        stroke-width="8"
+        stroke-dasharray="15,10"
+      />
+    </svg>
 
-    <!-- Certificate Container -->
-    <div id="certificate" class="relative bg-white border-4 border-blue-600 shadow-xl rounded-lg p-6 sm:p-8 md:p-12 max-w-full sm:max-w-2xl lg:max-w-4xl text-center mt-12">
-        <!-- QR Code -->
-        <img src="data:image/png;base64,{{qr_code_base64}}" alt="QR Code" class="absolute top-4 left-4 w-24 h-24 rounded-md shadow-md">
-    
-        <!-- Certificate Header -->
-        <div class="mb-8">
-            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600">{{certi_obj.certificate_for.title }} Certificate</h1>
-            <p class="text-gray-600 text-sm italic mt-2">Presented by {{ certi_obj.event.title }}</p>
-        </div>
-    
-        <!-- Certificate Content -->
-        <div class="mb-8">
-            <p class="text-gray-700 text-base sm:text-lg">This is to certify that</p>
-            <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mt-2">{{ certi_obj.user.first_name }} {{ certi_obj.user.last_name }}</h2>
-            <p class="text-gray-700 text-base sm:text-lg mt-4">has successfully participated in</p>
-            <h3 class="text-lg sm:text-xl md:text-2xl font-semibold text-blue-600">{{ certi_obj.event.title }}</h3>
-            <p class="text-gray-700 text-base sm:text-lg mt-4">
-                and demonstrated outstanding performance in <span class="font-semibold">{{ certi_obj.event.title }} event</span>.
-            </p>
-        </div>
-    
-        <!-- Certificate Footer -->
-        <div class="flex flex-wrap justify-between items-center mt-12">
-            <!-- Issuer Details -->
-            <div class="w-full md:w-auto text-left mb-4 md:mb-0">
-                <p class="text-sm text-gray-700 font-bold">Date:</p>
-                <p class="text-gray-600">{{ certi_obj.issue_date|date:"F d, Y" }}</p>
-            </div>
-            
-            <!-- Signature Section -->
-            <div class="w-full md:w-auto text-right">
-                <p class="text-sm text-gray-700 font-bold">Authorized Signature:</p>
-                <div class="mt-2">
-                    <p class="text-blue-600 font-semibold">______________________</p>
-                    <p class="text-sm text-gray-600">Event Coordinator</p>
-                </div>
-            </div>
-        </div>
-        <p class="mt-4 break-words text-center">
-            <small class="text-sm text-blue-600">
-                Verify: 
-                <a href="{% url 'certificate' certi_obj.hash %}" class="break-all">
-                    {{ certi_obj.hash }}
-                </a>
-            </small>
-        </p>
+    <!-- QR Code -->
+    <!-- QR Code - Responsive -->
+    <div
+      class="absolute top-4 left-4 sm:top-6 sm:left-6 w-16 sm:w-20 md:w-24 h-auto"
+    >
+      <img
+        src="data:image/png;base64,{{qr_code_base64}}"
+        alt="QR Code"
+        class="w-full h-auto max-w-full rounded-lg shadow-lg border border-blue-300"
+        title="Scan to Verify"
+      />
     </div>
-    
-    <!-- Download Button -->
-     <div class='grid lg:grid-col-1'>
-    <button id="download-btn" class="ml-4 mt-8 bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        Download Certificate
+
+    <!-- Certificate Content -->
+    <div class="text-center z-10 relative">
+      <h2
+        class="font-[Playfair Display] text-3xl md:text-4xl font-bold text-blue-700 dark:text-blue-400 mb-2"
+      >
+        {{ certi_obj.certificate_for.title }} Certificate
+      </h2>
+      <p class="text-sm italic text-gray-500 dark:text-gray-400 mb-6">
+        Awarded by {{ certi_obj.event.title }}
+      </p>
+
+      <p class="text-lg sm:text-xl">This certifies that</p>
+      <h1
+        class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mt-2"
+      >
+        {{ certi_obj.user.first_name }} {{ certi_obj.user.last_name }}
+      </h1>
+
+      <p class="text-lg mt-4">has successfully participated in</p>
+      <h3
+        class="text-xl md:text-2xl font-semibold text-blue-600 dark:text-blue-300 mt-1"
+      >
+        {{ certi_obj.event.title }}
+      </h3>
+
+      <p class="mt-4 text-base md:text-lg">
+        and exhibited outstanding performance in the event.
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <div class="flex flex-wrap justify-between items-end mt-10 text-sm">
+      <div class="mb-4">
+        <strong>Date:</strong><br />
+        <span>{{ certi_obj.issue_date|date:"F d, Y" }}</span>
+      </div>
+      <div class="text-right">
+        <strong>Authorized Signature:</strong>
+        <div class="mt-2 text-blue-600">______________________</div>
+        <span>Event Coordinator</span>
+      </div>
+    </div>
+
+    <!-- Verification Link -->
+    <div class="mt-6 text-center break-words">
+      <small class="text-blue-600 dark:text-blue-400 text-xs">
+        Verify at:
+        <a
+          href="{% url 'certificate' certi_obj.hash %}"
+          class="underline hover:text-blue-900 dark:hover:text-white"
+        >
+          {{ certi_obj.hash }}
+        </a>
+      </small>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="flex flex-wrap justify-center gap-4 mt-12 animate-fade-in-up">
+    <button
+      {% comment %} id="download-btn" {% endcomment %}
+       onclick="downloadCertificatePDF()"
+      class="bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-300"
+    >
+      Download PDF
     </button>
-    <a href='{{ linkedin_url }}' target='_blank'>
-        <button class="ml-4 mt-8 bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            Add to linkdin <i class="fab fa-linkedin"></i>
-        </button>
+    {% if linkedin_url %}
+    <a href="{{ linkedin_url }}" target="_blank">
+      <button
+        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg flex items-center gap-2 transition-all duration-300"
+      >
+        <i class="fab fa-linkedin"></i> Add to LinkedIn
+      </button>
     </a>
+    {% endif %}
+  </div>
 </div>
 
-</div>
+<!-- Confetti Animation -->
+<canvas
+  id="confetti-canvas"
+  class="pointer-events-none fixed inset-0 z-0"
+></canvas>
+
+
 <script>
-    document.getElementById("download-btn").addEventListener("click", () => {
-        const element = document.getElementById("certificate");
-        const opt = {
-            margin: 1,
-            filename: 'Certificate_of_{{ certi_obj.event }}.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
-        };
-        html2pdf().set(opt).from(element).save();
+  // Trigger confetti
+  window.addEventListener("load", () => {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
     });
+  });
+
+  // PDF Download
+  {% comment %} document.getElementById("download-btn").addEventListener("click", () => {
+    const element = document.getElementById("certificate");
+    const opt = {
+      margin: 0,
+      filename: "Certificate_{{ certi_obj.event.title }}.pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: "in", format: "letter", orientation: "landscape" },
+    };
+    html2pdf().set(opt).from(element).save();
+  }); {% endcomment %}
+
+  function downloadCertificatePDF() {
+    const element = document.getElementById("certificate");
+    const opt = {
+      margin:       0.5,
+      filename:     'Certificate_{{ certi_obj.event.title }}.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true },
+      jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
+    };
+
+    // Wait a moment for animations to complete (optional)
+    html2pdf().set(opt).from(element).save();
+  }
 </script>
 
+<style>
+  @keyframes fade-in-down {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes fade-in-up {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes slide-up {
+    0% {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-down {
+    animation: fade-in-down 1s ease-out both;
+  }
+  .animate-fade-in-up {
+    animation: fade-in-up 1s ease-out both;
+  }
+  .animate-slide-up {
+    animation: slide-up 1.2s ease-out both;
+  }
+</style>
 {% endblock content %}

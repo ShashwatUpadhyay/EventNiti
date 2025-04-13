@@ -1,167 +1,114 @@
 {% extends "index.html" %}
 
 {% block title %}
-{{ event.title }} Memories
+{{ event.title }} | Glimpses
 {% endblock title %}
 
 {% block content %}
 {% load static %}
-<div class="bg-gray-50 pt-20">
 
-  <div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8  mb-4 md:mb-6 px-4">
-      
-          {% if user.is_authenticated %}
-         {% if not user.is_student %}
-         {% comment %} <a class="border-2 rounded-sm py-1 px-3 text-sm md:text-base hover:border-red-400" href="{% url "event_memory_upload" event.slug %}">Upload Here</a> {% endcomment %}
-          {% endif %}
-          {% endif %}
-      <h1 class="text-4xl border-b-2 text-center font-bold text-purple-700 my-6">GLIMPS OF PREVIOUS EVENTS
-      </h1>
-  </div>
+<!-- Hero Banner -->
+<section class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white py-16 text-center shadow-lg animate-fadeIn">
+  <h1 class="text-5xl font-bold tracking-wide">✨ Glimpses of {{ event.title }} ✨</h1>
+  <p class="mt-4 text-lg">Relive the vibe. Dive into the moments. 💜</p>
+</section>
 
-  <!-- image albums -->
-  <div class="columns-2 md:columns-4 gap-4 space-y-4 lg:mx-10 md:lg:mx-4">    
+<!-- Gallery Masonry -->
+<div class="px-4 py-12 bg-gray-50">
+  <div class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4 transition-all duration-300">
     {% for memory in memories %}
-          <img  class="figimg w-full rounded-xl shadow transition-transform duration-300 hover:scale-105" src="{{ memory.image.url }}" alt="">
+    <img src="{{ memory.image.url }}" alt="Memory" class="gallery-img w-full rounded-xl border-4 border-transparent hover:border-pink-400 hover:shadow-lg hover:shadow-purple-300/50 transition-transform duration-300 hover:scale-105 cursor-pointer" />
     {% endfor %}
   </div>
-  {% if memories.paginator.num_pages >= 2 %}
-  <!-- ====== Pagination Section Start -->
-  <div class="bg-gray-100 py-10 text-center dark:bg-dark">
-      <div>
-        <ul
-          class="mx-auto flex w-full max-w-[415px] items-center justify-between"
-        >
-          <li>
-              {% if memories.has_previous %}
-            <a
-            href='?page={{memories.previous_page_number}}{% if request.GET.sort %}&sort={{request.GET.sort}}{% endif %}{% if request.GET.s %}&s={{request.GET.s}}{% endif %}{% if request.GET.category %}&category={{request.GET.category}}{% endif %}'
-              class="inline-flex h-10 items-center justify-center gap-2 rounded-lg px-4 py-2 text-base font-medium text-dark hover:bg-gray-2 dark:text-black dark:hover:bg-white/5"
-            >
-              <span>
-                <svg
-                  width="17"
-                  height="17"
-                  viewBox="0 0 17 17"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M11.325 14.825C11.175 14.825 11.025 14.775 10.925 14.65L5.27495 8.90002C5.04995 8.67502 5.04995 8.32503 5.27495 8.10002L10.925 2.35002C11.15 2.12502 11.5 2.12502 11.725 2.35002C11.95 2.57502 11.95 2.92502 11.725 3.15002L6.47495 8.50003L11.75 13.85C11.975 14.075 11.975 14.425 11.75 14.65C11.6 14.75 11.475 14.825 11.325 14.825Z"
-                    fill="currentColor"
-                  />
-                </svg>
-              </span>
-              <span class="max-sm:hidden"> Previous </span>
-            </a>
-            {% endif %}
-          </li>
-          <p class="text-base font-medium text-dark dark:text-dark">
-            Page {{memories.number}} to {{memories.paginator.num_pages}}
-          </p>
-          <li>
-              {% if memories.has_next %}
-            <a
-            href='?page={{memories.next_page_number}}{% if request.GET.sort %}&sort={{request.GET.sort}}{% endif %}{% if request.GET.s %}&s={{request.GET.s}}{% endif %}{% if request.GET.category %}&category={{request.GET.category}}{% endif %}'
-              class="inline-flex h-10 items-center justify-center gap-2 rounded-lg px-4 py-2 text-base font-medium text-dark hover:bg-gray-2 dark:text-dark dark:hover:bg-white/5"
-            >
-              <span class="max-sm:hidden"> Next </span>
-              <span>
-                <svg
-                  width="17"
-                  height="17"
-                  viewBox="0 0 17 17"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M5.67495 14.825C5.52495 14.825 5.39995 14.775 5.27495 14.675C5.04995 14.45 5.04995 14.1 5.27495 13.875L10.525 8.50003L5.27495 3.15002C5.04995 2.92502 5.04995 2.57502 5.27495 2.35002C5.49995 2.12502 5.84995 2.12502 6.07495 2.35002L11.725 8.10002C11.95 8.32503 11.95 8.67502 11.725 8.90002L6.07495 14.65C5.97495 14.75 5.82495 14.825 5.67495 14.825Z"
-                    fill="currentCOlor"
-                  />
-                </svg>
-              </span>
-            </a>
-            {% endif %}
-          </li>
-        </ul>
-      </div>
-    </div>
-    <!-- ====== Pagination Section End -->
-    {% endif %}
 </div>
 
-  <script>
-      document.addEventListener("DOMContentLoaded", () => {
-          const images = document.querySelectorAll(".figimg");
-          const modal = document.createElement("div");
-          modal.classList.add("fixed", "top-0", "left-0", "w-full", "h-full", "bg-black/80", "flex", "items-center", "justify-center", "hidden", "z-30");
-          modal.innerHTML = `
-  <div class="relative">
-      <button id="closeModal" class="absolute top-2 right-2 bg-gray-200 px-3 py-1 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-</svg>
-</button>
-      <button id="prevImage" class="absolute left-2 top-1/2 -translate-y-1/2 bg-gray-200 px-3 py-1 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-</svg>
-</button>
-      <img id="modalImage" class="max-w-full max-h-[90vh] rounded-lg" src="" alt="">
-      <button id="nextImage" class="absolute right-2 top-1/2 -translate-y-1/2 bg-gray-200 px-3 py-1 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-</svg>
-</button>
-      <p id="modalCaption" class="text-center text-white mt-2"></p>
-  </div>
-`;
-          document.body.appendChild(modal);
+<!-- Lightbox Modal -->
+<div id="lightbox" class="fixed inset-0 bg-black bg-opacity-90 hidden items-center justify-center z-50">
+  <button id="closeBtn" class="absolute top-6 right-6 text-white text-3xl">&times;</button>
+  <button id="prevBtn" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-4xl">&#10094;</button>
+  <img id="lightboxImg" src="" alt="Full View" class="max-w-full max-h-[85vh] rounded-lg shadow-2xl">
+  <button id="nextBtn" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-4xl">&#10095;</button>
+</div>
 
-          let currentIndex = 0;
+<style>
+  .animate-fadeIn {
+    animation: fadeIn 1.2s ease-in;
+  }
 
-          images.forEach((img, index) => {
-              img.addEventListener("click", () => {
-                  currentIndex = index;
-                  openModal();
-              });
-          });
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
-          function openModal() {
-              modal.classList.remove("hidden");
-              updateModal();
-          }
+  .gallery-img {
+    transition: all 0.3s ease-in-out;
+  }
 
-          function closeModal() {
-              modal.classList.add("hidden");
-          }
+  #lightbox {
+    display: none;
+  }
 
-          function updateModal() {
-              const img = images[currentIndex];
-              document.getElementById("modalImage").src = img.src;
-              document.getElementById("modalCaption").textContent = img.nextElementSibling.textContent;
-          }
+  #lightbox.show {
+    display: flex;
+  }
+</style>
 
-          document.getElementById("closeModal").addEventListener("click", closeModal);
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const images = document.querySelectorAll(".gallery-img");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightboxImg");
+    const closeBtn = document.getElementById("closeBtn");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
 
-          document.getElementById("nextImage").addEventListener("click", () => {
-              if (currentIndex < images.length - 1) {
-                  currentIndex++;
-                  updateModal();
-              }
-          });
+    let currentIndex = 0;
 
-          document.getElementById("prevImage").addEventListener("click", () => {
-              if (currentIndex > 0) {
-                  currentIndex--;
-                  updateModal();
-              }
-          });
+    const openLightbox = (index) => {
+      currentIndex = index;
+      lightbox.classList.add("show");
+      lightboxImg.src = images[currentIndex].src;
+    };
 
-          modal.addEventListener("click", (event) => {
-              if (event.target === modal) closeModal();
-          });
-      });
+    const closeLightbox = () => {
+      lightbox.classList.remove("show");
+    };
 
-  </script>
+    const showNext = () => {
+      currentIndex = (currentIndex + 1) % images.length;
+      lightboxImg.src = images[currentIndex].src;
+    };
 
+    const showPrev = () => {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      lightboxImg.src = images[currentIndex].src;
+    };
 
+    images.forEach((img, index) => {
+      img.addEventListener("click", () => openLightbox(index));
+    });
+
+    closeBtn.addEventListener("click", closeLightbox);
+    nextBtn.addEventListener("click", showNext);
+    prevBtn.addEventListener("click", showPrev);
+
+    lightbox.addEventListener("click", (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (!lightbox.classList.contains("show")) return;
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowRight") showNext();
+      if (e.key === "ArrowLeft") showPrev();
+    });
+  });
+</script>
 
 {% endblock content %}

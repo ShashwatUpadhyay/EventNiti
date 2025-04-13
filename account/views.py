@@ -120,8 +120,6 @@ def registrationpage(request):
         models.UserExtra.objects.create(user = user_obj,phone = phone, uu_id = uuid, course = course, section = section,year=year,forget_password_token = secrets.token_hex(20),forget_password_token_time = current_time)
         messages.success(request, 'Your Account has been Created!')
         return redirect('register')
-        
-        
     return render(request , 'register.html')
 
 def accountVerify(request, uid):

@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect,HttpResponse
+from django.shortcuts import render,redirect,HttpResponse, get_object_or_404
 from . import models
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -8,12 +8,17 @@ from base.views import is_head, is_member, is_student, is_teacher
 from certificate.views import generate_qr_code_base64
 from django.contrib.auth.decorators import login_required
 from ppuu import settings
-from asgiref.sync import async_to_sync
 from django.http import JsonResponse
 import datetime
 import pytz
 
 india_timezone = pytz.timezone('Asia/Kolkata')
+
+def is_cordinator(request,event):
+    for event in event.cordinators.all():
+        if request.user == event.user:
+            return True
+    return False
 
 # Create your views here.
 def events(request):
@@ -104,15 +109,10 @@ def myTicket(request):
     
 @login_required(login_url='login')
 def takeSudentAttendence(request, submissionid):
-    if is_student(request.user):
-        messages.error(request,"Access Denied!")
-        return redirect('home')
-    
-    submission = None
-    try:
-        submission = models.EventSubmission.objects.get(uid=submissionid)
-    except:
-        return render(request, 'eventattendence.html', {'submission': False, 'msg': 'Invalid QR Code', 'student': None})
+    submission = get_object_or_404(models.EventSubmission , uid=submissionid)    
+    if not is_cordinator(request,submission.event):
+        messages.error(request , 'Access denied')
+        return redirect('events')
     
     if models.EventTicket.objects.get(submission_uid=submissionid).restricted:
         return render(request, 'eventattendence.html', {'submission': False, 'msg': 'Student is Restricted!', 'student': submission.full_name})
@@ -143,26 +143,18 @@ def teacherEventList(request):
 
 @login_required(login_url='login')
 def teacherEvent(request, slug):
-    if is_student(request.user):
-        return redirect('event')
-    
-    event = models.Event.objects.get(slug=slug)
-    return render(request, 'vieweventteacher.html',{'event':event})
+    event = get_object_or_404(models.Event , slug=slug)
+    if is_cordinator(request,event) or request.user.is_staff:
+        return render(request, 'vieweventteacher.html',{'event':event})
+    return redirect('events')
 
 @login_required(login_url='login')
-def registeredStudentList(request, slug):
-    if is_student(request.user):
-        messages.error(request,"Access Denied!")
-        return redirect('home')
-    
+def registeredStudentList(request, slug):    
     students = models.EventSubmission.objects.filter(event__slug=slug).order_by('full_name')
-    event = None
-    try:
-        event = models.Event.objects.get(slug=slug)
-    except:
-        return redirect('teacherEventList')
-    
-    return render(request , 'registeredstudent.html', {'students':students, 'event' : event}) 
+    event = get_object_or_404(models.Event , slug=slug)
+    if is_cordinator(request,event) or request.user.is_staff:
+        return render(request , 'registeredstudent.html', {'students':students, 'event' : event}) 
+    return redirect('events')
 
 @login_required(login_url='login')
 def registeredStudentListAjax(request, slug):

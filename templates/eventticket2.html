@@ -1,0 +1,475 @@
+{% extends "index.html" %}
+{% block title %}
+Exclusive Access | {{ ticket.event.title }} | Prerogatory Pointers United University
+{% endblock title %}
+
+{% block content %}
+{% load static %}
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@400;700&display=swap');
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f0f4f8; /* Lighter background for contrast */
+  }
+
+  .font-orbitron {
+    font-family: 'Orbitron', sans-serif;
+  }
+
+  /* --- Ticket Container Styling --- */
+  #ticket-container {
+    perspective: 1500px; /* For 3D hover effect */
+  }
+
+  #ticket-card {
+    background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #3f51b5 100%);
+    color: #ffffff;
+    border-radius: 20px;
+    transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1),
+                box-shadow 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden; /* Important for pseudo-elements */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  /* --- Subtle Animated Background Pattern --- */
+  #ticket-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+    background-size: 20px 20px;
+    opacity: 0.5;
+    animation: subtle-pan 60s linear infinite;
+    z-index: 0;
+  }
+
+  @keyframes subtle-pan {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
+  }
+
+  /* --- Holographic Shine Effect --- */
+  #ticket-card::after {
+    content: '';
+    position: absolute;
+    top: -100%; left: -100%;
+    width: 300%; height: 300%;
+    background: linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.3) 0%,
+      rgba(180, 180, 255, 0.2) 25%,
+      rgba(100, 100, 255, 0.1) 50%,
+      rgba(180, 180, 255, 0.2) 75%,
+      rgba(255, 255, 255, 0.3) 100%
+    );
+    opacity: 0;
+    transform: rotate(30deg);
+    transition: opacity 0.6s ease;
+    animation: holographic-shine 8s infinite linear alternate;
+    z-index: 1;
+    pointer-events: none; /* Allow clicks through */
+  }
+
+  #ticket-card:hover::after {
+     /* Optional: Enhance shine on hover */
+     /* opacity: 0.15; */
+  }
+
+  @keyframes holographic-shine {
+    0% { opacity: 0.05; transform: rotate(30deg) translate(-10%, -10%); }
+    50% { opacity: 0.15; transform: rotate(35deg) translate(0%, 0%); }
+    100% { opacity: 0.05; transform: rotate(40deg) translate(10%, 10%); }
+  }
+
+  /* --- Content Styling --- */
+  .ticket-content {
+    position: relative; /* Ensure content is above pseudo-elements */
+    z-index: 2;
+  }
+
+  /* --- Entrance Animation Placeholder --- */
+  .fade-in-up {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+  .fade-in-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+  }
+
+  /* --- QR Code Styling --- */
+  .qr-code-wrapper {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 12px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+  }
+  .qr-code-wrapper img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+  }
+  .qr-code-wrapper:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  /* --- Specific Element Styles --- */
+  .detail-icon {
+    color: #9fa8da; /* Lighter indigo for icons */
+  }
+  .attendee-initials {
+    background: linear-gradient(45deg, #7986cb, #3f51b5);
+  }
+  .verification-link {
+    background: rgba(0,0,0, 0.2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.8em;
+    word-break: break-all;
+  }
+
+  /* --- Button Styling --- */
+  .btn-gradient {
+    background-image: linear-gradient(to right, #4f46e5, #7c3aed, #c026d3);
+    background-size: 200% auto;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 4px 15px 0 rgba(99, 60, 234, 0.4);
+  }
+  .btn-gradient:hover {
+    background-position: right center; /* change the direction of the change here */
+    box-shadow: 0 8px 20px 0 rgba(99, 60, 234, 0.6);
+    transform: translateY(-2px);
+  }
+  .btn-outline {
+    border-color: #5c6bc0;
+    color: #3f51b5;
+    transition: all 0.3s ease;
+  }
+  .btn-outline:hover {
+    background-color: rgba(92, 107, 192, 0.1);
+    border-color: #3f51b5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(92, 107, 192, 0.2);
+  }
+
+  /* --- Download/Print State --- */
+  /* Style overrides when preparing for download/print */
+  .preparing-download #ticket-card::before,
+  .preparing-download #ticket-card::after {
+    display: none; /* Hide animated pseudo-elements */
+  }
+  .preparing-download #ticket-card {
+    transform: none !important; /* Reset transforms */
+    box-shadow: none !important; /* Simpler shadow or none */
+    background: linear-gradient(135deg, #283593 0%, #3f51b5 100%); /* Simplified background */
+  }
+  .preparing-download .qr-code-wrapper:hover {
+    transform: none; /* Disable hover effects */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+   .preparing-download .animate-on-web {
+    /* Hide or reset elements specifically animated only on web */
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+
+  /* --- Print Specific Styles --- */
+  @media print {
+    body {
+      background-color: #fff;
+    }
+    #ticket-container {
+      perspective: none;
+      margin: 0;
+      box-shadow: none;
+      max-width: 100%;
+    }
+    #ticket-card {
+      box-shadow: none;
+      border-radius: 0;
+      background: #fff !important; /* Print background often needs to be white */
+      color: #000 !important; /* High contrast text */
+      border: 1px solid #ccc;
+    }
+    #ticket-card::before, #ticket-card::after {
+      display: none; /* No effects */
+    }
+    .ticket-content {
+      padding: 20px !important; /* Adjust padding for print */
+    }
+     #header-section h1 {
+        color: #000 !important; /* Black title for print */
+        background: none !important; /* Remove gradient text */
+        -webkit-background-clip: initial !important;
+        background-clip: initial !important;
+    }
+    #header-section p {
+        color: #333 !important;
+    }
+     .detail-icon {
+        color: #555 !important;
+    }
+    .attendee-initials {
+       background: #eee !important;
+       color: #000 !important;
+       border: 1px solid #ccc;
+    }
+    .info-block {
+        background-color: #f8f8f8 !important;
+        border: 1px solid #eee !important;
+    }
+    .qr-code-wrapper {
+      background: #fff !important;
+      padding: 5px;
+      border: 1px solid #000;
+      box-shadow: none;
+    }
+    .qr-code-wrapper img {
+      border-radius: 0;
+    }
+    .verification-link {
+        background: none;
+        color: #000;
+        font-size: 0.75em;
+    }
+    .footer-section, .action-buttons {
+      display: none; /* Hide footer and buttons when printing */
+    }
+    .text-white { color: #000 !important; } /* Ensure text is visible */
+    .text-gray-300, .text-gray-400 { color: #333 !important; }
+    .bg-opacity-80 { background-color: rgba(255, 255, 255, 0.8) !important; } /* Adjust opacity for print */
+  }
+
+</style>
+
+<div class="min-h-screen py-16 px-4 flex flex-col items-center justify-center">
+
+  <div id="ticket-container" class="w-full max-w-2xl mb-12">
+    <div id="ticket-card">
+      <div class="ticket-content p-8 md:p-10 lg:p-12">
+
+        <div id="header-section" class="flex justify-between items-start mb-8 fade-in-up">
+          <div>
+            <h1 class="text-4xl md:text-5xl font-orbitron font-bold text-white mb-1">
+              VIP ACCESS
+            </h1>
+            <p class="text-lg text-indigo-100">
+              Unlock Your Exclusive Experience at <span class="font-semibold">{{ ticket.event.title }}</span>
+            </p>
+          </div>
+          <img src="{% static 'images/logo-condensed.png' %}" alt="University Logo" class="w-16 h-16 md:w-20 md:h-20 object-contain opacity-80">
+          </div>
+
+        <div class="relative h-48 md:h-56 rounded-lg overflow-hidden mb-10 shadow-lg fade-in-up" style="animation-delay: 0.1s;">
+           <img src="{{ ticket.event.poster.url }}" alt="{{ ticket.event.title }} Poster"
+               class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 animate-on-web">
+           <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent"></div>
+           <div class="absolute bottom-4 left-4 text-white">
+             <h3 class="text-xl md:text-2xl font-bold mb-1">{{ ticket.event.title }}</h3>
+             <p class="text-sm md:text-base opacity-90">{{ ticket.event.start_date|date:"l, F j, Y" }}</p>
+           </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-10">
+            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/20 fade-in-up info-block" style="animation-delay: 0.2s;">
+              <h4 class="text-xs font-semibold text-indigo-200 uppercase tracking-wider mb-4">Attendee Access</h4>
+              <div class="flex items-center space-x-4 mb-5">
+                 <div class="flex-shrink-0 h-12 w-12 rounded-full attendee-initials flex items-center justify-center text-xl font-bold shadow-inner">
+                   {{ ticket.user.first_name|first }}{{ ticket.user.last_name|first }}
+                 </div>
+                 <div>
+                   <p class="text-base font-medium text-white">{{ ticket.user.get_full_name }}</p>
+                   <p class="text-xs text-indigo-200">Ticket ID: {{ ticket.uid|slice:":8"|upper }}</p>
+                 </div>
+              </div>
+              <div class="mt-4 pt-4 border-t border-white/20">
+                 <p class="text-xs text-indigo-100 mb-2 text-center">Present for Seamless Entry:</p>
+                 <div class="flex justify-center">
+                    <div class="qr-code-wrapper w-32 h-32 animate-on-web">
+                      <img src="data:image/png;base64,{{ qrCode }}" alt="Verification QR Code">
+                       <div class="absolute -bottom-2 -right-2 bg-green-500 rounded-full p-1 shadow-md border-2 border-white">
+                           <svg class="h-4 w-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                           </svg>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+            </div>
+
+            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/20 fade-in-up info-block" style="animation-delay: 0.3s;">
+              <h4 class="text-xs font-semibold text-indigo-200 uppercase tracking-wider mb-4">Event Coordinates</h4>
+              <div class="space-y-3">
+                <div class="flex items-start">
+                  <svg class="flex-shrink-0 h-5 w-5 detail-icon mr-3 mt-px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <div>
+                      <span class="text-sm font-medium text-white">Date</span>
+                      <p class="text-xs text-indigo-100">{{ ticket.event.start_date|date:"l, F jS, Y" }}</p>
+                  </div>
+                </div>
+                 <div class="flex items-start">
+                    <svg class="flex-shrink-0 h-5 w-5 detail-icon mr-3 mt-px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                   <div>
+                       <span class="text-sm font-medium text-white">Time</span>
+                       <p class="text-xs text-indigo-100">{{ ticket.event.start_time|time:"g:i A T" }}</p>
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <svg class="flex-shrink-0 h-5 w-5 detail-icon mr-3 mt-px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                     <div>
+                         <span class="text-sm font-medium text-white">Venue</span>
+                         <p class="text-xs text-indigo-100">{{ ticket.event.location }}</p>
+                     </div>
+                </div>
+                 <div class="flex items-start pt-3 border-t border-white/10 mt-3">
+                    <svg class="flex-shrink-0 h-5 w-5 detail-icon mr-3 mt-px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                    </svg>
+                     <div>
+                         <span class="text-sm font-medium text-white">Access Level</span>
+                         <p class="text-xs text-indigo-100">VIP Priority Entrance</p>
+                     </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="footer-section text-center border-t border-white/20 pt-4 fade-in-up" style="animation-delay: 0.4s;">
+            <p class="text-xs text-indigo-200 mb-1">
+              Powered by <span class="font-semibold">Prerogatory Pointers United University Event Systems</span>
+            </p>
+            <p class="text-xs text-indigo-200">
+              Verify authenticity: <span class="verification-link text-indigo-50">eventpass.ppuu.edu/{{ ticket.uid|slice:":8" }}</span>
+            </p>
+        </div>
+
+      </div> </div> </div> <div class="flex flex-col sm:flex-row gap-5 mt-0 action-buttons">
+    <button id="download-btn" class="flex items-center justify-center px-8 py-3 text-white font-semibold rounded-lg btn-gradient focus:outline-none focus:ring-4 focus:ring-purple-300">
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+      </svg>
+      Download Digital Pass
+    </button>
+
+    <button onclick="window.print()" class="flex items-center justify-center px-8 py-3 bg-white border-2 font-semibold rounded-lg btn-outline focus:outline-none focus:ring-2 focus:ring-indigo-200">
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+      </svg>
+      Print for Entry
+    </button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const ticketContainer = document.getElementById('ticket-container');
+    const ticketCard = document.getElementById('ticket-card');
+
+    // --- 1. Entrance Animation ---
+    const animatedElements = document.querySelectorAll('.fade-in-up');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target); // Optional: stop observing after animation
+            }
+        });
+    }, { threshold: 0.1 }); // Trigger when 10% is visible
+
+    animatedElements.forEach(el => observer.observe(el));
+
+
+    // --- 2. 3D Tilt Effect on Hover (Web Only) ---
+    if (window.matchMedia('(min-width: 768px)').matches) { // Only apply on larger screens
+      ticketContainer.addEventListener('mousemove', (e) => {
+        const rect = ticketContainer.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+
+        const rotateX = (y / rect.height) * -20; // Max rotation deg
+        const rotateY = (x / rect.width) * 20;  // Max rotation deg
+
+        ticketCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`; // Add slight scale
+        ticketCard.style.boxShadow = `0 25px 50px -12px rgba(0, 0, 0, 0.25)`; // Enhanced shadow on hover
+      });
+
+      ticketContainer.addEventListener('mouseleave', () => {
+        ticketCard.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+         ticketCard.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.1)'; // Reset shadow
+      });
+    }
+
+    // --- 3. PDF Download Logic ---
+    const downloadBtn = document.getElementById("download-btn");
+    const mainContainer = document.querySelector('.min-h-screen'); // Get the main container
+
+    downloadBtn.addEventListener("click", () => {
+      const elementToCapture = document.getElementById("ticket-card"); // Capture the card itself
+
+      // Add a class to the container to trigger download-specific styles
+      mainContainer.classList.add('preparing-download');
+      elementToCapture.style.transform = 'none'; // Ensure no transforms interfere
+      elementToCapture.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.2)'; // Apply a decent static shadow for PDF
+
+      const opt = {
+        margin: [0.5, 0.5, 0.5, 0.5], // inches: top, left, bottom, right
+        filename: `VIP_Pass_${'{{ ticket.event.title|slugify }}'.replace(/"/g, '')}_${'{{ ticket.user.get_full_name|slugify }}'.replace(/"/g, '')}.pdf`,
+        image: { type: "png", quality: 0.98 }, // PNG preserves gradients better
+        html2canvas: {
+          scale: 2.5, // Increased scale for better resolution
+          useCORS: true,
+          allowTaint: true,
+          scrollX: 0,
+          scrollY: 0,
+          //backgroundColor: null // Allow transparent background if needed, or set explicit color
+           backgroundColor: '#3f51b5' // Match the simpler gradient base
+        },
+        jsPDF: {
+          unit: "in",
+          format: "letter",
+          orientation: "portrait"
+        },
+        // Attempt to embed fonts if possible (experimental in html2pdf)
+        // fontEmbedCSS: "@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@400;700&display=swap');"
+      };
+
+      // Use timeout to ensure styles are applied before capture
+      setTimeout(() => {
+        html2pdf().set(opt).from(elementToCapture).save().then(() => {
+          // Cleanup: Remove the temporary class after PDF generation
+          mainContainer.classList.remove('preparing-download');
+          // Optional: restore original inline styles if needed, though class removal should suffice
+          elementToCapture.style.transform = '';
+          elementToCapture.style.boxShadow = '';
+        }).catch(err => {
+            console.error("PDF generation failed:", err);
+            // Ensure cleanup even on error
+            mainContainer.classList.remove('preparing-download');
+            elementToCapture.style.transform = '';
+            elementToCapture.style.boxShadow = '';
+        });
+      }, 300); // Delay to allow CSS rendering
+    });
+
+  });
+</script>
+
+{% endblock content %}

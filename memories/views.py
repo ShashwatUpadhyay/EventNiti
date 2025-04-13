@@ -24,11 +24,10 @@ def event_memories_list(request):
 
 @login_required(login_url='login')
 def UploadMemories(request, event_slug):
-    
     if is_student(request.user):
         messages.error(request, "You are not allowed to upload memories.")
         return redirect('event_memories_list', event_slug = event_slug)
-    
+    event_slug = None
     try:
         event = models.Event.objects.get(slug=event_slug)
         memory = models.Memories.objects.get(event=event)
