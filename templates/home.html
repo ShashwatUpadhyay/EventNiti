@@ -23,7 +23,7 @@ EventSphere Pro | Orchestrate Unforgettable Event Experiences
   #hero-section {
     position: relative;
     height: 100vh;
-    background: linear-gradient(135deg, #1a2980 0%, #26d0ce 100%); /* Deep Blue to Teal gradient */
+    {% comment %} background: linear-gradient(135deg, #1a2980 0%, #26d0ce 100%); /* Deep Blue to Teal gradient */ {% endcomment %}
     overflow: hidden;
   }
   #hero-particles {
@@ -282,8 +282,8 @@ EventSphere Pro | Orchestrate Unforgettable Event Experiences
 
 </style>
 
-<section id="hero-section" class="flex items-center text-white">
-  <div id="hero-particles"></div> <div class="container px-6 mx-auto hero-content text-center">
+<section id="hero-section" class="flex items-center text-white  bg-center bg-no-repeat bg-cover bg-[url('{{rand_mem}}')] bg-blend-multiply h-screen bg-gray-700">
+  <div id="hero-particles"></div> <div class="container px-6 mx-auto hero-content text-center ">
     <h1 class="mb-4 text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl hero-headline" data-aos="fade-down">
       <span>Orchestrate</span> <span class="text-teal-300">Unforgettable</span>
       <span class="block mt-2">Event Experiences</span>

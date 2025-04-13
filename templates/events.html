@@ -29,7 +29,7 @@ Events Hub | Prerogatory Pointers United University
                     Browse Events
                 </a>
                 {% if user.is_authenticated %}
-                <a href="" class="bg-yellow-400 text-indigo-900 font-bold py-3 px-8 rounded-full hover:bg-yellow-300 transition-all transform hover:scale-105 shadow-lg">
+                <a href="{% url "contact" %}" class="bg-yellow-400 text-indigo-900 font-bold py-3 px-8 rounded-full hover:bg-yellow-300 transition-all transform hover:scale-105 shadow-lg">
                     Host an Event
                 </a>
                 {% else %}
@@ -185,6 +185,7 @@ Events Hub | Prerogatory Pointers United University
                                 FREE
                             </span>
                             {% endif %}
+                            
                         </div>
                         
                         <div class="flex items-center text-gray-500 text-sm mb-3">
@@ -219,7 +220,16 @@ Events Hub | Prerogatory Pointers United University
                                     +{{ events.attendees.count|default:"12" }}
                                 </div>
                             </div>
-                            
+                            {% for cordinator in events.cordinators.all %}
+                                {% if cordinator.user == user %}
+                                <a href="{% url 'teacherEvent' events.slug %}" class="text-indigo-600 font-semibold text-sm hover:text-indigo-800 flex items-center">
+                                    Veiw as cordinator
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </a>
+                                {% endif %}
+                            {% endfor %}
                             <a href="{% url 'event' events.slug %}" class="text-indigo-600 font-semibold text-sm hover:text-indigo-800 flex items-center">
                                 View Details
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
