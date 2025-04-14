@@ -45,27 +45,27 @@ def loginpage(request):
             logger.info(f'[{current_time}] {user_obj.get_full_name()} logged in')
             return redirect('/admin')
         
-        if not user_obj.is_verified:
-            if cache.get(username):
-                data = cache.get(username)
-                data['count'] += 1
+        # if not user_obj.is_verified:
+        #     if cache.get(username):
+        #         data = cache.get(username)
+        #         data['count'] += 1
             
-                if data['count'] >= 3:
-                    cache.set(username,data, 60*5)
-                    messages.error(request,"You have exceeded the limit of verification mail!.. Please try again after 5 minutes.")
-                    return redirect('login')
-                cache.set(username,data, 60*1)
+        #         if data['count'] >= 3:
+        #             cache.set(username,data, 60*5)
+        #             messages.error(request,"You have exceeded the limit of verification mail!.. Please try again after 5 minutes.")
+        #             return redirect('login')
+        #         cache.set(username,data, 60*1)
              
-            if not cache.get(username):   
-                data = {
-                    'username':username,
-                    'count': 1
-                }
-                cache.set(username,data, 60*1)
+        #     if not cache.get(username):   
+        #         data = {
+        #             'username':username,
+        #             'count': 1
+        #         }
+        #         cache.set(username,data, 60*1)
                
-            verifyUser(user.email,user_obj.uid)
-            messages.error(request,"Verification mail has been sent to the registered!.. Please verify your account.")
-            return redirect('login')
+        #     verifyUser(user.email,user_obj.uid)
+        #     messages.error(request,"Verification mail has been sent to the registered!.. Please verify your account.")
+        #     return redirect('login')
         
         user_obj = authenticate(username = username, password = password)
         if not user_obj:
@@ -98,9 +98,6 @@ def registrationpage(request):
             return redirect('register')
         if User.objects.filter(email = email).exists():
             messages.error(request, 'Email already Exists!')
-            return redirect('register')
-        if User.objects.filter(phone = phone).exists():
-            messages.error(request, 'Mobile number already Exists!')
             return redirect('register')
         if len(str(phone))!=10:
             messages.error(request, 'Mobile number is Invalid!')
@@ -181,3 +178,21 @@ def change_password(request,uid):
         messages.success(request, 'Password Changed Successfully!')
         return redirect('login')
     return render(request, 'changepassword.html')  
+
+@login_required(login_url='login')
+def profile(request):
+    if request.method == "POST":
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        uu_id = request.POST.get('uuid')
+        course = request.POST.get('course')
+        section = request.POST.get('section')
+        year= request.POST.get('year')
+        print(first_name,
+last_name,
+uu_id,
+course,
+section,
+year,
+)
+    return render(request,'profile.html')

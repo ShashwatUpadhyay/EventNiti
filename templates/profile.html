@@ -1,0 +1,137 @@
+{% extends "index.html" %}
+{% block title %}Profile Settings{% endblock title %}
+
+{% block content %}
+{% load static %}
+<div class="max-w-4xl mx-auto py-12 px-6 pt-[150px]">
+    <div class="bg-white shadow-xl rounded-xl p-8 space-y-8 animate-fade-in">
+
+        <!-- Title -->
+        <div class="text-center">
+            <h2 class="text-4xl font-bold text-indigo-700">👤 My Profile</h2>
+            <p class="text-gray-500 mt-2">Manage your account information and security settings</p>
+        </div>
+
+        <!-- Profile Form -->
+        <form method="POST" enctype="multipart/form-data" class="space-y-6">
+            {% csrf_token %}
+
+            <!-- Profile Picture -->
+            <div class="flex items-center space-x-6">
+                <img src="{% static 'images/pro.jpg' %}" class="w-20 h-20 rounded-full shadow" alt="Profile Picture">
+                <div>
+                    <label class="block font-medium text-gray-700">Update Profile Picture</label>
+                    <input type="file" name="profile_image" class="mt-1 text-sm text-gray-500 file:bg-indigo-100 file:text-indigo-700 file:px-4 file:py-1 file:rounded-lg">
+                </div>
+            </div>
+
+            <!-- Personal Info -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                    <label class="block font-semibold text-gray-700">First Name</label>
+                    <input type="text" name="first_name" value="{{ user.first_name }}" class="input" required>
+                </div>
+                <div>
+                    <label class="block font-semibold text-gray-700">Last Name</label>
+                    <input type="text" name="last_name" value="{{ user.last_name }}" class="input" required>
+                </div>
+                <div>
+                    <label class="block font-semibold text-gray-700">Username</label>
+                    <input type="text" value="{{ user.username }}" class="input bg-gray-100 cursor-not-allowed" readonly>
+                </div>
+                <div>
+                    <label class="block font-semibold text-gray-700">Email</label>
+                    <input type="email" name='email' value="{{ user.email }}" class="input bg-gray-100 cursor-not-allowed" readonly>
+                </div>
+                <div>
+                    <label class="block font-semibold text-gray-700">UUID</label>
+                    <input type="text" name="uuid" value="{{ user.user_extra.uu_id }}" class="input">
+                </div>
+                <div>
+                    <label class="block font-semibold text-gray-700">Course</label>
+                    <input type="text" name="course" value="{{ user.user_extra.course }}" class="input">
+                </div>
+                <div>
+                    <label class="block font-semibold text-gray-700">Section</label>
+                    <input type="text" name="section" value="{{ user.user_extra.section }}" class="input">
+                </div>
+                <div>
+                    <label class="block font-semibold text-gray-700">Year</label>
+                    <input type="text" name="year" value="{{ user.user_extra.year }}" class="input">
+                </div>
+            </div>
+
+            <!-- Change Password Toggle -->
+            <div class="pt-4">
+                <button type="button" onclick="togglePassword()" class="text-indigo-600 hover:underline">
+                    🔒 Change Password
+                </button>
+            </div>
+
+            <!-- Password Fields -->
+            <div id="password-section" class="hidden space-y-4">
+                <div>
+                    <label class="block font-semibold text-gray-700">Old Password</label>
+                    <input type="password" name="old_password" class="input">
+                </div>
+                <div>
+                    <label class="block font-semibold text-gray-700">New Password</label>
+                    <input type="password" name="new_password1" class="input">
+                </div>
+                <div>
+                    <label class="block font-semibold text-gray-700">Confirm New Password</label>
+                    <input type="password" name="new_password2" class="input">
+                </div>
+            </div>
+
+            <!-- Save Button -->
+            <div class="text-center pt-6">
+                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition">
+                    💾 Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Toasts -->
+{% if messages %}
+    <div class="fixed bottom-5 right-5 space-y-3">
+        {% for message in messages %}
+            <div class="bg-green-500 text-white py-2 px-4 rounded shadow animate-fade-in">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<!-- Style + Script -->
+<style>
+    .input {
+        width: 100%;
+        padding: 0.65rem;
+        border-radius: 0.5rem;
+        border: 1px solid #ccc;
+        background: white;
+        transition: border 0.2s ease;
+    }
+    .input:focus {
+        outline: none;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+        animation: fadeIn 0.4s ease-in-out;
+    }
+</style>
+<script>
+    function togglePassword() {
+        const section = document.getElementById("password-section");
+        section.classList.toggle("hidden");
+    }
+</script>
+{% endblock content %}

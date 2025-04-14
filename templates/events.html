@@ -205,6 +205,10 @@ Events Hub | Prerogatory Pointers United University
                             - {{ events.end_date|date:"F d, Y" }}
                             {% endif %}
                         </div>
+                        <div class="flex items-center text-gray-500 text-sm mb-4">
+                            <svg class="inline w-4 h-4 mr-1 -mt-px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            {{ events.start_date|time:"h:i A"|default:"TBA" }}
+                        </div>
                         
                         <p class="text-gray-600 mb-5 line-clamp-2">
                             {{ events.description }}

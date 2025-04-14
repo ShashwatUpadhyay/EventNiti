@@ -23,6 +23,9 @@ class Course(models.Model):
     def __str__(self):
         return self.name + f' ({(self.department.name)})'
     
+    class Meta: 
+        verbose_name = '6. Course'
+    
 class Subject(models.Model):
     name = models.CharField(max_length=100)
     slug = models.CharField(max_length=100, null=True, blank=True)

@@ -282,7 +282,12 @@ EventSphere Pro | Orchestrate Unforgettable Event Experiences
 
 </style>
 
+{% if rand_mem %}
 <section id="hero-section" class="flex items-center text-white  bg-center bg-no-repeat bg-cover bg-[url('{{rand_mem}}')] bg-blend-multiply h-screen bg-gray-700">
+{% else %}
+<section id="hero-section" class="flex items-center text-white  bg-center bg-no-repeat bg-cover  bg-blend-multiply h-screen bg-gray-700">
+{% endif %}
+  
   <div id="hero-particles"></div> <div class="container px-6 mx-auto hero-content text-center ">
     <h1 class="mb-4 text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl hero-headline" data-aos="fade-down">
       <span>Orchestrate</span> <span class="text-teal-300">Unforgettable</span>
@@ -403,7 +408,7 @@ EventSphere Pro | Orchestrate Unforgettable Event Experiences
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
                        {{ events_item.category|default:"General" }}
                     </span>
-                    <span><svg class="inline w-4 h-4 mr-1 -mt-px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> {{ events_item.duration|default:"TBA" }}</span>
+                    <span><svg class="inline w-4 h-4 mr-1 -mt-px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> {{ events_item.start_date|time:"h:i A"|default:"TBA" }}</span>
                  </div>
 
                <h3 class="mb-2 text-lg font-semibold text-gray-900 truncate">{{ events_item.title }}</h3>

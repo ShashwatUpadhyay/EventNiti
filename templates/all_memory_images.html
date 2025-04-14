@@ -8,10 +8,26 @@
 {% load static %}
 
 <!-- Hero Banner -->
-<section class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white py-16 text-center shadow-lg animate-fadeIn">
-  <h1 class="text-5xl font-bold tracking-wide">✨ Glimpses of {{ event.title }} ✨</h1>
-  <p class="mt-4 text-lg">Relive the vibe. Dive into the moments. 💜</p>
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-r from-indigo-800 to-purple-700 py-20 mt-20 overflow-hidden">
+  <!-- Animated background elements -->
+  <div class="absolute top-0 left-0 w-full h-full opacity-10">
+      <div class="absolute top-20 left-10 w-40 h-40 rounded-full bg-purple-400 animate-pulse"></div>
+      <div class="absolute bottom-10 right-20 w-60 h-60 rounded-full bg-blue-400 animate-pulse animation-delay-2000"></div>
+  </div>
+  
+  <div class="container mx-auto px-6 relative z-10">
+      <div class="text-center animate__animated animate__fadeIn">
+          <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">
+              <span class="text-yellow-300">Glimps</span> From Previous Events
+          </h1>
+          {% comment %} <p class="text-xl text-indigo-100 max-w-3xl mx-auto">
+              Engage, learn, and network at our premier university events. Earn certifications, expand your horizons.
+          </p> {% endcomment %}
+      </div>
+  </div>
 </section>
+
 
 <!-- Gallery Masonry -->
 <div class="px-4 py-12 bg-gray-50">
