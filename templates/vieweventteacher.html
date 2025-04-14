@@ -1,120 +1,269 @@
 {% extends "index.html" %}
 {% block title %}
-{{ event.title }} Event
+{{ event.title }} Event | Prerogatory Pointers United University
 {% endblock title %}
 
 {% block content %}
-<div class="bg-gray-50 font-sans py-12">
-    <div class="container mx-auto py-12 px-6">
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 font-sans py-12 animate-gradient pt-[100px]">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
 
-        <!-- Event Header -->
-        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-6">
-            <h1 class="text-5xl font-bold">{{ event.title }}</h1>
-            <p class="mt-2 text-blue-200">An exclusive event experience</p>
-        </div>
-
-        <!-- Event Poster -->
-        <div class="p-6 flex justify-center">
-            <div class="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-300">
-                <img src="{{ event.poster.url }}" alt="Event Poster" class="w-full max-h-80 object-cover" onerror="this.onerror=null; this.src='';">
+        <!-- Hero Section -->
+        <div class="relative overflow-hidden rounded-2xl shadow-2xl mb-12">
+            <div class="absolute inset-0 bg-gradient-to-r from-blue-800 to-indigo-900 opacity-90"></div>
+            <div class="relative z-10 py-20 px-6 sm:py-24 sm:px-12 text-center">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 animate-fade-in-down">
+                    {{ event.title }}
+                </h1>
+                <p class="text-xl text-blue-100 max-w-3xl mx-auto animate-fade-in-up">
+                    {{ event.short_description|default:"An exclusive event experience" }}
+                </p>
+                <div class="mt-8 flex flex-wrap justify-center gap-4">
+                    <span class="bg-white bg-opacity-20 text-white px-4 py-2 rounded-full text-sm font-medium">
+                        📅 {{ event.start_date|date:"F j, Y" }}
+                    </span>
+                    <span class="bg-white bg-opacity-20 text-white px-4 py-2 rounded-full text-sm font-medium">
+                        📍 {{ event.location }}
+                    </span>
+                    <span class="bg-white bg-opacity-20 text-white px-4 py-2 rounded-full text-sm font-medium">
+                        👥 {{ event.count }} registered
+                    </span>
+                </div>
             </div>
         </div>
 
-        <!-- Event Details -->
-        <div class="p-6 space-y-6">
-            <div class="mb-6">
-                <h2 class="text-2xl font-semibold text-gray-800">📜 Description</h2>
-                <p class="text-gray-600 mt-2">{{ event.description }}</p>
-            </div>
-
-            <!-- Event Information Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div class="bg-gray-100 p-5 rounded-lg shadow-md hover:shadow-lg transition">
-                    <h3 class="font-semibold text-gray-800">🎤 Organized By</h3>
-                    <p class="text-gray-600">{{ event.organized_by.username }}</p>
-                </div>
-                <div class="bg-gray-100 p-5 rounded-lg shadow-md hover:shadow-lg transition">
-                    <h3 class="font-semibold text-gray-800">📍 Location</h3>
-                    <p class="text-gray-600">{{ event.location }}</p>
-                </div>
-                <div class="bg-gray-100 p-5 rounded-lg shadow-md hover:shadow-lg transition">
-                    <h3 class="font-semibold text-gray-800">👥 Participant Limit</h3>
-                    <p class="text-gray-600">{{ event.limit|default:"No limit" }}</p>
-                </div>
-                <a href="{% url 'registeredStudentList' event.slug %}">
-                    <div class="bg-gray-100 p-5 rounded-lg shadow-md hover:shadow-lg hover:bg-blue-50 transition">
-                        <h3 class="font-semibold text-blue-700">📝 Currently Registered</h3>
-                        <p class="text-gray-800 font-bold">{{ event.count }}</p>
+        <!-- Main Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column (Event Details) -->
+            <div class="lg:col-span-2 space-y-8">
+                <!-- Event Poster -->
+                <div class="relative group rounded-2xl overflow-hidden shadow-xl transition-all duration-300 hover:shadow-2xl">
+                    <img src="{{ event.poster.url }}" alt="Event Poster" 
+                         class="w-full h-auto max-h-96 object-cover transition-transform duration-500 group-hover:scale-105"
+                         onerror="this.onerror=null; this.src='';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                        {% comment %} <span class="text-white text-lg font-medium">Click to view full size</span> {% endcomment %}
                     </div>
-                </a>
-                <div class="bg-gray-100 p-5 rounded-lg shadow-md hover:shadow-lg transition">
-                    <h3 class="font-semibold text-gray-800">⏳ Upload Time</h3>
-                    <p class="text-gray-600">{{ event.upload_time }}</p>
                 </div>
-                <div class="bg-gray-100 p-5 rounded-lg shadow-md hover:shadow-lg transition">
-                    <h3 class="font-semibold text-gray-800">📆 Start Date</h3>
-                    <p class="text-gray-600">{{ event.start_date }}</p>
+
+                <!-- Event Description -->
+                <div class="bg-white rounded-2xl shadow-lg p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="bg-blue-100 p-3 rounded-full mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800">Event Details</h2>
+                    </div>
+                    <div class="prose max-w-none text-gray-600">
+                        {{ event.description|safe|linebreaks }}
+                    </div>
                 </div>
-                <div class="bg-gray-100 p-5 rounded-lg shadow-md hover:shadow-lg transition">
-                    <h3 class="font-semibold text-gray-800">🚀 Event Open</h3>
-                    {% if event.event_open %}
-                        <span class="mt-2 bg-green-600 text-white font-semibold py-1 px-3 rounded-full text-sm inline-block">Yes</span>
-                    {% else %}
-                        <span class="mt-2 bg-red-600 text-white font-semibold py-1 px-3 rounded-full text-sm inline-block">No</span>
-                    {% endif %}
-                </div>
-                <div class="bg-gray-100 p-5 rounded-lg shadow-md hover:shadow-lg transition">
-                    <h3 class="font-semibold text-gray-800">📝 Registration Open</h3>
-                    {% if event.registration_open %}
-                        <span class="mt-2 bg-green-600 text-white font-semibold py-1 px-3 rounded-full text-sm inline-block">Yes</span>
-                    {% else %}
-                        <span class="mt-2 bg-red-600 text-white font-semibold py-1 px-3 rounded-full text-sm inline-block">No</span>
-                    {% endif %}
-                </div>
+                <!-- Event Coordinators -->
+<div class="bg-white rounded-2xl shadow-lg p-8">
+    <div class="flex items-center mb-6">
+        <div class="bg-purple-100 p-3 rounded-full mr-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 12a5 5 0 100-10 5 5 0 000 10zm-7 7a7 7 0 0114 0H3z" />
+              </svg>
+              
+        </div>
+        <h2 class="text-2xl font-bold text-gray-800">Event Coordinators</h2>
+    </div>
+    {% if event.cordinators.all %}
+        <ul class="space-y-4 text-gray-700">
+            {% for coordinator in event.cordinators.all %}
+                <li class="border border-gray-200 rounded-xl px-4 py-3 shadow-sm hover:bg-gray-50 transition">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-semibold text-lg">{{ coordinator.user.get_full_name }}</p>
+                            <p class="text-sm text-gray-500">{{ coordinator.user.email }}</p>
+                        </div>
+                        <div class="bg-indigo-100 text-indigo-700 text-sm font-medium px-3 py-1 rounded-full">
+                            {{ coordinator.role|default:"Coordinator" }}
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-gray-500 italic">No coordinators assigned yet.</p>
+    {% endif %}
+</div>
+
             </div>
 
-            <!-- Back Button -->
-            <div class="mt-8 text-center">
-                <a href="{% url 'teacherEventList' %}" class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-400 transition mx-2">
-                    🔙 Back to Events
-                </a>
-                {% if is_host %}
-                <a href="{% url 'edit_event' event.slug %}" class="bg-blue-400 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition mx-2">
-                    ✏️ Edit {{event.title}} Event
-                </a>
-                {% endif %}
+            <!-- Right Column (Event Info) -->
+            <div class="space-y-8">
+                <!-- Quick Info Card -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 text-white">
+                        <h3 class="text-xl font-bold flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Event Summary
+                        </h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="text-sm font-medium text-gray-500">Host</h4>
+                                    <p class="text-sm font-semibold text-gray-900">{{ event.organized_by.username }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="text-sm font-medium text-gray-500">Location</h4>
+                                    <p class="text-sm font-semibold text-gray-900">{{ event.location }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="text-sm font-medium text-gray-500">Start Date</h4>
+                                    <p class="text-sm font-semibold text-gray-900">{{ event.start_date }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="text-sm font-medium text-gray-500">Uploaded</h4>
+                                    <p class="text-sm font-semibold text-gray-900">{{ event.upload_time }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Status Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
+                        <div class="mx-auto h-12 w-12 rounded-full flex items-center justify-center mb-3"
+                             style="background-color: {% if event.event_open %}#10B981{% else %}#EF4444{% endif %}; opacity: 0.1;">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <h3 class="text-sm font-medium text-gray-500 mb-1">Event Status</h3>
+                        <span class="text-sm font-semibold {% if event.event_open %}text-green-600{% else %}text-red-600{% endif %}">
+                            {% if event.event_open %}Active{% else %}Inactive{% endif %}
+                        </span>
+                    </div>
+                    
+                    <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
+                        <div class="mx-auto h-12 w-12 rounded-full flex items-center justify-center mb-3"
+                             style="background-color: {% if event.registration_open %}#10B981{% else %}#EF4444{% endif %}; opacity: 0.1;">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-sm font-medium text-gray-500 mb-1">Registration</h3>
+                        <span class="text-sm font-semibold {% if event.registration_open %}text-green-600{% else %}text-red-600{% endif %}">
+                            {% if event.registration_open %}Open{% else %}Closed{% endif %}
+                        </span>
+                    </div>
+                    
+                    <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
+                        <div class="mx-auto h-12 w-12 rounded-full flex items-center justify-center mb-3 bg-blue-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-sm font-medium text-gray-500 mb-1">Participants</h3>
+                        <p class="text-sm font-semibold text-gray-900">{{ event.count }} registered</p>
+                        <a href="{% url 'registeredStudentList' event.slug %}" class="mt-2 inline-flex items-center text-blue-600 text-xs font-medium hover:text-blue-800">
+                            View list
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                    
+                    <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
+                        <div class="mx-auto h-12 w-12 rounded-full flex items-center justify-center mb-3 bg-blue-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-sm font-medium text-gray-500 mb-1">Capacity</h3>
+                        <p class="text-sm font-semibold text-gray-900">{{ event.limit|default:"No limit" }}</p>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="space-y-4">
+                    <a href="{% url 'teacherEventList' %}" 
+                       class="w-full flex items-center justify-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        Back to Events
+                    </a>
+                    
+                    {% if is_host %}
+                    <a href="{% url 'edit_event' event.slug %}" 
+                       class="w-full flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow-md transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        Edit Event
+                    </a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Lightbox Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/simple-lightbox@2.4.0/dist/simple-lightbox.min.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const lightbox = new SimpleLightbox('[data-lightbox="gallery"]', {
-            nav: true, // Enables next/prev navigation
-            captionDelay: 250, // Delay for caption
-            closeText: '✖',
-            disableScroll: true
-        });
-    });
-</script>
-
 <!-- Animation Styles -->
 <style>
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
+    .animate-gradient {
+        animation: gradientShift 15s ease infinite;
+        background-size: 200% 200%;
     }
-
-    @keyframes scaleIn {
-        from { opacity: 0; transform: scale(0.95); }
-        to { opacity: 1; transform: scale(1); }
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
     }
-
-    .animate-fade-in { animation: fadeIn 0.8s ease-out; }
-    .animate-scale-in { animation: scaleIn 0.6s ease-out; }
+    .animate-fade-in-down {
+        animation: fadeInDown 0.8s ease-out;
+    }
+    .animate-fade-in-up {
+        animation: fadeInUp 0.8s ease-out;
+    }
+    @keyframes fadeInDown {
+        0% { opacity: 0; transform: translateY(-20px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+        0% { opacity: 0; transform: translateY(20px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
 </style>
 
 {% endblock content %}

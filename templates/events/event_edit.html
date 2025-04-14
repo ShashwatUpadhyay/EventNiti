@@ -2,126 +2,123 @@
 {% block title %}Edit {{ event.title }}{% endblock title %}
 
 {% block content %}
-<div class="bg-gray-50 min-h-screen font-sans pb-20 pt-[80px]">
+<div class="bg-gradient-to-b from-indigo-50 to-white min-h-screen pt-[80px] font-sans">
 
-    <!-- Header -->
-    <section class="relative bg-gradient-to-r from-indigo-800 to-purple-700 py-20 overflow-hidden text-center">
-        <div class="absolute top-0 left-0 w-full h-full opacity-10">
-            <div class="absolute top-20 left-10 w-40 h-40 rounded-full bg-purple-400 animate-pulse"></div>
-            <div class="absolute bottom-10 right-20 w-60 h-60 rounded-full bg-blue-400 animate-pulse animation-delay-2000"></div>
-        </div>
+    <!-- Animated Gradient Header -->
+    <section class="relative bg-gradient-to-r from-indigo-700 via-purple-600 to-pink-500 text-white py-24 text-center shadow-xl">
+        <div class="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm"></div>
         <div class="relative z-10">
-            <h1 class="text-5xl font-extrabold text-white drop-shadow-lg mb-3">Edit <span class="text-yellow-300">{{ event.title }}</span></h1>
-            <p class="text-indigo-100 text-lg">Modify your event details below and shine brighter ✨</p>
+            <h1 class="text-5xl font-extrabold drop-shadow-lg mb-3 animate-pulse">Update <span class="text-yellow-300">{{ event.title }}</span></h1>
+            <p class="text-indigo-100 text-lg">Polish your event details with style ✨</p>
         </div>
     </section>
 
-    <!-- Edit Form -->
-    <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-2xl p-10 mt-[-80px] relative z-20 animate-fade-in mt-[100px]">
-        <form method="POST" enctype="multipart/form-data" class="space-y-8">
-            {% csrf_token %}
-            
-            <!-- Title -->
-            <div>
-                <label class="block text-gray-700 font-semibold mb-2">🎯 Event Title</label>
-                <input type="text" name="title" value="{{ event.title }}" required
-                    class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            </div>
+    <!-- Form Section -->
+    <section class="max-w-5xl mx-auto px-6 py-12">
+        <div class="bg-white rounded-3xl shadow-2xl p-10 transition-all hover:shadow-indigo-300">
+            <form method="POST" enctype="multipart/form-data" class="space-y-10">
+                {% csrf_token %}
 
-            <!-- Description -->
-            <div>
-                <label class="block text-gray-700 font-semibold mb-2">📜 Description</label>
-                <textarea name="description" rows="4" required
-                    class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">{{ event.description }}</textarea>
-            </div>
-
-            <!-- Location -->
-            <div>
-                <label class="block text-gray-700 font-semibold mb-2">📍 Location</label>
-                <input type="text" name="location" value="{{ event.location }}"
-                    class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            </div>
-
-            <!-- Poster Upload -->
-            <div>
-                <label class="block text-gray-700 font-semibold mb-2">🖼️ Poster</label>
-                <input type="file" name="poster"
-                    class="w-full p-3 border border-dashed border-gray-300 rounded-lg bg-gray-50">
-                {% if event.poster %}
-                    <img src="{{ event.poster.url }}" alt="Current Poster"
-                         class="mt-4 rounded-lg w-48 shadow-md hover:scale-105 transition transform">
-                {% endif %}
-            </div>
-
-          <!-- 📅 Start Date -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <!-- Date Field -->
+                <!-- Event Title -->
                 <div>
-                    <label class="block text-gray-700 font-semibold mb-2">📅 Start Date</label>
-                    <input type="date" name="start_date" value="{{ event.start_date|date:'Y-m-d' }}"
-                        class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-gray-700 font-semibold mb-2">🎯 Title</label>
+                    <input type="text" name="title" value="{{ event.title }}" required
+                        class="w-full p-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
                 </div>
 
-                <!-- Time Field -->
+                <!-- Description -->
                 <div>
-                    <label class="block text-gray-700 font-semibold mb-2">⏰ Start Time</label>
-                    <input type="time" name="start_time" value="{{ event.start_date|date:'H:i' }}"
-                        class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-gray-700 font-semibold mb-2">📜 Description</label>
+                    <textarea name="description" rows="4" required
+                        class="w-full p-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500">{{ event.description }}</textarea>
                 </div>
-            </div>
 
-            <!-- Registration & Event Open -->
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-gray-700 font-semibold mb-2">📝 Registration Open</label>
-                    <select name="registration_open"
-                        class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500">
-                        <option value="True" {% if event.registration_open %}selected{% endif %}>Yes</option>
-                        <option value="False" {% if not event.registration_open %}selected{% endif %}>No</option>
-                    </select>
+                <!-- Location + Poster -->
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">📍 Location</label>
+                        <input type="text" name="location" value="{{ event.location }}"
+                            class="w-full p-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">🖼️ Poster</label>
+                        <input type="file" name="poster"
+                            class="w-full p-3 border border-dashed border-gray-300 rounded-xl bg-gray-50">
+                        {% if event.poster %}
+                            <img src="{{ event.poster.url }}" alt="Poster" class="mt-4 rounded-xl w-40 shadow-md hover:scale-105 transition-transform">
+                        {% endif %}
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-gray-700 font-semibold mb-2">Show Event</label>
-                    <select name="event_open"
-                        class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500">
-                        <option value="True" {% if event.event_open %}selected{% endif %}>Yes</option>
-                        <option value="False" {% if not event.event_open %}selected{% endif %}>No</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-gray-700 font-semibold mb-2">Event Over?</label>
-                    <select name="event_over"
-                        class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500">
-                        <option value="True" {% if event.event_over %}selected{% endif %}>Yes</option>
-                        <option value="False" {% if not event.event_over %}selected{% endif %}>No</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-gray-700 font-semibold mb-2">Offers Certification?</label>
-                    <select name="offers_certification"
-                        class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500">
-                        <option value="True" {% if event.offers_certification %}selected{% endif %}>Yes</option>
-                        <option value="False" {% if not event.offers_certification %}selected{% endif %}>No</option>
-                    </select>
-                </div>
-            </div>
 
-            <!-- Submit Button -->
-            <div class="text-center pt-4">
-                <button type="submit"
-                        class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-8 py-3 rounded-full font-semibold shadow-lg hover:from-indigo-700 hover:to-purple-700 transition transform hover:scale-105">
-                    💾 Save Changes
-                </button>
-            </div>
-        </form>
+                <!-- Date and Time -->
+                <div class="grid sm:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">📅 Start Date</label>
+                        <input type="date" name="start_date" value="{{ event.start_date|date:'Y-m-d' }}"
+                            class="w-full p-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">⏰ Start Time</label>
+                        <input type="time" name="start_time" value="{{ event.start_date|date:'H:i' }}"
+                            class="w-full p-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    </div>
+                </div>
 
-        <!-- Back Button -->
-        <div class="mt-8 text-center">
-            <a href="{% url 'teacherEventList' %}" class="text-indigo-600 hover:underline font-semibold">
-                🔙 Back to My Events
-            </a>
-        </div>
+                <!-- Switches -->
+                <!-- Switches -->
+<div class="grid md:grid-cols-2 gap-6">
+    <div>
+        <label class="block text-gray-700 font-semibold mb-2">📝 Registration Open</label>
+        <select name="registration_open"
+                class="w-full p-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-purple-500">
+            <option value="True" {% if event.registration_open %}selected{% endif %}>Yes</option>
+            <option value="False" {% if not event.registration_open %}selected{% endif %}>No</option>
+        </select>
     </div>
+    <div>
+        <label class="block text-gray-700 font-semibold mb-2">🎉 Show Event</label>
+        <select name="event_open"
+                class="w-full p-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-purple-500">
+            <option value="True" {% if event.event_open %}selected{% endif %}>Yes</option>
+            <option value="False" {% if not event.event_open %}selected{% endif %}>No</option>
+        </select>
+    </div>
+    <div>
+        <label class="block text-gray-700 font-semibold mb-2">⏳ Event Over?</label>
+        <select name="event_over"
+                class="w-full p-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-purple-500">
+            <option value="True" {% if event.event_over %}selected{% endif %}>Yes</option>
+            <option value="False" {% if not event.event_over %}selected{% endif %}>No</option>
+        </select>
+    </div>
+    <div>
+        <label class="block text-gray-700 font-semibold mb-2">📃 Offers Certification?</label>
+        <select name="offers_certification"
+                class="w-full p-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-purple-500">
+            <option value="True" {% if event.offers_certification %}selected{% endif %}>Yes</option>
+            <option value="False" {% if not event.offers_certification %}selected{% endif %}>No</option>
+        </select>
+    </div>
+</div>
+
+
+                <!-- Save Button -->
+                <div class="text-center">
+                    <button type="submit"
+                        class="bg-gradient-to-r from-pink-500 to-indigo-600 text-white px-10 py-3 rounded-full font-semibold shadow-lg hover:from-indigo-700 hover:to-pink-600 transition-transform hover:scale-105">
+                        💾 Save Changes
+                    </button>
+                </div>
+            </form>
+
+            <!-- Back Button -->
+            <div class="mt-8 text-center">
+                <a href="{% url 'teacherEventList' %}" class="text-purple-600 hover:underline font-semibold">
+                    🔙 Back to Events
+                </a>
+            </div>
+        </div>
+    </section>
 </div>
 
 <style>
@@ -129,7 +126,6 @@
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
     }
-
     .animate-fade-in {
         animation: fadeIn 0.7s ease-out;
     }

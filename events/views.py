@@ -9,9 +9,8 @@ from certificate.views import generate_qr_code_base64
 from django.contrib.auth.decorators import login_required
 from ppuu import settings
 from django.http import JsonResponse
-import datetime
+from datetime import datetime
 import pytz
-
 
 india_timezone = pytz.timezone('Asia/Kolkata')
 
@@ -106,7 +105,9 @@ def myTicket(request):
 @login_required(login_url='login')
 def takeSudentAttendence(request, submissionid):
     submission = get_object_or_404(models.EventSubmission , uid=submissionid)    
-    if not is_cordinator(request,submission.event):
+    if is_cordinator(request,submission.event) or is_event_host(request,submission.event) or request.user.is_staff:
+        pass
+    else:
         messages.error(request , 'Access denied')
         return redirect('events')
     
@@ -120,7 +121,7 @@ def takeSudentAttendence(request, submissionid):
         return render(request, 'eventattendence.html', {'submission': False, 'msg': 'Attendence Already Marked', 'student': submission.full_name})
     
     if submission.attendence == 'Absent':
-        current_time_india = datetime.datetime.now(india_timezone)
+        current_time_india = datetime.now(india_timezone)
         submission.attendence = 'Present'
         submission.attendence_taken_by = f'{request.user.get_full_name()} - {current_time_india.strftime('%Y-%m-%d %I:%M:%S %p')}'
         submission.save()
@@ -154,13 +155,13 @@ def registeredStudentList(request, slug):
 
 @login_required(login_url='login')
 def registeredStudentListAjax(request, slug):
-    if is_student(request.user):
+    event = models.Event.objects.get(slug=slug)
+    if is_cordinator(request,event) or is_event_host(request,event) or request.user.is_staff:
+        pass
+    else:
         messages.error(request, "Access Denied!")
         return redirect('home')
-    
-    event = models.Event.objects.get(slug=slug)
     students = models.EventSubmission.objects.filter(event__slug=slug).order_by('full_name')
-    
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':  # Check if it's an AJAX request
         student_data = []
         for student in students:
@@ -211,7 +212,6 @@ def my_hosted_events(request):
         'events': host_events
     })
 
-from datetime import datetime
 
 @login_required(login_url='login')
 def edit_event(request, slug):
@@ -251,8 +251,6 @@ def edit_event(request, slug):
         event.save()
         return redirect('edit_event' , event.slug)
         
-    return render(request, 'events/event_edit.html', {
-        'event': event
-    })
+    return render(request, 'events/event_edit.html', {'event': event})
 
 

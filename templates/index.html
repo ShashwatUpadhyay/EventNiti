@@ -18,18 +18,18 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <link rel="shortcut icon" href="{% static 'images/pplogo.png' %}">
         <script>
-            document.addEventListener("contextmenu", (event) => event.preventDefault());
+            {% comment %} document.addEventListener("contextmenu", (event) => event.preventDefault());
             document.addEventListener("contextmenu", (event) => event.preventDefault());
             document.addEventListener("keydown", (event) => {
                 if (event.ctrlKey && (event.key === "u" || event.key === "U" || event.key === "i" || event.key === "I")) {
                     event.preventDefault();
                 }
-            });
+            }); {% endcomment %}
         </script>
         <style>
-            * {
+            {% comment %} * {
                 user-select: none; /* Prevents text selection */
-            }
+            } {% endcomment %}
             body, html {
                 margin: 0;
                 padding: 0;
