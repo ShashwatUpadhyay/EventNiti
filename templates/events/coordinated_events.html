@@ -29,13 +29,13 @@
         {% if events %}
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 ">
             {% for event in events %}
-            <div class="relative rounded-3xl  p-6 backdrop-blur-lg border border-white/20  shadow-xl transition-transform hover:scale-[1.03] hover:shadow-2xl group overflow-hidden bg-gray-900 ">
+            <div class="relative rounded-3xl  p-6 backdrop-blur-lg border border-white/20  shadow-xl transition-transform hover:scale-[1.03] hover:shadow-2xl group overflow-hidden  ">
                 <!-- Top gradient icon -->
                 <div class="absolute  top-6 -left-6 w-20 h-20 bg-gradient-to-br from-yellow-400 to-pink-500 rounded-full opacity-30 group-hover:opacity-60 blur-2xl z-0"></div>
                 <a href='{% url "teacherEvent" event.event.slug %}'>
                 <div class="relative z-10">
-                    <h3 class="text-2xl font-bold text-white mb-2">{{ event.event.title }}</h3>
-                    <p class="text-indigo-100 text-sm leading-relaxed mb-4">{{ event.event.description|truncatewords:18 }}</p>
+                    <h3 class="text-2xl font-bold  mb-2 text-gray-900">{{ event.event.title }}</h3>
+                    <p class="text-gray-100 text-sm leading-relaxed mb-4">{{ event.event.description|truncatewords:6|safe }}</p>
                     <div class="text-indigo-300 text-sm mt-auto">
                         📅 {{ event.event.start_date }} | 📍 {{ event.event.location }}
                     </div>

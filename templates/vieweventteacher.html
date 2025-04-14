@@ -56,40 +56,71 @@
                         <h2 class="text-2xl font-bold text-gray-800">Event Details</h2>
                     </div>
                     <div class="prose max-w-none text-gray-600">
-                        {{ event.description|safe|linebreaks }}
+                        {{ event.description|safe }}
                     </div>
                 </div>
                 <!-- Event Coordinators -->
-<div class="bg-white rounded-2xl shadow-lg p-8">
-    <div class="flex items-center mb-6">
-        <div class="bg-purple-100 p-3 rounded-full mr-4">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10 12a5 5 0 100-10 5 5 0 000 10zm-7 7a7 7 0 0114 0H3z" />
-              </svg>
-              
-        </div>
-        <h2 class="text-2xl font-bold text-gray-800">Event Coordinators</h2>
-    </div>
-    {% if event.cordinators.all %}
-        <ul class="space-y-4 text-gray-700">
-            {% for coordinator in event.cordinators.all %}
-                <li class="border border-gray-200 rounded-xl px-4 py-3 shadow-sm hover:bg-gray-50 transition">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="font-semibold text-lg">{{ coordinator.user.get_full_name }}</p>
-                            <p class="text-sm text-gray-500">{{ coordinator.user.email }}</p>
+                <div class="bg-white rounded-2xl shadow-lg p-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center">
+                            <div class="bg-purple-100 p-3 rounded-full mr-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 12a5 5 0 100-10 5 5 0 000 10zm-7 7a7 7 0 0114 0H3z" />
+                                </svg>
+                            </div>
+                            <h2 class="text-2xl font-bold text-gray-800">Event Coordinators</h2>
                         </div>
-                        <div class="bg-indigo-100 text-indigo-700 text-sm font-medium px-3 py-1 rounded-full">
-                            {{ coordinator.role|default:"Coordinator" }}
-                        </div>
+                        {% if is_host %}
+                        <!-- Add Coordinator Button -->
+                        <a href="{% url "add_coordinators" event.slug %}" 
+                        class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-xl shadow transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                        </a>
+                        {% endif %}
+
                     </div>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p class="text-gray-500 italic">No coordinators assigned yet.</p>
-    {% endif %}
-</div>
+                    {% if event.cordinators.all %}
+                    {% for coordinator in event.cordinators.all %}
+                        <div class="border border-gray-200 rounded-xl px-4 py-3 shadow-sm hover:bg-gray-50 transition my-2">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="font-semibold text-lg">{{ coordinator.user.get_full_name }}</p>
+                                    <p class="text-sm text-gray-500">
+                                        {{ coordinator.user.user_extra.phone|default:'' }} - {{ coordinator.user.email }}
+                                    </p>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    {% if is_host %}
+                                    <!-- Delete Button with SweetAlert -->
+                                        <form method="post"
+                                            action="{% url 'remove_coordinator' coordinator.uid %}"
+                                            class="delete-coordinator-form">
+                                            {% csrf_token %}
+                                            <button type="button"
+                                                    class="delete-btn inline-flex items-center justify-center w-8 h-8 bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition"
+                                                    title="Remove Coordinator">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M6 18L18 6M6 6l12 12"/>
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                    <span class="bg-indigo-100 text-indigo-700 text-sm font-medium px-3 py-1 rounded-full">
+                                        {{ coordinator.role|default:"Coordinator" }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-gray-500 italic">No coordinators assigned yet.</p>
+                    {% endif %}
+                </div>
 
             </div>
 
@@ -265,5 +296,53 @@
         100% { opacity: 1; transform: translateY(0); }
     }
 </style>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const deleteButtons = document.querySelectorAll(".delete-btn");
+    
+        deleteButtons.forEach(btn => {
+          btn.addEventListener("click", function (e) {
+            const form = btn.closest("form");
+    
+            Swal.fire({
+              title: 'Are you sure?',
+              text: "This will remove the coordinator from this event.",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#d33',
+              cancelButtonColor: '#6b7280',
+              confirmButtonText: 'Yes, remove',
+              cancelButtonText: 'Cancel'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                form.submit();
+              }
+            });
+          });
+        });
+      });
+
+
+// Django Messages with SweetAlert2
+{% if messages %}
+{% for message in messages %}
+  Swal.fire({
+    toast: true, // Make it a toast notification
+    position: 'top-end',
+    icon: '{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}',
+    title: "{{ message|escapejs }}", // Escape JS characters in message
+    showConfirmButton: false,
+    timer: 3500, // Show for 3.5 seconds
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  });
+{% endfor %}
+{% endif %}
+</script>
 
 {% endblock content %}

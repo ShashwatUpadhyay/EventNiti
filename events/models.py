@@ -148,6 +148,7 @@ class EventCordinator(models.Model):
     uid = models.CharField(max_length=100, default=uuid.uuid4, null=True,blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE,  related_name='cordinator')
     event = models.ForeignKey(Event, on_delete=models.CASCADE,related_name='cordinators')
+    role = models.CharField(max_length=100, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -155,3 +156,4 @@ class EventCordinator(models.Model):
 
     class Meta:
         verbose_name = '5. Event Cordinator'
+        unique_together = ('user', 'event')

@@ -172,7 +172,7 @@ Events Hub | Prerogatory Pointers United University
                         </div>
                         
                         <p class="text-gray-600 mb-5 line-clamp-2">
-                            {{ events.description }}
+                            {{ events.description|safe|truncatechars:30 }}
                         </p>
                         
                         <div class="flex justify-between items-center">

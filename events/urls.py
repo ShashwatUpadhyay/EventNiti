@@ -5,6 +5,8 @@ urlpatterns = [
     path('my-tickets/', views.myTicket , name='myticket'),
     path('auth-view/', views.teacherEventList, name = 'teacherEventList'),
     path('auth-view/<slug>/', views.teacherEvent, name = 'teacherEvent'),
+    path('auth-view/<slug>/add_coordinators/', views.add_coordinators, name = 'add_coordinators'),
+    path('auth-view/remove_coordinator/<uid>/', views.remove_coordinator, name = 'remove_coordinator'),
     path('auth-view/<slug>/edit/', views.edit_event, name = 'edit_event'),
     path('auth-view/<slug>/registrations/', views.registeredStudentList, name = 'registeredStudentList'),
     path('auth-view/<slug>/registration/', views.registeredStudentListAjax, name = 'registeredStudentListAjax'),
@@ -15,4 +17,5 @@ urlpatterns = [
     path('attendence/<submissionid>/', views.takeSudentAttendence, name = 'takeSudentAttendence'),
     path('coordinator/my_coordinated_events/', views.my_coordinated_events, name = 'my_coordinated_events'),
     path('host/my_hosted_events/', views.my_hosted_events, name = 'my_hosted_events'),
+    path('live/polling_qna/', views.live_polling_qna, name = 'live_polling_qna'),
 ]

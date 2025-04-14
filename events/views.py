@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from account.models import UserExtra
 from blog.models import Blog
+from django.http import HttpResponseRedirect
 from base.views import is_head, is_member, is_student, is_teacher
 from certificate.views import generate_qr_code_base64
 from django.contrib.auth.decorators import login_required
@@ -253,4 +254,30 @@ def edit_event(request, slug):
         
     return render(request, 'events/event_edit.html', {'event': event})
 
+@login_required(login_url='login')
+def add_coordinators(request,slug):
+    users = User.objects.exclude(username = request.user.username)
+    event = get_object_or_404(models.Event , slug=slug)
+    if not is_event_host(request,event):
+        return redirect('events')
+    if request.method == "POST":
+        user_id = request.POST.getlist('users')
+        selected_users = User.objects.filter(id__in=user_id)
+        try:
+            for user in selected_users:
+                models.EventCordinator.objects.create(event=event, user=user)
+        except Exception as e:
+            print(e)
+            messages.error(request, "User is already Coordinator")
+        return redirect('teacherEvent', event.slug)
+    return render(request , 'events/add_coordinators.html',{'users':users})
 
+@login_required(login_url='login')
+def remove_coordinator(request,uid):
+    coordinator = get_object_or_404(models.EventCordinator , uid=uid) 
+    coordinator.delete()
+    messages.success(request, "User removed from Coordinator")
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def live_polling_qna(request):
+    return render(request, 'events/live_poll_qna.html')
