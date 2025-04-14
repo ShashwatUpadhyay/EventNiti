@@ -26,6 +26,7 @@ urlpatterns = [
     path('', include('base.urls')),
     path('user/', include('account.urls')),
     path('certificate/', include('certificate.urls')),
+    path('badge/', include('badge.urls')),
     path('events/', include('events.urls')),
     path('memories/', include('memories.urls')),
     path('blog/', include('blog.urls')),

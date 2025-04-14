@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'memories',
     'blog',
     'question_papers',
+    'badge',
 ]
 
 
@@ -165,8 +166,8 @@ MEDIA_ROOT = BASE_DIR / 'media' # for production
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'ppuuetchnicalteam@gmail.com'
-EMAIL_HOST_PASSWORD = 'fndn sasu zkaf psjj'
+EMAIL_HOST_USER = 'imakemyownluck619@gmail.com'
+EMAIL_HOST_PASSWORD = 'miiu rgag ukri trjw'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 

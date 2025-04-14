@@ -6,7 +6,7 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.core.mail import send_mail
 from ppuu import settings
-from ppuu.mail_sender import event_anouncement, event_announcement,event_result_anouncement
+from ppuu.mail_sender import event_anouncement, event_announcement,event_result_anouncement, ticket_issued_email
 # Create your models here.
 
 
@@ -17,7 +17,7 @@ class Event(models.Model):
     poster = models.ImageField(
         upload_to='event_poster/', null=True, blank=True)
     description = models. TextField()
-    organized_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    organized_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='host')
     location = models.CharField(max_length=100, null=True, blank=True)
     limit = models.IntegerField(null=True, blank=True, help_text=(
         'Limit (leave it blank if no registration limit)'))
@@ -125,17 +125,7 @@ def generate_ticket(sender, instance, created, **kwargs):
     if created:
         ticket = EventTicket.objects.create(
             user=instance.user, submission_uid=instance.uid, event=instance.event)
-        # send_mail(
-        #     'Ticket Issued',
-        #     'You received a ticket from PPUU',
-        #     settings.EMAIL_HOST_USER,
-        #     [instance.user.email],
-        #     fail_silently=False,
-        #     html_message=f"""<p>
-        #         <h1>Received {instance.event.title} ticket</h1>
-        #         <a href='{settings.DOMAIN_NAME}events/ticket/{ticket.uid}'><button>OPEN</button></a>
-        #     </p>"""
-        # )
+        ticket_issued_email(instance,ticket)
         print('Ticket Created!')
 
 

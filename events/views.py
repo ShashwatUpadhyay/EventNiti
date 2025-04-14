@@ -12,6 +12,7 @@ from django.http import JsonResponse
 import datetime
 import pytz
 
+
 india_timezone = pytz.timezone('Asia/Kolkata')
 
 def is_cordinator(request,event):
@@ -20,7 +21,10 @@ def is_cordinator(request,event):
             return True
     return False
 
-# Create your views here.
+def is_event_host(request,event): 
+    return event.organized_by == request.user
+    
+    
 def events(request):
     event = models.Event.objects.filter(event_open=True,event_over = False).order_by('start_date').order_by('-registration_open')
     return render(request, 'events.html',{'event':event})
@@ -77,14 +81,6 @@ def eventregister(request, slug):
         submission = models.EventSubmission.objects.create(uu_id=uuid,full_name = full_name,year=year,email = email,user=request.user,course = course,section = section,event = event)
         event.count = event.count + 1
         event.save()
-        
-        # #django channel
-        # students = list(models.EventSubmission.objects.filter(event__slug=slug).values())
-        # channel_layer = get_channel_layer()
-        # async_to_sync(channel_layer.group_send)(
-        #     f"event_{slug}",
-        #     {"type": "send_update", "students": students}
-        # )
         
         messages.success(request,f"Submission Successful in {event.title} event")
         return redirect('events')
@@ -144,15 +140,15 @@ def teacherEventList(request):
 @login_required(login_url='login')
 def teacherEvent(request, slug):
     event = get_object_or_404(models.Event , slug=slug)
-    if is_cordinator(request,event) or request.user.is_staff:
-        return render(request, 'vieweventteacher.html',{'event':event})
+    if is_cordinator(request,event) or request.user.is_staff or is_event_host(request,event):
+        return render(request, 'vieweventteacher.html',{'event':event , 'is_host':is_event_host(request,event)})
     return redirect('events')
 
 @login_required(login_url='login')
 def registeredStudentList(request, slug):    
     students = models.EventSubmission.objects.filter(event__slug=slug).order_by('full_name')
     event = get_object_or_404(models.Event , slug=slug)
-    if is_cordinator(request,event) or request.user.is_staff:
+    if is_cordinator(request,event) or request.user.is_staff or is_event_host(request,event):
         return render(request , 'registeredstudent.html', {'students':students, 'event' : event}) 
     return redirect('events')
 
@@ -198,3 +194,65 @@ def eventResult(request, slug):
         return redirect('home')
     
     return render(request , 'resultofevent.html',{'event':event, 'result':result,'submisson':submisson,'blogs':blogs})
+
+@login_required(login_url='login')
+def my_coordinated_events(request):
+    # coordinated_events = models.EventCordinator.objects.filter(user = request.user)
+    coordinated_events = request.user.cordinator.all
+    print(coordinated_events)
+    return render(request, 'events/coordinated_events.html', {
+        'events': coordinated_events
+    })
+    
+@login_required(login_url='login')
+def my_hosted_events(request):
+    host_events = request.user.host.all
+    return render(request, 'events/hosted_events.html', {
+        'events': host_events
+    })
+
+from datetime import datetime
+
+@login_required(login_url='login')
+def edit_event(request, slug):
+    event = get_object_or_404(models.Event , slug=slug)
+    if not is_event_host(request,event):
+        return redirect('events')
+    
+    if request.method == "POST":
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        location = request.POST.get('location')
+        poster = request.FILES.get('poster')
+        start_date = request.POST.get('start_date')
+        start_time = request.POST.get('start_time')  
+        registration_open = request.POST.get('registration_open')
+        event_open = request.POST.get('event_open')
+        event_over = request.POST.get('event_over')
+        offers_certification = request.POST.get('offers_certification')
+        print(title,description,location,poster,start_date,registration_open,event_open)
+    
+        if title:
+            event.title = title
+        if description:
+            event.description =description
+        if location:
+            event.location = location
+        if poster:
+            event.poster = poster
+        if start_date and start_time:
+            combined_datetime = datetime.strptime(f"{start_date} {start_time}", "%Y-%m-%d %H:%M")
+            event.start_date = combined_datetime
+
+        event.registration_open = registration_open
+        event.event_open = event_open
+        event.event_over = event_over
+        event.offers_certification = offers_certification
+        event.save()
+        return redirect('edit_event' , event.slug)
+        
+    return render(request, 'events/event_edit.html', {
+        'event': event
+    })
+
+

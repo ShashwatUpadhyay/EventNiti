@@ -75,9 +75,14 @@
 
             <!-- Back Button -->
             <div class="mt-8 text-center">
-                <a href="{% url 'teacherEventList' %}" class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition">
+                <a href="{% url 'teacherEventList' %}" class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-400 transition mx-2">
                     🔙 Back to Events
                 </a>
+                {% if is_host %}
+                <a href="{% url 'edit_event' event.slug %}" class="bg-blue-400 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition mx-2">
+                    ✏️ Edit {{event.title}} Event
+                </a>
+                {% endif %}
             </div>
         </div>
     </div>

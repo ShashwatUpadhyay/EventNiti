@@ -1,0 +1,52 @@
+{% extends "index.html" %}
+{% block title %}My Hosted Events{% endblock title %}
+{% block content %}
+
+<!-- 🟣 Hero Section -->
+<section class="relative bg-gradient-to-br from-indigo-800 via-purple-700 to-pink-700 py-24 overflow-hidden pt-[150px]">
+    <!-- Animated Background Circles -->
+    <div class="absolute inset-0 opacity-10">
+        <div class="absolute top-20 left-10 w-40 h-40 rounded-full bg-purple-400 animate-pulse"></div>
+        <div class="absolute bottom-10 right-20 w-60 h-60 rounded-full bg-blue-400 animate-ping animation-delay-1000"></div>
+    </div>
+
+    <div class="relative z-10 max-w-5xl mx-auto px-4 text-center text-white">
+        <h1 class="text-5xl font-extrabold mb-4 tracking-tight flex items-center justify-center">
+            <svg class="w-10 h-10 mr-3 text-yellow-300 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.658 5.108a1 1 0 00.95.69h5.36c.969 0 1.371 1.24.588 1.81l-4.34 3.15a1 1 0 00-.364 1.118l1.658 5.108c.3.921-.755 1.688-1.54 1.118l-4.34-3.15a1 1 0 00-1.176 0l-4.34 3.15c-.784.57-1.838-.197-1.539-1.118l1.658-5.108a1 1 0 00-.364-1.118l-4.34-3.15c-.783-.57-.38-1.81.588-1.81h5.36a1 1 0 00.95-.69l1.658-5.108z"/>
+              </svg>
+            My Hosted Events
+        </h1>
+        <p class="text-lg text-indigo-100">All the events you're ruling over like a pro 🎤👑</p>
+    </div>
+</section>
+
+<!-- 🔵 Events List Section -->
+<section class="py-16 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-4">
+        {% if events %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for event in events %}
+                    <div class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition duration-300 border-l-8 border-indigo-600">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-semibold text-indigo-700">{{ event.title }}</h3>
+                            <p class="text-gray-600 mt-2 text-sm">{{ event.description|truncatewords:25 }}</p>
+                            <div class="mt-4 text-sm text-gray-500 flex items-center justify-between">
+                                <span>📍 {{ event.location }}</span>
+                                <span>📅 {{ event.start_date }}</span>
+                            </div>
+                            <a href='{% url "teacherEvent" event.slug %}' class="inline-block mt-5 text-indigo-600 hover:underline text-sm font-medium">View Details →</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center text-gray-600 text-xl mt-16">
+                😢 You haven’t hosted any events yet. Time to make some noise!
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}

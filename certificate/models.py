@@ -7,8 +7,8 @@ from django.dispatch import receiver
 import hashlib
 import secrets 
 from events.models import Event
-from django.core.mail import send_mail
 from ppuu import settings
+from ppuu.mail_sender import certificate_issued_email
 import uuid
 
 # Create your models here.
@@ -53,15 +53,5 @@ def save_certificate(sender,created, instance, **kwargs):
         random_string = secrets.token_hex(16)
         instance.hash = uuid.uuid4()
         instance.save()
-        send_mail(
-            'Congratulations!! You got Certificate from PPUU',
-            'You received a Certificate from PPUU',
-            settings.EMAIL_HOST_USER,
-            [instance.user.email],
-            fail_silently=False,
-            html_message=f"""<p>
-                <h1>Received {instance.event.title} {instance.certificate_for} Certificate</h1>
-                <a href='{settings.DOMAIN_NAME}certificate/{instance.hash}'><button>OPEN</button></a>
-            </p>"""
-        )
+        certificate_issued_email(instance)
         print("Certificate Created")
