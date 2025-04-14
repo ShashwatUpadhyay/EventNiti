@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from ppuu.mail_sender import verifyUser, change_password_email
+from base.models import Course,Section,Year
 from django.core.cache import cache
 import logging
 import datetime
@@ -181,18 +182,37 @@ def change_password(request,uid):
 
 @login_required(login_url='login')
 def profile(request):
+    year = Year.objects.all()
     if request.method == "POST":
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        uu_id = request.POST.get('uuid')
-        course = request.POST.get('course')
-        section = request.POST.get('section')
         year= request.POST.get('year')
-        print(first_name,
-last_name,
-uu_id,
-course,
-section,
-year,
-)
-    return render(request,'profile.html')
+        old_password= request.POST.get('old_password')
+        new_password1= request.POST.get('new_password1')
+        new_password2= request.POST.get('new_password2')
+        
+        print(year, old_password,new_password1, new_password2)
+        
+        if year != '':
+            user = request.user.user_extra
+            user.year = year
+            user.save()
+            
+        if old_password != '':
+            user = request.user
+            check = user.check_password(old_password)
+            if check:
+                if new_password1 != '' or new_password2 != '':
+                    if new_password1 == new_password2:
+                        user.set_password(new_password1)
+                        messages.success(request,"Password changed sucessfully!!")
+                        
+                    else:
+                        messages.error(request,"    New password does't match")
+                else:
+                    messages.error(request,"Change password fields are empty!!")
+            else:
+                messages.error(request , 'Old password is wrong!!')
+        return redirect('profile')
+    context = {
+        'years' : year,
+    }
+    return render(request,'profile.html', context)
