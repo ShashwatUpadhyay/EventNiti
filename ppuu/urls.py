@@ -30,6 +30,7 @@ urlpatterns = [
     path('events/', include('events.urls')),
     path('memories/', include('memories.urls')),
     path('blog/', include('blog.urls')),
+    path('review/', include('review.urls')),
     path('previous-year-question-paper/', include('question_papers.urls')),
 ]+ debug_toolbar_urls()
 handler404 = 'base.views.custom_404'

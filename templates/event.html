@@ -245,6 +245,27 @@
             
             <!-- Right Column - Registration & Details -->
             <div class="space-y-6 ">
+
+                    <!-- Poll Participation Card -->
+                    {% if event.polls.all %}
+                    <div class="bg-white rounded-xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl">
+                        <div class="bg-gradient-to-r from-yellow-500 to-pink-500 p-6 text-white">
+                            <h3 class="text-xl font-bold mb-1">Take a Quick Poll</h3>
+                            <p class="text-yellow-100 text-sm">Your opinion matters!</p>
+                        </div>
+                    
+                        <div class="p-6">
+                            <a href="{% url "poll" event.slug %}" 
+                               class="block text-center w-full bg-gradient-to-r from-yellow-500 to-pink-500 text-white font-semibold py-2 px-4 rounded-lg shadow hover:from-yellow-600 hover:to-pink-600 transition-all">
+                                Join Poll
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+
+ 
+
                 <!-- Registration Card -->
                  
                 <div class="bg-white rounded-xl shadow-xl overflow-hidden sticky top-[100px] transition-all duration-300 hover:shadow-2xl">
@@ -263,61 +284,66 @@
                             {% endfor %}
                         </div>
                         {% endif %}
-                        
-                        <!-- Pricing -->
-                        <div class="mb-6">
-                            {% if event.price > 0 %}
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-gray-600">Standard Ticket</span>
-                                <span class="font-bold text-gray-800">${{ event.price|floatformat:2 }}</span>
-                            </div>
-                            {% if event.early_bird_price %}
-                            <div class="flex justify-between items-center text-sm text-green-600 mb-2">
-                                <span>Early Bird (Limited)</span>
-                                <span class="font-bold">${{ event.early_bird_price|floatformat:2 }}</span>
-                            </div>
-                            {% endif %}
-                            {% if event.vip_price %}
-                            <div class="flex justify-between items-center text-sm text-purple-600">
-                                <span>VIP Experience</span>
-                                <span class="font-bold">${{ event.vip_price|floatformat:2 }}</span>
-                            </div>
-                            {% endif %}
+                       
+                        {% if registered %}
+                            <div class="p-3 rounded-lg bg-green-100 text-green-800 my-5">You are Alredy Registered!</div>
                             {% else %}
-                            <div class="text-center py-4 bg-green-50 rounded-lg">
-                                <span class="font-bold text-green-700">FREE REGISTER</span>
+                            <div class="mb-6">
+                                {% if event.price > 0 %}
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-gray-600">Standard Ticket</span>
+                                    <span class="font-bold text-gray-800">${{ event.price|floatformat:2 }}</span>
+                                </div>
+                                {% if event.early_bird_price %}
+                                <div class="flex justify-between items-center text-sm text-green-600 mb-2">
+                                    <span>Early Bird (Limited)</span>
+                                    <span class="font-bold">${{ event.early_bird_price|floatformat:2 }}</span>
+                                </div>
+                                {% endif %}
+                                {% if event.vip_price %}
+                                <div class="flex justify-between items-center text-sm text-purple-600">
+                                    <span>VIP Experience</span>
+                                    <span class="font-bold">${{ event.vip_price|floatformat:2 }}</span>
+                                </div>
+                                {% endif %}
+                                {% else %}
+                                <div class="text-center py-4 bg-green-50 rounded-lg">
+                                    <span class="font-bold text-green-700">FREE REGISTER</span>
+                                </div>
+                                {% endif %}
                             </div>
-                            {% endif %}
-                        </div>
-                        
-                        <!-- Registration CTA -->
-                        <div class="text-center">
-                            {% if not event.event_over %}
-                                {% if event.registration_open %}
-                                    <a href="{% url 'eventregister' event.slug %}" 
-                                        class="block w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300 mb-3">
-                                        Register Now
-                                    </a>
-                                    {% if event.price > 0 %}
-                                    <p class="text-xs text-gray-500">Secure payment processing</p>
+                            <!-- Registration CTA -->
+                            <div class="text-center">
+                                {% if not event.event_over %}
+                                    {% if event.registration_open %}
+                                        <a href="{% url 'eventregister' event.slug %}" 
+                                            class="block w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300 mb-3">
+                                            Register Now
+                                        </a>
+                                        {% if event.price > 0 %}
+                                        <p class="text-xs text-gray-500">Secure payment processing</p>
+                                        {% endif %}
+                                    {% else %}
+                                        <button class="block w-full bg-gray-300 text-gray-700 font-bold py-3 px-6 rounded-lg shadow cursor-not-allowed mb-3" disabled>
+                                            Registration Closed
+                                        </button>
+                                        <p class="text-xs text-gray-500">Contact organizer for availability</p>
                                     {% endif %}
                                 {% else %}
                                     <button class="block w-full bg-gray-300 text-gray-700 font-bold py-3 px-6 rounded-lg shadow cursor-not-allowed mb-3" disabled>
-                                        Registration Closed
+                                        Event Concluded
                                     </button>
-                                    <p class="text-xs text-gray-500">Contact organizer for availability</p>
+                                    {% if event.certification_available %}
+                                    <a href="#" class="text-indigo-600 text-sm font-medium hover:underline">
+                                        Request Certificate <i class="fas fa-arrow-right ml-1"></i>
+                                    </a>
+                                    {% endif %}
                                 {% endif %}
-                            {% else %}
-                                <button class="block w-full bg-gray-300 text-gray-700 font-bold py-3 px-6 rounded-lg shadow cursor-not-allowed mb-3" disabled>
-                                    Event Concluded
-                                </button>
-                                {% if event.certification_available %}
-                                <a href="#" class="text-indigo-600 text-sm font-medium hover:underline">
-                                    Request Certificate <i class="fas fa-arrow-right ml-1"></i>
-                                </a>
-                                {% endif %}
-                            {% endif %}
-                        </div>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Pricing -->
+                        
                     </div>
                     
                     <!-- Additional Info -->
@@ -354,7 +380,8 @@
                         </div>
                     </div>
                 </div>
-                
+
+               
             </div>
 
                 
@@ -370,5 +397,25 @@
     </a>
     {% endif %}
 </div>
+
+<script>
+{% if messages %}
+{% for message in messages %}
+  Swal.fire({
+    toast: true, // Make it a toast notification
+    position: 'top-end',
+    icon: '{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}',
+    title: "{{ message|escapejs }}", // Escape JS characters in message
+    showConfirmButton: false,
+    timer: 3500, // Show for 3.5 seconds
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  });
+{% endfor %}
+{% endif %}
+</script>
 
 {% endblock content %}

@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'blog',
     'question_papers',
     'badge',
+    'review',
 ]
 
 

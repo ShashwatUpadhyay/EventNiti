@@ -37,7 +37,6 @@ def event(request, slug):
         return redirect('home')
     registered = False
     if models.EventSubmission.objects.filter(user=request.user, event=event).exists():
-        messages.error(request, "You are Alredy Registered")
         registered = True
     return render(request, 'event.html',{'event':event,'registered':registered})
 
