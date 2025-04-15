@@ -1,0 +1,114 @@
+{% extends "index.html" %}
+{% block title %}
+{{ event.title }} Event | Prerogatory Pointers United University
+{% endblock title %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 py-10 px-4 sm:px-6 lg:px-12 pt-[100px]">
+
+  <div class="max-w-7xl mx-auto space-y-10">
+
+    <!-- 🧊 Sexy Glassmorphic Header -->
+    <div class="relative rounded-3xl border border-white/30 bg-white/20 backdrop-blur-lg shadow-2xl p-8 text-center animate-fade-in">
+      <h1 class="text-5xl font-extrabold text-indigo-800 drop-shadow-xl tracking-tight flex justify-center items-center gap-2">
+        🗳️ {{ event.title }}
+      </h1>
+      <p class="text-md text-gray-700 mt-2 italic">Poll Results Overview</p>
+    </div>
+
+    <!-- 📊 Polls Grid -->
+    <div class="flex flex-wrap gap-10 justify-center">
+      {% for poll_data in polls_with_votes %}
+        {% with poll=poll_data.poll options=poll_data.options total_votes=poll_data.total_votes %}
+
+        <!-- 🔮 Poll Card -->
+        <div class="bg-white rounded-xl shadow-2xl p-6 w-full sm:w-[45%] lg:w-[30%] hover:scale-[1.015] transition-all duration-300 ease-in-out group">
+
+          <!-- Question -->
+          <div class="text-center mb-4">
+            <h2 class="text-xl font-bold text-indigo-700 group-hover:text-purple-600 transition">{{ poll.question }}</h2>
+            <p class="text-xs text-gray-500">Total Votes: {{ total_votes }}</p>
+          </div>
+
+          <!-- Poll Bars -->
+          <div class="space-y-3">
+            {% for option in options %}
+            <div>
+              <div class="flex justify-between text-sm font-medium text-gray-600 mb-1">
+                <span>🗳️ {{ option.option }}</span>
+                <a href='{% url "voters" option.uid %}'><span>{{ option.votes }} votes</span></a>
+              </div>
+              <div class="w-full bg-gray-300 h-4 rounded-full overflow-hidden">
+                <div class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 h-full text-white text-xs text-center rounded-full animate-pulse"
+                     style="width: {% widthratio option.votes total_votes 100 %}%; transition: width 0.8s ease-out;">
+                  {% widthratio option.votes total_votes 100 %}%
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+
+          <!-- Chart -->
+          <div class="mt-6 bg-gray-50  p-4 shadow-inner">
+            <canvas id="chart-{{ forloop.counter }}"></canvas>
+          </div>
+
+          <!-- Chart Script -->
+          <script>
+            const ctx{{ forloop.counter }} = document.getElementById('chart-{{ forloop.counter }}').getContext('2d');
+            new Chart(ctx{{ forloop.counter }}, {
+              type: 'doughnut',
+              data: {
+                labels: [{% for option in options %}"{{ option.option }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+                datasets: [{
+                  data: [{% for option in options %}{{ option.votes }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+                  backgroundColor: [
+                    '#6366f1', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981',
+                    '#ef4444', '#0ea5e9', '#14b8a6', '#a855f7'
+                  ],
+                  borderColor: '#fff',
+                  borderWidth: 2
+                }]
+              },
+              options: {
+                plugins: {
+                  legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                      color: '#4b5563',
+                      font: { size: 12 }
+                    }
+                  }
+                },
+                animation: { animateScale: true }
+              }
+            });
+          </script>
+
+        </div>
+        {% endwith %}
+      {% endfor %}
+    </div>
+
+    <!-- 🔙 Back Button -->
+    <div class="text-center mt-12">
+        {% if is_cordinator or is_host %}
+        <a href="{% url 'teacherEvent' event.slug %}"
+           class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl shadow-md text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transition-all duration-300">
+          ⬅ Back to Event
+        </a>
+        {% else %}
+        <a href="{% url 'event' event.slug %}"
+           class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl shadow-md text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transition-all duration-300">
+          ⬅ Back to Event
+        </a>
+        {% endif %}
+
+    </div>
+
+  </div>
+</div>
+{% endblock content %}

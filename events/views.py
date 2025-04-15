@@ -24,7 +24,13 @@ def is_cordinator(request,event):
 def is_event_host(request,event): 
     return event.organized_by == request.user
     
-    
+def registered_in_event(request,event):
+    submissions = event.participant.all
+    for user in submissions:
+        if submissions.user == request.user:
+            return True
+    return False
+
 def events(request):
     event = models.Event.objects.filter(event_open=True,event_over = False).order_by('start_date').order_by('-registration_open')
     return render(request, 'events.html',{'event':event})

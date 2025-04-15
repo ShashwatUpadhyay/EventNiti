@@ -1,6 +1,6 @@
 {% extends "index.html" %}
 {% block title %}
-Exclusive Access | {{ ticket.event.title }} | Prerogatory Pointers United University
+Exclusive Access | {{ ticket.event.title }} | {{ company_name }}
 {% endblock title %}
 
 {% block content %}
@@ -352,7 +352,7 @@ Exclusive Access | {{ ticket.event.title }} | Prerogatory Pointers United Univer
 
         <div class="footer-section text-center border-t border-white/20 pt-4 fade-in-up" style="animation-delay: 0.4s;">
             <p class="text-xs text-indigo-200 mb-1">
-              Powered by <span class="font-semibold">Prerogatory Pointers United University Event Systems</span>
+              Powered by <span class="font-semibold">{{ company_name }} Event Systems</span>
             </p>
             <p class="text-xs text-indigo-200">
               Verify authenticity: <span class="verification-link text-indigo-50">eventpass.ppuu.edu/{{ ticket.uid|slice:":8" }}</span>

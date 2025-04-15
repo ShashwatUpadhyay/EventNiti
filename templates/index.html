@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}
-        Prerogatory Pointers United University
+        {{ company_name }}
         {% endblock title %}</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -16,7 +16,7 @@
         <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
         <style src="{% static 'css/styles.css' %}"></style>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <link rel="shortcut icon" href="{% static 'images/pplogo.png' %}">
+        <link rel="shortcut icon" href="{% static 'images/logoo.png' %}">
         <script>
             {% comment %} document.addEventListener("contextmenu", (event) => event.preventDefault());
             document.addEventListener("contextmenu", (event) => event.preventDefault());

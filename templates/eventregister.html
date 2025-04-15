@@ -1,7 +1,7 @@
 {% extends "index.html" %}
 
 {% block title %}
-Event Registration | Prerogatory Pointers United University
+Event Registration | {{ company_name }}
 {% endblock title %}
 
 {% block content %}
@@ -337,7 +337,7 @@ Event Registration | Prerogatory Pointers United University
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
                     <h3 class="text-lg font-semibold mb-4">EventHub</h3>
-                    <p class="text-gray-400">Prerogatory Pointers United University's official event management platform.</p>
+                    <p class="text-gray-400">{{ company_name }} official event management platform.</p>
                 </div>
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
@@ -384,7 +384,7 @@ Event Registration | Prerogatory Pointers United University
                 </div>
             </div>
             <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; 2023 Prerogatory Pointers United University. All rights reserved.</p>
+                <p>&copy; 2023 {{ company_name }}. All rights reserved.</p>
             </div>
         </div>
     </footer>

@@ -34,7 +34,7 @@
                     {% else %}
                     {% for option in poll.options.all %}
                     <label class="flex items-center">
-                        <input type="radio" name="{{poll.uid}}" value="{{option.uid}}" class="mr-2"> {{option.option}} - {{option.votes}}
+                        <input type="radio" name="{{poll.uid}}" value="{{option.uid}}" class="mr-2"> {{option.option}}
                     </label>
                     {% endfor %}
                     {% endif %}

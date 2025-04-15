@@ -55,7 +55,7 @@ class Event(models.Model):
 class EventSubmission(models.Model):
     choice = (('Present', 'Present'), ('Absent', 'Absent'))
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='participant')
     uu_id = models.CharField(max_length=50)
     full_name = models.CharField(max_length=50)
     email = models.CharField(max_length=50)
