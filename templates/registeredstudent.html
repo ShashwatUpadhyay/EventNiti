@@ -73,9 +73,9 @@ Registered Students
 
         <!-- Download Button -->
         <div class="mt-10 flex justify-center">
-            <button id="download-btn" class="bg-indigo-700 hover:bg-indigo-800 text-white font-bold py-3 px-8 rounded-lg shadow transition-transform transform hover:scale-105">
+            <a href='{% url "registeredStudentListCSV" event.slug %}' class="bg-indigo-700 hover:bg-indigo-800 text-white font-bold py-3 px-8 rounded-lg shadow transition-transform transform hover:scale-105">
                 📥 Download Current Status
-            </button>
+            </a>
         </div>
     </div>
 </div>

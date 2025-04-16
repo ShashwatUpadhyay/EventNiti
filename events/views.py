@@ -12,6 +12,7 @@ from ppuu import settings
 from django.http import JsonResponse
 from datetime import datetime
 import pytz
+import csv
 
 india_timezone = pytz.timezone('Asia/Kolkata')
 
@@ -158,6 +159,35 @@ def registeredStudentList(request, slug):
     if is_cordinator(request,event) or request.user.is_staff or is_event_host(request,event):
         return render(request , 'registeredstudent.html', {'students':students, 'event' : event}) 
     return redirect('events')
+
+@login_required(login_url='login')
+def registeredStudentListCSV(request, slug):    
+    students = models.EventSubmission.objects.filter(event__slug=slug).order_by('full_name')
+    event = get_object_or_404(models.Event , slug=slug)
+    # if not is_cordinator(request,event) or not request.user.is_staff or not is_event_host(request,event):
+    #     return redirect('event',slug) 
+    
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="{event.slug}_{datetime.now(india_timezone)}.csv"'
+    
+    writer = csv.writer(response)
+    
+    writer.writerow(['Name', 'UUID', 'Course', 'Section', 'Year', 'Attendence','Attendence Taken By'])
+    # products = Product.objects.all()
+    for student in students:
+        writer.writerow([
+            student.user.get_full_name(),
+            student.user.user_extra.uu_id,
+            student.user.user_extra.course,
+            student.user.user_extra.section,
+            student.user.user_extra.year,
+            student.attendence,
+            student.attendence_taken_by,
+        ])
+    
+    return response
+    
+    # return redirect('events')
 
 @login_required(login_url='login')
 def registeredStudentListAjax(request, slug):
