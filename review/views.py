@@ -122,3 +122,7 @@ def delete_answer(request,uid):
     answer.delete()
     messages.success(request, "Response has been deleted!")
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def event_reviews(request,slug):
+    event= get_object_or_404(Event,slug=slug)
+    return render(request,'events/event_reviews.html',{'event':event})

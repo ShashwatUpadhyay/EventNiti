@@ -9,6 +9,7 @@ class PollQuestionAdmin(admin.ModelAdmin):
     list_display = ['question']
     inlines = [PollOptionAdmin]
 
+admin.site.register(EventReview)
 admin.site.register(PollQuestion,PollQuestionAdmin)
 admin.site.register(PollOption)
 admin.site.register(PollResponse)

@@ -10,4 +10,5 @@ urlpatterns = [
     path('poll/voters/<uid>/', views.voter_list_view , name='voters'),
     path('qna/delete_question/<uid>/', views.delete_question , name='delete_question'),
     path('qna/delete_answer/<uid>/', views.delete_answer , name='delete_answer'),
+    path('event/reviews/<slug>/', views.event_reviews , name='event_reviews'),
 ]

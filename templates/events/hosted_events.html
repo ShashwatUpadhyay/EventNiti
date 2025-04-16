@@ -37,6 +37,9 @@
                                 <span>📅 {{ event.start_date }}</span>
                             </div>
                             <a href='{% url "teacherEvent" event.slug %}' class="inline-block mt-5 text-indigo-600 hover:underline text-sm font-medium">View Details →</a>
+                            {% if event.event_over %}
+                                <a href='{% url "event_reviews" event.slug %}' class="inline-block mt-5 text-indigo-600 hover:underline text-sm font-medium">Reviews →</a>
+                            {% endif %}
                         </div>
                     </div>
                 {% endfor %}

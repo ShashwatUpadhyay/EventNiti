@@ -4,6 +4,8 @@ from events.models import Event
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
+from django.core.validators import MinValueValidator, MaxValueValidator
+
 # Create your models here.
 class PollQuestion(models.Model):
     uid = models.CharField(max_length=100, default=uuid.uuid4)
@@ -61,10 +63,17 @@ def poll_responce_deleted(sender, instance, **kwargs):
     instance.option.save()
     
 
-# class EventReview(models.Model):
-#     uid = models.CharField(max_length=100, default=uuid.uuid4)
-#     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='questions')
-#     user= models.ForeignKey(User,on_delete=models.CASCADE)
-#     created_at = models.DateTimeField(auto_now_add=True)
+class EventReview(models.Model):
+    uid = models.CharField(max_length=100, default=uuid.uuid4)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='reviews')
+    user= models.ForeignKey(User,on_delete=models.CASCADE)
+    rating = models.PositiveSmallIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(5)])
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
     
-    
+    class Meta:
+        unique_together = ('event', 'user')  
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'{self.user.get_full_name()} - {self.rating}★ for {self.event.title}'

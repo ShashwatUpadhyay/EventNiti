@@ -22,3 +22,7 @@ def is_coordinator(event,user):
 @register.filter
 def registered(event,user):
     return EventSubmission.objects.filter(event=event,user=user).exists()
+
+@register.filter
+def times(number):
+    return range(int(number))
