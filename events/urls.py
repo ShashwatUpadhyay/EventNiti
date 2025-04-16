@@ -18,5 +18,5 @@ urlpatterns = [
     path('coordinator/my_coordinated_events/', views.my_coordinated_events, name = 'my_coordinated_events'),
     path('host/my_hosted_events/', views.my_hosted_events, name = 'my_hosted_events'),
     path('live/polling_qna/', views.live_polling_qna, name = 'live_polling_qna'),
-    path('auth-view/<slug>/registrations/csv/', views.registeredStudentListCSV, name = 'registeredStudentListCSV'),
+    path('auth-view/<slug>/registrations/csv/', views.registeredStudentListExcel, name = 'registeredStudentListCSV'),
 ]

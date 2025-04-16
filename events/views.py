@@ -13,6 +13,9 @@ from django.http import JsonResponse
 from datetime import datetime
 import pytz
 import csv
+from openpyxl import Workbook
+from openpyxl.styles import PatternFill
+import io
 
 india_timezone = pytz.timezone('Asia/Kolkata')
 
@@ -161,21 +164,27 @@ def registeredStudentList(request, slug):
     return redirect('events')
 
 @login_required(login_url='login')
-def registeredStudentListCSV(request, slug):    
+def registeredStudentListExcel(request, slug):
+    india_timezone = pytz.timezone("Asia/Kolkata")
     students = models.EventSubmission.objects.filter(event__slug=slug).order_by('full_name')
-    event = get_object_or_404(models.Event , slug=slug)
-    # if not is_cordinator(request,event) or not request.user.is_staff or not is_event_host(request,event):
-    #     return redirect('event',slug) 
-    
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = f'attachment; filename="{event.slug}_{datetime.now(india_timezone)}.csv"'
-    
-    writer = csv.writer(response)
-    
-    writer.writerow(['Name', 'UUID', 'Course', 'Section', 'Year', 'Attendence','Attendence Taken By'])
-    # products = Product.objects.all()
+    event = get_object_or_404(models.Event, slug=slug)
+
+    # Workbook setup
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Attendance"
+
+    # Header row
+    headers = ['Name', 'UUID', 'Course', 'Section', 'Year', 'Attendance', 'Attendance Taken By']
+    ws.append(headers)
+
+    # Color fills
+    green_fill = PatternFill(start_color="FFC6EFCE", end_color="FFC6EFCE", fill_type="solid")  # Present
+    red_fill = PatternFill(start_color="FFCC0000", end_color="FFCC0000", fill_type="solid")    # Absent
+
+    # Write student data
     for student in students:
-        writer.writerow([
+        row_data = [
             student.user.get_full_name(),
             student.user.user_extra.uu_id,
             student.user.user_extra.course,
@@ -183,8 +192,30 @@ def registeredStudentListCSV(request, slug):
             student.user.user_extra.year,
             student.attendence,
             student.attendence_taken_by,
-        ])
-    
+        ]
+        ws.append(row_data)
+
+        # Get the last row index
+        current_row = ws.max_row
+        print(current_row)
+        # Apply color to "Attendance" column (index 6, Excel is 1-based)
+        attendance_cell = ws.cell(row=current_row, column=6)
+        print(attendance_cell)
+        if str(student.attendence).strip().lower() == 'present':
+            attendance_cell.fill = green_fill
+        elif str(student.attendence).strip().lower() == 'absent':
+            attendance_cell.fill = red_fill
+
+    # Save to memory stream instead of file
+    output = io.BytesIO()
+    wb.save(output)
+    output.seek(0)
+
+    # Response as XLSX
+    response = HttpResponse(output.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    filename = f'{event.slug}_{datetime.now(india_timezone).strftime("%Y-%m-%d_%H-%M-%S")}.xlsx'
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
     return response
     
     # return redirect('events')
