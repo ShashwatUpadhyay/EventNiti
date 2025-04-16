@@ -5,14 +5,15 @@
 <div class="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 py-16 px-4 sm:px-6 lg:px-12 flex justify-center items-start pt-[100px]">
 
   <div class="bg-white/30 backdrop-blur-md border border-white/20 shadow-2xl rounded-3xl p-10 max-w-2xl w-full space-y-8 animate-fade-in">
-
+    
     <!-- Heading -->
     <div class="text-center">
       <h1 class="text-4xl font-bold text-indigo-800 tracking-tight">📝 Create New Poll</h1>
       <p class="text-sm text-gray-700 mt-2">Craft your question and list the options below.</p>
     </div>
-
+    
     <!-- Poll Form -->
+    {% include 'task/back_button.html' %}
     <form method="POST" action="{% url 'create_poll' event.slug %}" class="space-y-6">
       {% csrf_token %}
 

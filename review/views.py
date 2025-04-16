@@ -4,6 +4,7 @@ from . import models
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from events.views import is_event_host, is_cordinator
+from django.http import HttpResponseRedirect
 
 # Create your views here.
 @login_required(login_url='login')
@@ -107,3 +108,15 @@ def qna_section(request,slug):
         'questions':questions
     }
     return render(request,'review/qnas.html',context)
+
+@login_required(login_url='login')
+def delete_question(request,uid):
+    question = get_object_or_404(models.QnaQuestion, uid=uid)
+    question.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    
+@login_required(login_url='login')
+def delete_answer(request,uid):
+    answer = get_object_or_404(models.QnaAnswer, uid=uid)
+    answer.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

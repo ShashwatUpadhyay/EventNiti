@@ -8,4 +8,6 @@ urlpatterns = [
     path('poll/poll_result/<slug>/', views.poll_result , name='poll_result'),
     path('poll/create/<slug>/', views.create_poll , name='create_poll'),
     path('poll/voters/<uid>/', views.voter_list_view , name='voters'),
+    path('qna/delete_question/<uid>/', views.delete_question , name='delete_question'),
+    path('qna/delete_answer/<uid>/', views.delete_answer , name='delete_answer'),
 ]
