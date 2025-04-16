@@ -5,7 +5,9 @@
 
 {% block content %}
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 font-sans py-12 animate-gradient pt-[100px]">
+    
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        {% include 'task/back_button.html' %}
 
         <!-- Hero Section -->
         <div class="relative overflow-hidden rounded-2xl shadow-2xl mb-12">
@@ -255,6 +257,13 @@
                         Back to Events
                     </a>
                     
+                    <a href="{% url 'qna_section' event.slug %}" 
+                        class="max-w-full m-1 flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-emerald-500 hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400 shadow-md transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.77 9.77 0 01-4.39-1.02L3 21l1.58-3.61A8.97 8.97 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                            </svg>
+                            QNA
+                        </a>
                     {% if event.polls.all %}
                             <a href="{% url "poll_result" event.slug %}" 
                                 class="max-w-full m-1 flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 shadow-md transition-all">

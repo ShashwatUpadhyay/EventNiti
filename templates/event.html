@@ -7,6 +7,7 @@
 {% block content %}
 
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 pt-20">
+    
     <!-- Animated Header -->
     <header class="relative overflow-hidden bg-gradient-to-r from-indigo-600 to-purple-600 py-12 shadow-xl">
         <div class="absolute inset-0 bg-gradient-to-r from-indigo-700/20 to-purple-700/20 animate-pulse"></div>
@@ -30,9 +31,10 @@
         </div>
         <div class="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500"></div>
     </header>
-
+    
     <!-- Main Content -->
     <main class="container mx-auto px-6 py-12 -mt-8 relative z-20">
+        {% include 'task/back_button.html' %}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Left Column - Event Details -->
             <div class="lg:col-span-2 space-y-8">
@@ -266,7 +268,13 @@
                     {% endif %}
 
  
-
+                    <a href="{% url 'qna_section' event.slug %}" 
+                    class="max-w-full m-1 flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-emerald-500 hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400 shadow-md transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.77 9.77 0 01-4.39-1.02L3 21l1.58-3.61A8.97 8.97 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                        QNA
+                    </a>
                 <!-- Registration Card -->
                  
                 <div class="bg-white rounded-xl shadow-xl overflow-hidden sticky top-[100px] transition-all duration-300 hover:shadow-2xl">
@@ -381,8 +389,6 @@
                         </div>
                     </div>
                 </div>
-
-               
             </div>
 
                 

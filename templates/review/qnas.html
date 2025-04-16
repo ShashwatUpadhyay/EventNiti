@@ -1,0 +1,194 @@
+{% extends "index.html" %}
+{% block title %}
+{{ event.title }} Q&A | {{ company_name }}
+{% endblock title %}
+
+{% block content %}
+{% load review_tag %}
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-12 px-4 sm:px-6 lg:px-8 pt-[100px]">
+    
+    <!-- Page Header -->
+    <div class="max-w-4xl mx-auto text-center mb-12">
+        {% include 'task/back_button.html' %}
+        <h1 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+            <span class="block">Event Q&A</span>
+            <span class="block text-blue-600">{{ event.title }}</span>
+        </h1>
+        <p class="mt-3 text-xl text-gray-500">
+            Have questions? Get answers from the organizers and community.
+        </p>
+    </div>
+    <!-- Main Q&A Container -->
+    <div class="max-w-4xl mx-auto space-y-6">
+        <!-- Question Card 1 -->
+        {% if questions %}
+         {% for question in questions %}
+        <div class="bg-white shadow-xl rounded-xl overflow-hidden transition-all duration-300 hover:shadow-2xl">
+            <div class="p-6 sm:p-8">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 mr-4">
+                        <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v1.2c0 .7.5 1.2 1.2 1.2h16.8c.7 0 1.2-.5 1.2-1.2v-1.2c0-3.2-6.4-4.8-9.6-4.8z"/>
+                              </svg>
+                              
+                        </div>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline">
+                            <p class="text-lg font-semibold text-gray-900">{{question.user.get_full_name}}</p>
+                            <p class="text-sm text-gray-500 mt-1 sm:mt-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                {{question.created_at|timesince}} ago
+                            </p>
+                        </div>
+                        <div class="mt-2 text-gray-700">
+                            <p> {{question.question}}</p>
+                        </div>
+                        
+                       <!-- Answer Section -->
+                    {% if question.answers.all %}
+                        {% for answer in question.answers.all %}
+                            <div id="answer-display-1" class="mt-6">
+                                <div class="pl-4 border-l-4 border-blue-200">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 mr-3">
+                                            <div class="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center text-green-700 text-sm font-bold">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v1.2c0 .7.5 1.2 1.2 1.2h16.8c.7 0 1.2-.5 1.2-1.2v-1.2c0-3.2-6.4-4.8-9.6-4.8z"/>
+                                                  </svg>
+                                                  
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-semibold text-gray-900">{{answer.user.get_full_name|default:'Coordinator'}}</p>
+                                            <p class="text-xs text-gray-500">{{answer.answer}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3 text-gray-700 pl-11">
+                                        <p>{{ question.answer.answer }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                    {% endif %}
+                        {% if event|is_host:request.user or event|is_coordinator:request.user %}
+                        <!-- Reply Button -->
+                        <div class="mt-6">
+                            <button onclick="toggleAnswerBox('{{question.uid}}')" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-105">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                                </svg>
+                                Reply
+                            </button>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Answer Input Box -->
+                <div id="answer-box-{{question.uid}}" class="mt-6 hidden">
+                    <form method='POST'>
+                        {% csrf_token %}
+                    <div class="pl-4 border-l-4 border-blue-200">
+                        <label for="answer-input-1" class="block text-sm font-medium text-gray-700 mb-2">Your Response</label>
+                        <textarea id="answer-input-1" name='{{question.uid}}' rows="4" class="w-full px-3 py-2 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150" placeholder="Write your answer here..."></textarea>
+                        <div class="mt-4 flex justify-end space-x-3">
+                            <button onclick="toggleAnswerBox('{{question.uid}}')" class="px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                Cancel
+                            </button>
+                            <button type='submit' class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200 transform hover:scale-105">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Submit Answer
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="max-w-4xl mx-auto">
+            <div class="flex flex-col items-center justify-center text-center p-8 bg-white rounded-xl shadow-md border border-gray-200">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 9.75h.008v.008H9.75V9.75zm4.5 0h.008v.008h-.008V9.75zm-2.25 6a6 6 0 110-12 6 6 0 010 12zm0 1.5c-2.485 0-7.5 1.243-7.5 3.75V21h15v-.75c0-2.507-5.015-3.75-7.5-3.75z" />
+              </svg>
+              <h2 class="text-lg font-semibold text-gray-800">No Questions Yet</h2>
+              <p class="text-sm text-gray-500 mt-1">Questions will appear here once someone asks. Stay tuned!</p>
+            </div>
+          </div>
+        {% endif %}
+         
+        {% if event|registered:request.user %}
+        <!-- Add Question Form -->
+        <div class="bg-white shadow-xl rounded-xl overflow-hidden">
+            <div class="p-6 sm:p-8">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Ask a Question</h3>
+                <form method='POST'>
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label for="new-question" class="block text-sm font-medium text-gray-700 mb-2">Your Question</label>
+                        <textarea id="new-question" name='question' rows="3" class="w-full px-3 py-2 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150" placeholder="Type your question here..."></textarea>
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="submit"  class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-105">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                            </svg>
+                            Post Question
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    function toggleAnswerBox(id) {
+        const answerBox = document.getElementById(`answer-box-${id}`);
+        answerBox.classList.toggle('hidden');
+        
+        // Close if there's already an answer
+        const answerDisplay = document.getElementById(`answer-display-${id}`);
+        if (!answerDisplay.classList.contains('hidden')) {
+            answerDisplay.classList.add('hidden');
+        }
+    }
+
+</script>
+
+<style>
+    /* Smooth transitions for all interactive elements */
+    button, textarea, input {
+        transition: all 0.2s ease-in-out;
+    }
+    
+    /* Custom scrollbar for textareas */
+    textarea {
+        scrollbar-width: thin;
+        scrollbar-color: #3b82f6 #e5e7eb;
+    }
+    
+    textarea::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    textarea::-webkit-scrollbar-track {
+        background: #e5e7eb;
+        border-radius: 4px;
+    }
+    
+    textarea::-webkit-scrollbar-thumb {
+        background-color: #3b82f6;
+        border-radius: 4px;
+    }
+</style>
+{% endblock content %}

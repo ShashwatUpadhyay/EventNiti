@@ -35,8 +35,9 @@ class PollResponse(models.Model):
     
 class QnaQuestion(models.Model):
     uid = models.CharField(max_length=100, default=uuid.uuid4)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='questions')
     question = models.TextField()
-    user= models.ForeignKey(User,on_delete=models.CASCADE)
+    user= models.ForeignKey(User,on_delete=models.CASCADE,related_name='questions')
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
@@ -44,7 +45,7 @@ class QnaQuestion(models.Model):
     
 class QnaAnswer(models.Model):
     uid = models.CharField(max_length=100, default=uuid.uuid4)
-    question = models.ForeignKey(QnaQuestion,on_delete=models.CASCADE)
+    question = models.ForeignKey(QnaQuestion,on_delete=models.CASCADE, related_name='answers')
     answer = models.TextField()
     user= models.ForeignKey(User,on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)

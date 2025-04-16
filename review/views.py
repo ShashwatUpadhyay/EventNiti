@@ -31,7 +31,7 @@ def poll(request,slug):
 @login_required(login_url='login')
 def poll_result(request,slug):
     event = get_object_or_404(Event,slug=slug)
-    polls = models.PollQuestion.objects.filter(event=event).order_by('created_at')
+    polls = models.PollQuestion.objects.filter(event=event).order_by('-created_at')
     
     
     polls_with_votes = []
@@ -80,5 +80,30 @@ def voter_list_view(request ,uid):
     return render(request, 'review/voters_list.html', {'voters': voters,'option':option})
 
 
-def qna(request):
+def qna(request,slug):
     return render(request,'review/qna.html')
+
+@login_required(login_url='login')
+def qna_section(request,slug):
+    event = get_object_or_404(Event,slug=slug)
+    questions = models.QnaQuestion.objects.filter(event=event).order_by('-created_at')
+    
+    if request.method == 'POST':
+        question = request.POST.get('question')
+        
+        if question:
+            models.QnaQuestion.objects.create(user=request.user,question=question,event=event)
+        
+        for question in questions:
+            answer = request.POST.get(question.uid)
+            if answer:
+                models.QnaAnswer.objects.create(answer=answer,question=question,user=request.user)
+
+        return redirect('qna_section', slug)
+    
+    
+    context = {
+        'event':event,
+        'questions':questions
+    }
+    return render(request,'review/qnas.html',context)

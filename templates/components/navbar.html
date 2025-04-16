@@ -89,12 +89,12 @@
                                 </svg>
                                 Blogs
                             </a>
-                            <a href="{% url 'paperHome' %}" class="flex items-center px-4 py-3 text-gray-700 hover:bg-indigo-50 transition-all duration-200">
+                            {% comment %} <a href="{% url 'paperHome' %}" class="flex items-center px-4 py-3 text-gray-700 hover:bg-indigo-50 transition-all duration-200">
                                 <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                 </svg>
                                 Question Papers
-                            </a>
+                            </a> {% endcomment %}
                         </div>
                     </div>
                 </div>
@@ -150,9 +150,11 @@
                             {% endif %}
                             
                             {% if user.cordinator.all %}
-                                <a href="{% url 'my_coordinated_events' %}" class="flex items-center px-4 py-3 text-gray-700 hover:bg-indigo-100 transition-all duration-200 rounded-md">                                    <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3a1.75 1.75 0 00-1.75 1.75V6H6a1.75 1.75 0 000 3.5h2v1H6a1.75 1.75 0 000 3.5h2v1H6a1.75 1.75 0 000 3.5h2v1.25A1.75 1.75 0 009.75 21h4.5A1.75 1.75 0 0016 19.25V18h2a1.75 1.75 0 000-3.5h-2v-1h2a1.75 1.75 0 000-3.5h-2v-1h2a1.75 1.75 0 000-3.5h-2V4.75A1.75 1.75 0 0014.25 3h-4.5z" />
+                                <a href="{% url 'my_coordinated_events' %}" class="flex items-center px-4 py-3 text-gray-700 hover:bg-indigo-100 transition-all duration-200 rounded-md">                                    
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-indigo-600 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M16 11c1.66 0 3-1.34 3-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 3-1.34 3-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5C15 14.17 10.33 13 8 13zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 2.03 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
                                       </svg>
+                                      
                                     <span class="font-medium">Coordinator</span>
                                 </a>
                             {% endif %}
@@ -244,12 +246,12 @@
                 </svg>
                 Blogs
             </a>
-            <a href="{% url 'paperHome' %}" class="flex items-center px-3 py-2 rounded-md text-base font-medium hover:bg-indigo-50 hover:text-indigo-600 transition duration-300">
+            {% comment %} <a href="{% url 'paperHome' %}" class="flex items-center px-3 py-2 rounded-md text-base font-medium hover:bg-indigo-50 hover:text-indigo-600 transition duration-300">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                 </svg>
                 Question Papers
-            </a>
+            </a> {% endcomment %}
             <a href="{% url 'contact' %}" class="flex items-center px-3 py-2 rounded-md text-base font-medium hover:bg-indigo-50 hover:text-indigo-600 transition duration-300">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
