@@ -31,7 +31,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
+COMPANY_NAME = 'Event Niti'
 
 # Application definition
 

@@ -38,7 +38,7 @@
                     <div class="flex-1 min-w-0">
                         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline">
                             <span class="text-lg font-semibold text-gray-900">{{question.user.get_full_name}}
-                               {% if request.user == question.user %}
+                               {% if request.user == question.user or event|is_host:request.user  %}
                                 <span>
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" onclick="confirmDelete('{% url "delete_question" question.uid %}')">
                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6h18M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2M10 11v6m4-6v6M5 6h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2z"/>
@@ -77,7 +77,7 @@
                                             </p>
 
                                             <p class="text-xs text-gray-500">{{answer.answer}}</p>
-                                            {% if request.user == answer.user %}
+                                            {% if request.user == answer.user or event|is_host:request.user %}
                                             <span>
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" onclick="aconfirmDelete('{% url "delete_answer" answer.uid %}')">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6h18M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2M10 11v6m4-6v6M5 6h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2z"/>
@@ -145,7 +145,7 @@
           </div>
         {% endif %}
          
-        {% if event|registered:request.user %}
+        {% if event|registered:request.user or event|is_host:request.user or event|is_coordinator:request.user %}
         <!-- Add Question Form -->
         <div class="bg-white shadow-xl rounded-xl overflow-hidden">
             <div class="p-6 sm:p-8">
@@ -196,11 +196,11 @@
       }).then((result) => {
         if (result.isConfirmed) {
           // Perform the delete action (e.g., send a request to the server)
-          Swal.fire(
-            'Deleted!',
-            'Your file has been deleted.',
-            'success'
-          )
+          //Swal.fire(
+          //  'Deleted!',
+          //  'Your file has been deleted.',
+          //  'success'
+          //)
           window.location.href = url;  
         }
       })
@@ -217,16 +217,28 @@
         cancelButtonText: 'Cancel'
       }).then((result) => {
         if (result.isConfirmed) {
-          // Perform the delete action (e.g., send a request to the server)
-          Swal.fire(
-            'Deleted!',
-            'Your file has been deleted.',
-            'success'
-          )
           window.location.href = url;  
         }
       })
     }
+
+    {% if messages %}
+{% for message in messages %}
+  Swal.fire({
+    toast: true, // Make it a toast notification
+    position: 'top-end',
+    icon: '{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}',
+    title: "{{ message|escapejs }}", // Escape JS characters in message
+    showConfirmButton: false,
+    timer: 3500, // Show for 3.5 seconds
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  });
+{% endfor %}
+{% endif %}
   </script>
 <style>
     /* Smooth transitions for all interactive elements */

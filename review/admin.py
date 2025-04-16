@@ -11,5 +11,6 @@ class PollQuestionAdmin(admin.ModelAdmin):
 
 admin.site.register(PollQuestion,PollQuestionAdmin)
 admin.site.register(PollOption)
+admin.site.register(PollResponse)
 admin.site.register(QnaQuestion)
 admin.site.register(QnaAnswer)

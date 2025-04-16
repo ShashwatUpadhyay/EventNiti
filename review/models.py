@@ -2,6 +2,8 @@ from django.db import models
 import uuid
 from events.models import Event
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
 # Create your models here.
 class PollQuestion(models.Model):
     uid = models.CharField(max_length=100, default=uuid.uuid4)
@@ -52,3 +54,17 @@ class QnaAnswer(models.Model):
 
     def __str__(self):
         return self.answer
+    
+@receiver(post_delete, sender=PollResponse)
+def poll_responce_deleted(sender, instance, **kwargs):
+    instance.option.votes -= 1
+    instance.option.save()
+    
+
+# class EventReview(models.Model):
+#     uid = models.CharField(max_length=100, default=uuid.uuid4)
+#     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='questions')
+#     user= models.ForeignKey(User,on_delete=models.CASCADE)
+#     created_at = models.DateTimeField(auto_now_add=True)
+    
+    

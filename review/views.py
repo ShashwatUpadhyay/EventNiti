@@ -113,10 +113,12 @@ def qna_section(request,slug):
 def delete_question(request,uid):
     question = get_object_or_404(models.QnaQuestion, uid=uid)
     question.delete()
+    messages.success(request, "Question has been deleted!")
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     
 @login_required(login_url='login')
 def delete_answer(request,uid):
     answer = get_object_or_404(models.QnaAnswer, uid=uid)
     answer.delete()
+    messages.success(request, "Response has been deleted!")
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

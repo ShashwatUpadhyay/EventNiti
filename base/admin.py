@@ -1,9 +1,9 @@
 from django.contrib import admin
 from .models import *
-
-admin.site.site_header = "Prerogative Pointers Administration"  
-admin.site.site_title = "Prerogative Pointers Admin Portal"     
-admin.site.index_title = "Welcome to Prerogative Pointers Admin Panel"  
+from ppuu.settings import COMPANY_NAME
+admin.site.site_header = f"{COMPANY_NAME} Administration"  
+admin.site.site_title = f"{COMPANY_NAME} Admin Portal"     
+admin.site.index_title = f"Welcome to {COMPANY_NAME} Admin Panel"  
 
 # Register your models here.
 admin.site.register(Course)
