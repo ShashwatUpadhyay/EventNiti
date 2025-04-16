@@ -294,7 +294,7 @@
       <span class="block mt-2">Event Experiences</span>
     </h1>
     <p class="max-w-3xl mx-auto mb-10 text-lg md:text-xl text-indigo-100" data-aos="fade-up" data-aos-delay="200">
-      EventSphere Pro: The all-in-one platform designed for seamless event management, ticketing, certification, and engagement. Elevate your events from start to finish.
+      {{ company_name }}: The all-in-one platform designed for seamless event management, ticketing, certification, and engagement. Elevate your events from start to finish.
     </p>
     <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4" data-aos="fade-up" data-aos-delay="400">
       <a href="{% url 'events' %}" class="btn btn-primary">
@@ -374,7 +374,7 @@
     <div class="flex flex-col items-center justify-between mb-12 md:flex-row">
       <div class="mb-6 text-center md:text-left md:mb-0" data-aos="fade-right">
         <h2 class="section-title">Upcoming Events</h2>
-        <p class="mt-2 text-lg text-gray-600">Explore exciting opportunities hosted on EventSphere Pro</p>
+        <p class="mt-2 text-lg text-gray-600">Explore exciting opportunities hosted on  {{ company_name }}</p>
       </div>
       <div data-aos="fade-left">
         <a href="{% url 'events' %}" class="btn btn-outline">
@@ -445,7 +445,7 @@
           <div class="flex flex-col items-center justify-center p-10 text-center bg-indigo-50 border border-indigo-100 rounded-xl">
              <svg class="w-12 h-12 mb-4 text-indigo-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
             <h3 class="mb-2 text-xl font-semibold text-indigo-800">No Upcoming Events Found</h3>
-            <p class="text-indigo-600">Keep an eye on this space, or consider hosting your own event with EventSphere Pro!</p>
+            <p class="text-indigo-600">Keep an eye on this space, or consider hosting your own event with  {{ company_name }}!</p>
           </div>
         </div>
       {% endif %}
@@ -524,7 +524,7 @@
   <div class="container px-6 mx-auto">
     <div class="mb-16 text-center" data-aos="fade-up">
       <h2 class="text-4xl font-bold mb-4">Hear From Our Happy Hosts</h2>
-      <p class="text-xl text-indigo-100 max-w-3xl mx-auto">Thousands trust EventSphere Pro to power their most important events.</p>
+      <p class="text-xl text-indigo-100 max-w-3xl mx-auto">Thousands trust  {{ company_name }} to power their most important events.</p>
     </div>
 
     <div class="swiper testimonials-swiper" data-aos="fade-up">
@@ -532,7 +532,7 @@
          <div class="swiper-slide h-auto">
            <div class="testimonial-card h-full">
              <div class="testimonial-content">
-               <p class="mb-6 text-gray-700 italic">"EventSphere Pro transformed our annual conference. The ticketing system was seamless, check-in was a breeze, and the analytics helped us prove ROI to our stakeholders."</p>
+               <p class="mb-6 text-gray-700 italic">" {{ company_name }} transformed our annual conference. The ticketing system was seamless, check-in was a breeze, and the analytics helped us prove ROI to our stakeholders."</p>
                <div class="flex items-center">
                   <img class="w-12 h-12 rounded-full mr-4 object-cover" src="https://randomuser.me/api/portraits/women/68.jpg" alt="Jane Doe">
                  <div>
@@ -560,7 +560,7 @@
          <div class="swiper-slide h-auto">
            <div class="testimonial-card h-full">
               <div class="testimonial-content">
-                 <p class="mb-6 text-gray-700 italic">"As an NGO, efficiency is key. EventSphere Pro provides everything we need in one intuitive platform, from registration to post-event reporting. Highly recommended!"</p>
+                 <p class="mb-6 text-gray-700 italic">"As an NGO, efficiency is key.  {{ company_name }} provides everything we need in one intuitive platform, from registration to post-event reporting. Highly recommended!"</p>
                  <div class="flex items-center">
                     <img class="w-12 h-12 rounded-full mr-4 object-cover" src="https://randomuser.me/api/portraits/women/44.jpg" alt="Maria Johnson">
                     <div>
@@ -618,7 +618,7 @@
 <section class="py-20 bg-indigo-800">
   <div class="container px-6 mx-auto text-center" data-aos="fade-up">
     <h2 class="mb-6 text-3xl font-bold text-white md:text-4xl">Ready to Revolutionize Your Events?</h2>
-    <p class="max-w-2xl mx-auto mb-10 text-lg text-indigo-100 md:text-xl">Join leading organizations creating seamless, engaging, and impactful experiences with EventSphere Pro.</p>
+    <p class="max-w-2xl mx-auto mb-10 text-lg text-indigo-100 md:text-xl">Join leading organizations creating seamless, engaging, and impactful experiences with  {{ company_name }}.</p>
     <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
       <a href="#" class="btn bg-white text-indigo-700 hover:bg-gray-100">
         Get Started Free
@@ -676,7 +676,7 @@
     <div class="container px-6 mx-auto">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
             <div>
-                <h5 class="text-lg font-semibold text-white mb-4">EventSphere Pro</h5>
+                <h5 class="text-lg font-semibold text-white mb-4"> {{ company_name }}</h5>
                 <p class="text-sm">Orchestrating unforgettable event experiences.</p>
                 </div>
             <div>
@@ -708,7 +708,7 @@
             </div>
         </div>
         <div class="border-t border-gray-700 pt-8 text-center text-sm">
-            &copy; {% now "Y" %} EventSphere Pro. All rights reserved. | <a href="#" class="hover:text-white">Privacy Policy</a> | <a href="#" class="hover:text-white">Terms of Service</a>
+            &copy; {% now "Y" %}  {{ company_name }}. All rights reserved. | <a href="#" class="hover:text-white">Privacy Policy</a> | <a href="#" class="hover:text-white">Terms of Service</a>
         </div>
     </div>
 </footer>
