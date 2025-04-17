@@ -34,6 +34,7 @@ class Event(models.Model):
     text_status = models.CharField(
         max_length=100, null=True, blank=True, help_text=('let he backend handle it'))
     cert_distributed = models.BooleanField(default=False)
+    badge_distributed = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

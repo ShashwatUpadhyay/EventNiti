@@ -1,0 +1,229 @@
+{% extends "index.html" %}
+
+{% block title %}
+Certification List {{ company_name }}
+{% endblock title %}
+
+{% block content %}
+{% load cert_tags %}
+{% load review_tag %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<div class="bg-gradient-to-br from-indigo-100 via-white to-blue-100 min-h-screen py-12 pt-[100px]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {% include 'task/back_button.html' %}
+
+        <!-- Header Section -->
+        <div class="bg-gradient-to-r from-indigo-700 to-blue-700 text-white p-8 rounded-2xl shadow-lg mb-10 animate-fade-in">
+            <h1 class="text-4xl font-extrabold tracking-tight">📋 Certification List</h1>
+            <p class="mt-2 text-indigo-200 text-lg">Event: <span class="text-green-300 font-semibold">{{ event.title }}</span></p>
+        </div>
+
+        <!-- Table Section -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden animate-slide-in">
+            {% if students %}
+            <div class="overflow-x-auto">
+                <table id="table" class="min-w-full divide-y divide-gray-200 text-sm">
+                    <thead class="bg-indigo-600 text-white uppercase text-xs">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider">UUID</th>
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider">Full Name</th>
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider">Email</th>
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider">Course</th>
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider">Section</th>
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider">Year</th>
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider">Attendance</th>
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider">Certified</th>
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider">Options</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for student in students %}
+                        <tr class="hover:bg-indigo-50">
+                            <td class="px-6 py-4">{{ student.uu_id }}</td>
+                            <td class="px-6 py-4">{{ student.full_name }}</td>
+                            <td class="px-6 py-4">{{ student.email }}</td>
+                            <td class="px-6 py-4">{{ student.course }}</td>
+                            <td class="px-6 py-4">{{ student.section }}</td>
+                            <td class="px-6 py-4">{{ student.year }}</td>
+                            <td class="px-6 py-4">
+                                {% if student.attendence == 'Present' %}
+                                    <span class="inline-block bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Present</span>
+                                {% else %}
+                                    <span class="inline-block bg-red-100 text-red-700 text-xs font-semibold px-3 py-1 rounded-full">Absent</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ event|get_cert_for:student.user|default:"-" }}</td>
+                            <td class="px-6 py-4 flex">
+                        {% if event|get_cert_uid:student.user %}
+
+                                <a href='{% url "edit_cert" event|get_cert_uid:student.user|default:"-" %}' class='text-indigo-600 hover:text-blue-500'>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                            
+                        </a>
+                                <a class='text-indigo-600 hover:text-blue-500'>
+                               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" onclick="confirmDelete('{% url "delete_cert" event|get_cert_uid:student.user %}')" >
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6h18M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2M10 11v6m4-6v6M5 6h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2z"/>
+                              </svg>
+                            
+                        </a>
+                        {% else %}
+                                <a href='{% url "create_cert" student.user.username event.slug %}' class='text-indigo-600 hover:text-blue-500'>
+                                        Create
+                                        
+                                    </a>
+                        {% endif %}
+
+                        </td>
+                            
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="py-8 flex justify-center">
+                <div class="bg-yellow-100 border border-yellow-400 text-yellow-800 px-6 py-4 rounded-xl shadow">
+                    No registrations yet.
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Download Button -->
+        <div class="mt-10 flex justify-center">
+            <a href='{% url "cert_detail_csv" event.slug %}' onclick='handleCertificateClick(this)' class="bg-indigo-700 hover:bg-indigo-800 text-white font-bold py-3 px-8 rounded-lg shadow transition-transform transform hover:scale-105">
+                
+                <span class="loading hidden">
+                    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                    </svg>
+                </span><span class='textin'>📥 Export CSV<span>
+                
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes fade-in {
+        0% { opacity: 0; transform: translateY(-10px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slide-in {
+        0% { opacity: 0; transform: translateY(20px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in { animation: fade-in 1s ease-out; }
+    .animate-slide-in { animation: slide-in 1s ease-out; }
+</style>
+
+<script>
+        function handleCertificateClick(button) {
+            button.classList.add('cursor-not-allowed', 'opacity-70');
+            button.querySelector('.textin').classList.add('hidden');
+            button.querySelector('.loading').classList.remove('hidden');
+            
+            //Simulate delay or make your fetch/post call here
+            //setTimeout(() => {
+            //  window.location.href = 'your-actual-link-here';
+            //}, 2000);
+          }
+
+          function confirmDelete(url) {
+            Swal.fire({
+              title: 'Are you sure ?',
+              text: 'This action cannot be undone!',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#d33',
+              cancelButtonColor: '#3085d6',
+              confirmButtonText: 'Yes, delete it!',
+              cancelButtonText: 'Cancel'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // Perform the delete action (e.g., send a request to the server)
+                //Swal.fire(
+                //  'Deleted!',
+                //  'Your file has been deleted.',
+                //  'success'
+                //)
+                window.location.href = url;  
+              }
+            })
+          }
+
+          {% if messages %}
+          {% for message in messages %}
+            Swal.fire({
+              toast: true, // Make it a toast notification
+              position: 'top-end',
+              icon: '{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}',
+              title: "{{ message|escapejs }}", // Escape JS characters in message
+              showConfirmButton: false,
+              timer: 5000, // Show for 3.5 seconds
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+              }
+            });
+          {% endfor %}
+          {% endif %}
+    //const eventSlug = "{{ event.slug }}";
+
+    //function fetchStudents() {
+    //    $.ajax({
+    //        url: "{% url 'registeredStudentListAjax' event.slug %}",
+    //        type: 'GET',
+    //        dataType: 'json',
+    //        success: function(data) {
+    //            updateStudentTable(data.students);
+    //            console.log(data.students);
+    //        },
+    //        error: function(xhr, status, error) {
+    //            console.error("AJAX Error:", status, error);
+    //            console.log(xhr.responseText);
+//
+    //            console.log("Failed to fetch data");
+    //        }
+    //    });
+    //}
+//
+    //function updateStudentTable(students) {
+    //    let tableBody = document.querySelector("#table tbody");
+    //    tableBody.innerHTML = "";
+//
+    //    students.forEach(student => {
+    //        let attendenceClass = student.attendence === 'Present' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
+    //        let attendenceText = student.attendence === 'Present' ? 'Present' : 'Absent';
+//
+    //        tableBody.innerHTML += `
+    //            <tr class="hover:bg-indigo-50">
+    //                <td class="px-6 py-4">${student.uu_id}</td>
+    //                <td class="px-6 py-4">${student.full_name}</td>
+    //                <td class="px-6 py-4">${student.email}</td>
+    //                <td class="px-6 py-4">${student.course}</td>
+    //                <td class="px-6 py-4">${student.section}</td>
+    //                <td class="px-6 py-4">${student.year}</td>
+//
+    //                 <!-- Attendance Column with conditional styling -->
+    //        <td class="px-6 py-4 ${attendenceClass}">
+    //            ${attendenceText}
+    //        </td>
+//
+    //                <td class="px-6 py-4">${student.attendence_taken_by}</td>
+    //                <td class="px-6 py-4">${student.allowed}</td>
+    //            </tr>
+    //        `;
+    //    });
+    //}
+//
+    //setInterval(fetchStudents, 2000);
+    //fetchStudents();
+</script>
+{% endblock content %}

@@ -29,7 +29,7 @@ class CertificateFor(models.Model):
 
 class Certificate(models.Model):
     choices = (('Participation', 'Participation') ,('Winner', 'Winner'),('Runner Up', 'Runner Up'),('Second Runner-Up', 'Second Runner-Up'))
-    user = models.ForeignKey(User ,on_delete=models.CASCADE)
+    user = models.ForeignKey(User ,on_delete=models.CASCADE, related_name='certificates')
     event = models.ForeignKey(Event,models.CASCADE)
     certificate_for = models.ForeignKey(CertificateFor, on_delete=models.CASCADE)
     certificate_ss = models.ImageField(upload_to='certificates_ss/', null=True, blank=True)

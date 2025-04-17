@@ -316,6 +316,7 @@ def edit_event(request, slug):
         event.event_over = event_over
         event.offers_certification = offers_certification
         event.save()
+        messages.success(request,'Changes applied sucessfully')
         return redirect('teacherEvent' , event.slug)
         
     return render(request, 'events/event_edit.html', {'event': event})
