@@ -242,8 +242,15 @@ Register | {{ company_name }}
                 </div>
 
                 <!-- Submit Button -->
-                <button type="submit" class="w-full py-3 px-4 bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold rounded-lg hover:from-purple-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transform transition duration-300 hover:scale-[1.01] shadow-lg">
-                    Create Account
+                <button type="submit" onclick='handleCertificateClick(this)' class="w-full py-3 px-4 bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold rounded-lg hover:from-purple-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transform transition duration-300 hover:scale-[1.01] shadow-lg">
+                   <p class='textin'> Create Account
+                   </p>
+                   <span class="loading hidden">
+                    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                    </svg>
+                  </span>
                 </button>
             </form>
 
@@ -290,5 +297,18 @@ Register | {{ company_name }}
             50% { transform: scale(1.2); opacity: 0.3; }
         }
     </style>
+
+    <script>
+        function handleCertificateClick(button) {
+            button.classList.add('cursor-not-allowed', 'opacity-70');
+            button.querySelector('.textin').classList.add('hidden');
+            button.querySelector('.loading').classList.remove('hidden');
+            
+            //Simulate delay or make your fetch/post call here
+            //setTimeout(() => {
+            //  window.location.href = 'your-actual-link-here';
+            //}, 2000);
+          }
+    </script>
 </div>
 {% endblock content %}

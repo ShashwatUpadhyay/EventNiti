@@ -33,6 +33,7 @@ class Event(models.Model):
         default=False, help_text=('Mark it True if the Event is Over'))
     text_status = models.CharField(
         max_length=100, null=True, blank=True, help_text=('let he backend handle it'))
+    cert_distributed = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -135,6 +136,8 @@ def new_event_anouncement(sender, instance, created, **kwargs):
         if instance.notify:
             emails = User.objects.values_list("email", flat=True)
             event_announcement(emails, instance)
+            instance.notify = False
+            instance.save()
 
 
 @receiver(post_delete, sender=EventSubmission)

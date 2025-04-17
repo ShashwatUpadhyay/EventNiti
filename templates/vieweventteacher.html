@@ -39,7 +39,7 @@
             <div class="lg:col-span-2 space-y-8">
                 <!-- Event Poster -->
                 <div class="relative group rounded-2xl overflow-hidden shadow-xl transition-all duration-300 hover:shadow-2xl">
-                    <img src="{{ event.poster.url }}" alt="Event Poster" 
+                    <img {% if event.poster.url %} src="{{ event.poster.url }}" {% endif %} alt="Event Poster" 
                          class="w-full h-auto max-h-96 object-cover transition-transform duration-500 group-hover:scale-105"
                          onerror="this.onerror=null; this.src='/static/img/default-poster.jpg';">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
@@ -276,13 +276,55 @@
                                     </svg>
                                     Create poll +
                                 </a>
-                            <a href="{% url 'edit_event' event.slug %}" 
+                        <a href="{% url 'edit_event' event.slug %}" 
                             class="w-full flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow-md transition-all">
                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                              </svg>
                              Edit Event
                          </a>
+                         {% if event.event_over %}
+                                {% if not event.cert_distributed %}
+                                <a 
+                                href='{% url "bulk_certification" event.slug %}'
+                                onclick="handleCertificateClick(this)"
+                                class="cert-btn w-full flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 shadow-md transition-all"
+                            >
+                                <span class="icon-text flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m1-7H6a2 2 0 00-2 2v14l4-4 4 4 4-4 4 4V5a2 2 0 00-2-2z" />
+                                </svg>
+                                Distribute Certificate
+                                </span>
+                                <span class="loading hidden">
+                                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                                </svg>
+                                </span>
+                            </a>
+                            {% else %}
+
+                            <div class="w-full flex space-x-3">
+                                <!-- Button 1 -->
+                                <a class="flex-1 flex items-center justify-center px-4 py-3 border border-transparent text-sm font-medium rounded-xl text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400 shadow transition-all">
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                  </svg>
+                                  Approve
+                                </a>
+                              
+                                <!-- Button 2 -->
+                                <a class="flex-1 flex items-center justify-center px-4 py-3 border border-transparent text-sm font-medium rounded-xl text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 shadow transition-all">
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                  </svg>
+                                  Reject
+                                </a>
+                              </div>
+                              
+                                {% endif %}
+                         {% endif %}
                     {% endif %}
                     <a href="{% url 'teacherEventList' %}" 
                     class="w-full flex items-center justify-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all">
@@ -351,7 +393,17 @@
           });
         });
       });
-
+      function handleCertificateClick(button) {
+        button.classList.add('cursor-not-allowed', 'opacity-70');
+        button.querySelector('.icon-text').classList.add('hidden');
+        button.querySelector('.loading').classList.remove('hidden');
+        
+        //Simulate delay or make your fetch/post call here
+        //setTimeout(() => {
+        //  window.location.href = 'your-actual-link-here';
+        //}, 2000);
+      }
+    
 
 // Django Messages with SweetAlert2
 {% if messages %}

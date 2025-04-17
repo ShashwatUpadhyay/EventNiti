@@ -1,5 +1,6 @@
-from django.shortcuts import render,redirect, HttpResponse
+from django.shortcuts import render,redirect, HttpResponse, get_object_or_404
 from . import models
+from events.models import Event, EventSubmission
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import qrcode
@@ -11,6 +12,7 @@ from datetime import datetime
 from django.template.loader import render_to_string
 import base64
 import os
+from django.http import HttpResponseRedirect
 
 
 def generate_certificate_link(student,certif_name, certi, dt):
@@ -64,3 +66,16 @@ def certificate(request,hash):
 def certificates(request):
     certi_obj = models.Certificate.objects.filter(user=request.user).order_by('-issue_date')
     return render(request ,'certificatecard.html', {'certi_obj':certi_obj})
+
+
+def bulk_certification(request,slug):
+    event = get_object_or_404(Event,slug=slug)
+    submission = EventSubmission.objects.filter(event=event)
+    for sub in submission:
+        if sub.attendence=='Present':
+            models.Certificate.objects.get_or_create(event=event,user=sub.user,certificate_for=models.CertificateFor.objects.get(title='Participation'))
+    event.cert_distributed = True
+    event.save()
+    messages.success(request,f'Certificates Sucessfully distributed for all participants in {event.title}')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    

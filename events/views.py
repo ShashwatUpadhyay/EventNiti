@@ -316,7 +316,7 @@ def edit_event(request, slug):
         event.event_over = event_over
         event.offers_certification = offers_certification
         event.save()
-        return redirect('edit_event' , event.slug)
+        return redirect('teacherEvent' , event.slug)
         
     return render(request, 'events/event_edit.html', {'event': event})
 
