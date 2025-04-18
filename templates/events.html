@@ -342,10 +342,10 @@ Events Hub | {{ company_name }}
             </p>
         </div>
 
-        <div class="past-events-section">
+        <div class="past-events-section w-full overflow-hidden">
              <div class="past-events-swiper">
                  <div class="swiper-container">
-                     <div class="swiper-wrapper">
+                     <div class="swiper-wrapper  ">
                          {% if over_event %} {# Assuming 'event' contains ALL events, filter here #}
                              {% for past_event in over_event %}
                                  {% if past_event.event_over %} {# Filter for past events #}
