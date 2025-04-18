@@ -16,6 +16,7 @@ class Memories(models.Model):
         verbose_name = '1. Memory'
 
 class MemoryImages(models.Model):
+    user = models.ForeignKey(User,on_delete=models.DO_NOTHING)
     memory = models.ForeignKey(Memories,on_delete=models.CASCADE,related_name='memory_img')
     image_title = models.CharField(max_length=100, null=True,blank=True)
     image = models.ImageField(upload_to='memories_images/')

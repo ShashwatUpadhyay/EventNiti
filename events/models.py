@@ -7,6 +7,7 @@ from django.dispatch import receiver
 from django.core.mail import send_mail
 from ppuu import settings
 from ppuu.mail_sender import event_anouncement, event_announcement,event_result_anouncement, ticket_issued_email
+from django.db.models import Avg
 # Create your models here.
 
 
@@ -38,7 +39,17 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
-   
+    
+    @property
+    def review_count(self):
+        return len(self.reviews.all())
+    
+    @property
+    def avg_rating(self):
+        rate = self.reviews.aggregate(Avg('rating'))['rating__avg'] or 0
+        star = int(rate) * '⭐'
+        return star
+    
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)

@@ -11,4 +11,5 @@ urlpatterns = [
     path('qna/delete_question/<uid>/', views.delete_question , name='delete_question'),
     path('qna/delete_answer/<uid>/', views.delete_answer , name='delete_answer'),
     path('event/reviews/<slug>/', views.event_reviews , name='event_reviews'),
+    path('event/reviews/detele-event-review/<uid>/', views.detele_event_review , name='detele_event_review'),
 ]

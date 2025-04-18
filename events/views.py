@@ -16,7 +16,7 @@ import csv
 from openpyxl import Workbook
 from openpyxl.styles import PatternFill
 import io
-
+from django.core.paginator import Paginator
 india_timezone = pytz.timezone('Asia/Kolkata')
 
 def is_cordinator(request,event):
@@ -37,7 +37,13 @@ def registered_in_event(request,event):
 
 def events(request):
     event = models.Event.objects.filter(event_open=True,event_over = False).order_by('start_date').order_by('-registration_open')
-    return render(request, 'events.html',{'event':event})
+    over_event = models.Event.objects.filter(event_open=True,event_over = True).order_by('start_date')
+    
+    p = Paginator(event,3)
+    page = request.GET.get('page')
+    event = p.get_page(page)
+    
+    return render(request, 'events.html',{'event':event,'over_event':over_event})
 
 @login_required(login_url='login')
 def event(request, slug):

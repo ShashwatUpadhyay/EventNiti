@@ -95,16 +95,49 @@ Event Ticket | {{company_name}} – Your Official Entry Pass
 
 <!-- HTML2PDF Script -->
 <script>
-  document.getElementById("download-btn").addEventListener("click", () => {
+  document.getElementById("download-btn").addEventListener("click", async () => {
     const element = document.getElementById("ticket");
-    const opt = {
-      margin: 0,
-      filename: "Ticket_{{ ticket.event.title|slugify }}_{{ ticket.user.get_full_name|slugify }}.pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" }
-    };
-    html2pdf().set(opt).from(element).save();
-  });
-</script>
-{% endblock content %}
+
+    // Clone the certificate cleanly
+    const cloned = element.cloneNode(true);
+    cloned.style.animation = "none";
+    cloned.style.background = "white"; // Set white background
+    cloned.style.color = "black";
+    cloned.style.minHeight = '100vh';  // ensure full height
+
+    // Temporarily hide unnecessary elements
+    cloned.querySelectorAll(".no-print").forEach((el) => (el.style.display = "none"));
+
+    // Create a temporary wrapper so html2canvas has clean context
+    const tempWrapper = document.createElement("div");
+    tempWrapper.style.padding = "20px";
+    tempWrapper.style.background = "white";
+
+    tempWrapper.appendChild(cloned);
+
+    document.body.appendChild(tempWrapper);
+
+    // Use html2canvas to capture the image
+    try {
+        const canvas = await html2canvas(tempWrapper, {
+            scale: 3,
+            useCORS: true, // important if using external images like QR code
+            allowTaint: true,
+        });
+
+        // Convert the canvas to an image data URL (in PNG format)
+        const imgData = canvas.toDataURL("image/png");
+
+        // Create a link to trigger download
+        const link = document.createElement("a");
+        link.href = imgData;
+        link.download = "{{ticket.event.slug}}-ticket.png"; // specify file name
+        link.click();
+    } catch (error) {
+        console.error("Error generating image: ", error);
+    } finally {
+        // Remove the temporary wrapper after use
+        document.body.removeChild(tempWrapper);
+    }
+});
+</script>{% endblock content %}

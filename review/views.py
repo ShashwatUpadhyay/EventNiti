@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from events.views import is_event_host, is_cordinator
 from django.http import HttpResponseRedirect
-
+from django.core.paginator import Paginator
 # Create your views here.
 @login_required(login_url='login')
 def poll(request,slug):
@@ -125,4 +125,26 @@ def delete_answer(request,uid):
 
 def event_reviews(request,slug):
     event= get_object_or_404(Event,slug=slug)
-    return render(request,'events/event_reviews.html',{'event':event})
+    exist =  models.EventReview.objects.filter(user=request.user,event=event).exists()
+    reviews = event.reviews.all()
+    
+    p = Paginator(reviews,10)
+    page = request.GET.get('page')
+    reviews = p.get_page(page)
+    
+    if request.method == "POST":
+        rating = request.POST.get('rating')
+        text = request.POST.get('text')
+        print(rating,text)
+        models.EventReview.objects.create(user=request.user,event=event,message=text,rating=rating)
+        messages.success(request,'Thank you for review!')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+    return render(request,'events/event_reviews.html',{'event':event,'exist':exist,'reviews':reviews})
+
+def detele_event_review(request,uid):
+    review = get_object_or_404(models.EventReview,uid=uid)
+    review.delete()
+    messages.success(request,"Review Deleted!")
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    

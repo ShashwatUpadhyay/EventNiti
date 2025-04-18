@@ -26,3 +26,8 @@ def registered(event,user):
 @register.filter
 def times(number):
     return range(int(number))
+
+@register.filter
+def review_count(event):
+    review = event.reviews.all()
+    return len(review)
