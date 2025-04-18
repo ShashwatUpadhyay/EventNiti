@@ -125,7 +125,9 @@ def delete_answer(request,uid):
 
 def event_reviews(request,slug):
     event= get_object_or_404(Event,slug=slug)
-    exist =  models.EventReview.objects.filter(user=request.user,event=event).exists()
+    exist=None
+    if request.user.is_authenticated:
+        exist =  models.EventReview.objects.filter(user=request.user,event=event).exists()
     reviews = event.reviews.all()
     
     p = Paginator(reviews,10)
