@@ -467,7 +467,7 @@
              {% for past_event in events %} {# Assuming 'events' contains past events too, or fetch separately #}
                  {% if past_event.event_over %} {# Filter for past events #}
                    <div class="swiper-slide h-auto"> {# Ensure slide height adapts #}
-                     <a href='{% url "eventResult" past_event.slug %}' class="block h-full">
+                     <div class="block h-full">
                        <div class="event-card h-full flex flex-col"> {# Use flex column #}
                           <div class="event-card-img-wrapper flex-shrink-0">
                              {% if past_event.poster %}
@@ -485,25 +485,43 @@
                           </div>
                           <div class="p-5 flex-grow flex flex-col justify-between"> {# Grow to fill space #}
                               <div>
-                                <span class="inline-flex items-center mb-3 px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                    <svg class="w-4 h-4 mr-1.5 -ml-0.5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>
-                                    {{ past_event.attendee_count|default:"N/A" }} Attendees
-                                </span>
-                                <p class="text-sm text-gray-600 line-clamp-2 mb-3">
-                                    {{ past_event.description|striptags|truncatewords:15|default:"View the event results and highlights." }}
-                                </p>
+                                <div class="past-event-card-content">
+                                  <h3 class="text-lg font-bold text-gray-800 mb-1 truncate">{{ past_event.title }}</h3>
+                                  <div class="flex items-center text-gray-500 text-xs mb-3">
+                                      <i class="far fa-calendar-alt mr-1"></i>
+                                      {{ past_event.start_date|date:"M d, Y" }}
+                                       <span class="mx-1.5">·</span>
+                                       <i class="fas fa-map-marker-alt mr-1"></i>
+                                       {{ past_event.location|default:"Venue" }}
+                                  </div>
+
+                                  <div class="mb-3">
+                                      <div class="flex items-center">
+                                          <div class="flex text-yellow-400 text-sm">
+                                             {{ past_event.avg_rating|default:'' }}
+                                              {% comment %} <i class="fas fa-star"></i>
+                                              <i class="fas fa-star"></i>
+                                              <i class="fas fa-star"></i>
+                                              <i class="fas fa-star"></i>
+                                              <i class="fas fa-star-half-alt"></i> {# Example rating #} {% endcomment %}
+                                          </div>
+                                          <span class="text-gray-500 text-xs ml-2">({{ past_event.review_count|default:0 }} reviews)</span> {# Replace with actual review count if available #}
+                                      </div>
+                                  </div>
                               </div>
-                              <div class="mt-auto pt-3 border-t border-gray-100"> {# Push link to bottom #}
-                                  <span class="inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-800 group">
-                                   View Results
-                                   <svg class="w-4 h-4 ml-1 transition-transform duration-200 ease-in-out group-hover:translate-x-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                   </svg>
-                                 </span>
+                              </div>
+                              <div class="mt-auto pt-3 border-t flex border-gray-100 justify-between"> {# Push link to bottom #}
+                                {% url 'event_recacpe' past_event.slug as event_recacpe_url %}  
+                                <a href='{{ event_recacpe_url }}' class="text-sm font-medium text-indigo-600 hover:text-indigo-800 inline-flex items-center">
+                                    View Recap <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                                 </a>
+                                  <a href='{% url "event_reviews" past_event.slug %}' class="text-sm font-medium text-indigo-600 hover:text-indigo-800 inline-flex items-center">
+                                    <i class="far fa-comment-dots mr-1"></i> Reviews
+                                 </a>
                              </div>
                           </div>
                        </div>
-                     </a>
+                     </div>
                    </div>
                  {% endif %}
              {% endfor %}
