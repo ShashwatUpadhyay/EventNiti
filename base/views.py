@@ -41,10 +41,6 @@ def home(request):
         rand_mem = None
     return render(request , 'home.html',{'event':event,'mem':mem,'events':events,'rand_mem':rand_mem.image.url if rand_mem else None})
 
-def contact(request):
-    return render(request, 'contact.html')
-
-
 def socials(request):
     return render(request, 'links.html')
 
