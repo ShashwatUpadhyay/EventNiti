@@ -29,12 +29,12 @@ class CertificateFor(models.Model):
 
 class Certificate(models.Model):
     choices = (('Participation', 'Participation') ,('Winner', 'Winner'),('Runner Up', 'Runner Up'),('Second Runner-Up', 'Second Runner-Up'))
-    user = models.ForeignKey(User ,on_delete=models.CASCADE)
+    user = models.ForeignKey(User ,on_delete=models.CASCADE, related_name='certificates')
     event = models.ForeignKey(Event,models.CASCADE)
     certificate_for = models.ForeignKey(CertificateFor, on_delete=models.CASCADE)
     certificate_ss = models.ImageField(upload_to='certificates_ss/', null=True, blank=True)
     issue_date = models.DateTimeField(auto_now_add=True)
-    hash = models.CharField(max_length=100, null=True, blank=True)
+    hash = models.CharField(max_length=100, default=uuid.uuid4)
     
     def __str__(self):
         date = str(convert_date(self.issue_date))
@@ -50,8 +50,5 @@ class Certificate(models.Model):
 @receiver(post_save, sender = Certificate)
 def save_certificate(sender,created, instance, **kwargs):
     if created:
-        random_string = secrets.token_hex(16)
-        instance.hash = uuid.uuid4()
-        instance.save()
         certificate_issued_email(instance)
-        print("Certificate Created")
+        print(f"Certificate Created for {instance.user.username}")

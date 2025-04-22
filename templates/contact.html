@@ -271,4 +271,27 @@ Contact Us | {{ company_name }}
     </style>
 </div>
 
+<script>
+
+    // Django Messages with SweetAlert2
+    {% if messages %}
+      {% for message in messages %}
+        Swal.fire({
+          toast: true, // Make it a toast notification
+          position: 'top-end',
+          icon: '{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}',
+          title: "{{ message|escapejs }}", // Escape JS characters in message
+          showConfirmButton: false,
+          timer: 3500, // Show for 3.5 seconds
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+        });
+      {% endfor %}
+    {% endif %}
+
+</script>
+
 {% endblock content %}

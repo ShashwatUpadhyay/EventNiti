@@ -30,7 +30,7 @@ Registered Students
                             <th scope="col" class="px-6 py-3 text-left tracking-wider">Section</th>
                             <th scope="col" class="px-6 py-3 text-left tracking-wider">Year</th>
                             <th scope="col" class="px-6 py-3 text-left tracking-wider">Attendance</th>
-                            <th scope="col" class="px-6 py-3 text-left tracking-wider">Taken By</th>
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider">Taken By-At</th>
                             <th scope="col" class="px-6 py-3 text-left tracking-wider">Allowed</th>
                         </tr>
                     </thead>
@@ -74,8 +74,15 @@ Registered Students
 
         <!-- Download Button -->
         <div class="mt-10 flex justify-center">
-            <a href='{% url "registeredStudentListCSV" event.slug %}' class="bg-indigo-700 hover:bg-indigo-800 text-white font-bold py-3 px-8 rounded-lg shadow transition-transform transform hover:scale-105">
-                📥 Export CSV
+            <a href='{% url "registeredStudentListCSV" event.slug %}' onclick='handleCertificateClick(this)' class="bg-indigo-700 hover:bg-indigo-800 text-white font-bold py-3 px-8 rounded-lg shadow transition-transform transform hover:scale-105">
+                
+                <span class="loading hidden">
+                    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                    </svg>
+                </span><span class='textin'>📥 Export CSV<span>
+                
             </a>
         </div>
     </div>
@@ -95,19 +102,17 @@ Registered Students
 </style>
 
 <script>
-    const formatter = new Intl.DateTimeFormat("en-US", {
-        timeZone: "Asia/Kolkata",
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: true,
-    });
 
-    const indiaTime = formatter.format(new Date()); 
-
+        function handleCertificateClick(button) {
+            button.classList.add('cursor-not-allowed', 'opacity-70');
+            button.querySelector('.textin').classList.add('hidden');
+            button.querySelector('.loading').classList.remove('hidden');
+            
+            //Simulate delay or make your fetch/post call here
+            //setTimeout(() => {
+            //  window.location.href = 'your-actual-link-here';
+            //}, 2000);
+          }
     const eventSlug = "{{ event.slug }}";
 
     function fetchStudents() {

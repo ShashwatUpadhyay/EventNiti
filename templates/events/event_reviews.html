@@ -26,11 +26,18 @@ Reviews - {{ event.title }} | {{ company_name }}
 
   <!-- Reviews Section -->
   <div class="max-w-4xl mx-auto space-y-6">
-    {% if event.reviews.all %}
-      {% for review in event.reviews.all %}
+    {% if reviews %}
+      {% for review in reviews %}
         <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
           <div class="flex justify-between items-center mb-2">
-            <h3 class="text-lg font-semibold text-gray-900">{{ review.user.get_full_name }}</h3>
+            <h3 class="text-lg font-semibold text-gray-900">
+              {{ review.user.get_full_name }} 
+              {% if review.user == request.user %}
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" onclick="confirmDelete('{% url "detele_event_review" review.uid %}')">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6h18M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2M10 11v6m4-6v6M5 6h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2z"/>
+              </svg>{% endif %}
+            </h3>
+            
             <div class="flex items-center space-x-1 text-yellow-400">
                 {% for i in review.rating|times %}
                         <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.975a1 1 0 00.95.69h4.184c.969 0 1.371 1.24.588 1.81l-3.39 2.462a1 1 0 00-.364 1.118l1.286 3.975c.3.921-.755 1.688-1.538 1.118l-3.39-2.462a1 1 0 00-1.176 0l-3.39 2.462c-.783.57-1.838-.197-1.538-1.118l1.286-3.975a1 1 0 00-.364-1.118L2.49 9.402c-.783-.57-.38-1.81.588-1.81h4.184a1 1 0 00.95-.69l1.286-3.975z"/></svg>
@@ -47,33 +54,126 @@ Reviews - {{ event.title }} | {{ company_name }}
       </div>
     {% endif %}
   </div>
+{% if request.user.is_authenticated %}
+    {% if event|registered:request.user %}
+        {% if not exist %}
+        <!-- Add Review Section -->
+        <div class="max-w-4xl mx-auto mt-12 bg-white p-6 rounded-lg shadow">
+          <h3 class="text-lg font-medium text-gray-900 mb-4">Add a Review</h3>
+          <form method="POST">
+            {% csrf_token %}
+            <div class="mb-4">
+              <label for="rating" class="block text-sm font-medium text-gray-700 mb-1">Rating</label>
+              <select id="rating" name="rating" class="w-full border rounded px-3 py-2">
+                <option value="1">⭐</option>
+                <option value="2">⭐⭐</option>
+                <option value="3">⭐⭐⭐</option>
+                <option value="4">⭐⭐⭐⭐</option>
+                <option value="5">⭐⭐⭐⭐⭐</option>
+              </select>
+            </div>
+            <div class="mb-4">
+              <label for="review-text" class="block text-sm font-medium text-gray-700 mb-1">Your Review</label>
+              <textarea id="review-text" name="text" rows="4" class="w-full px-3 py-2 border rounded" placeholder="Share your experience..."></textarea>
+            </div>
+            <div class="flex justify-end">
+              <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                Submit Review
+              </button>
+            </div>
+          </form>
+        </div>
+      {% endif %}
+    {% endif %}
+  {% endif %}
+  <!-- Pagination -->
+  {% if event.has_other_pages %}
+  <div class="mt-8 flex items-center justify-between">
+    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+      <div>
+        <p class="text-sm text-gray-700">
+          Showing <span class="font-medium">{{ event.start_index }}</span> to <span class="font-medium">{{ event.end_index }}</span> of <span class="font-medium">{{ orders.paginator.count }}</span> results
+        </p>
+      </div>
+      <div>
+        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+          {% if event.has_previous %}
+          <a href="?page={{ event.previous_page_number }}" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+            <span class="sr-only">Previous</span>
+            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+          </a>
+          {% endif %}
 
-  {% if event|registered:request.user %}
-  <!-- Add Review Section -->
-  <div class="max-w-4xl mx-auto mt-12 bg-white p-6 rounded-lg shadow">
-    <h3 class="text-lg font-medium text-gray-900 mb-4">Add a Review</h3>
-    <form method="POST">
-      {% csrf_token %}
-      <div class="mb-4">
-        <label for="rating" class="block text-sm font-medium text-gray-700 mb-1">Rating</label>
-        <select id="rating" name="rating" class="w-full border rounded px-3 py-2">
-          <option value="">Select rating</option>
-          {% for i in "12345" %}
-          <option value="{{ i }}">{{ i }} Star{% if i != "1" %}s{% endif %}</option>
+          {% for i in event.paginator.page_range %}
+            {% if event.number == i %}
+            <a href="#" aria-current="page" class="z-10 bg-blue-50 border-blue-500 text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+              {{ i }}
+            </a>
+            {% else %}
+            <a href="?page={{ i }}" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+              {{ i }}
+            </a>
+            {% endif %}
           {% endfor %}
-        </select>
+
+          {% if event.has_next %}
+          <a href="?page={{ event.next_page_number }}" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+            <span class="sr-only">Next</span>
+            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+            </svg>
+          </a>
+          {% endif %}
+        </nav>
       </div>
-      <div class="mb-4">
-        <label for="review-text" class="block text-sm font-medium text-gray-700 mb-1">Your Review</label>
-        <textarea id="review-text" name="text" rows="4" class="w-full px-3 py-2 border rounded" placeholder="Share your experience..."></textarea>
-      </div>
-      <div class="flex justify-end">
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-          Submit Review
-        </button>
-      </div>
-    </form>
+    </div>
   </div>
   {% endif %}
 </div>
+<script>
+  // Django Messages with SweetAlert2
+  {% if messages %}
+  {% for message in messages %}
+  Swal.fire({
+    toast: true, // Make it a toast notification
+    position: 'top-end',
+    icon: '{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}',
+    title: "{{ message|escapejs }}", // Escape JS characters in message
+    showConfirmButton: false,
+    timer: 3500, // Show for 3.5 seconds
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  });
+  {% endfor %}
+  {% endif %}
+
+  function confirmDelete(url) {
+    Swal.fire({
+      title: 'Are you sure ?',
+      text: 'This action cannot be undone!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Perform the delete action (e.g., send a request to the server)
+        //Swal.fire(
+        //  'Deleted!',
+        //  'Your file has been deleted.',
+        //  'success'
+        //)
+        window.location.href = url;  
+      }
+    })
+  }
+
+</script>
 {% endblock %}
