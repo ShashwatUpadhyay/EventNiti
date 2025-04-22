@@ -106,23 +106,7 @@ Registered Students
         hour12: true,
     });
 
-    const indiaTime = formatter.format(new Date());
-
-    document.getElementById("download-btn").addEventListener("click", () => {
-        const element = document.getElementById("table");
-        const opt = {
-            margin: [0.5, 0.5, 0.5, 0.5],
-            filename: `{{ event.title }}_${indiaTime}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 3, useCORS: true },
-            jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' }
-        };
-
-        element.style.width = "100%";
-        element.style.maxWidth = "100%";
-
-        html2pdf().set(opt).from(element).save();
-    });
+    const indiaTime = formatter.format(new Date()); 
 
     const eventSlug = "{{ event.slug }}";
 
