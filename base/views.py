@@ -6,7 +6,8 @@ from account.models import UserExtra
 from django.contrib.auth.models import User
 from events.models import Event
 from memories.models import Memories, MemoryImages
-
+import uuid
+from contact.models import Contact
 # Create your views here.
 
 def is_member(user):
@@ -39,6 +40,18 @@ def home(request):
         rand_mem = MemoryImages.objects.order_by('?').first()
     except:
         rand_mem = None
+        
+    if request.method == "POST":
+        name =  request.POST.get('name')
+        email =  request.POST.get('email')
+        subject =  request.POST.get('subject')
+        main =  request.POST.get('message')
+        
+        if not request.session.get('ukey'):
+            request.session['ukey'] = str(uuid.uuid4())
+        Contact.objects.create(full_name = name,email = email,subject = subject,message = main,session_key=request.session['ukey'])
+        messages.success(request, 'Your message has been sent! we will respond within 24 hour.')
+        return redirect('home')
     return render(request , 'home.html',{'event':event,'mem':mem,'events':events,'rand_mem':rand_mem.image.url if rand_mem else None})
 
 def socials(request):
