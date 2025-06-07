@@ -18,6 +18,8 @@ class Event(models.Model):
     poster = models.ImageField(
         upload_to='event_poster/', null=True, blank=True)
     description = models. TextField()
+    price = models.PositiveIntegerField(
+        default=0, help_text=('Price of the Event (leave it 0 if free)'))
     organized_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='host')
     location = models.CharField(max_length=100, null=True, blank=True)
     limit = models.IntegerField(null=True, blank=True, help_text=(
@@ -88,7 +90,23 @@ class EventSubmission(models.Model):
     class Meta:
         verbose_name = '2. Event Submission'
 
+class TemporaryEventSubmission(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='temp_participant')
+    uu_id = models.CharField(max_length=50)
+    full_name = models.CharField(max_length=50)
+    email = models.CharField(max_length=50)
+    course = models.CharField(max_length=50)
+    section = models.CharField(max_length=50)
+    year = models.CharField(max_length=5)
+    uid = models.CharField(max_length=100, default=uuid.uuid4 ,null=True, blank=True)
 
+    def __str__(self):
+        return str(self.full_name + " - " + self.event.title)
+
+    class Meta:
+        verbose_name = '6. Temporary Event Submission'
+        
 class EventTicket(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)

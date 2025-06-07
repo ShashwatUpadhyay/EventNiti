@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'badge',
     'review',
     'contact',
+    'payment',
 ]
 
 
@@ -178,6 +179,10 @@ EMAIL_USE_SSL = False
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+RAZOR_KEY_ID = 'rzp_test_fFBpYlGzvN55lA'
+RAZOR_KEY_SECRET = 'BtXZLUJmvHcGU9ZyMWllSgJv'
 
 # LOGGING = {
 #     "version": 1,

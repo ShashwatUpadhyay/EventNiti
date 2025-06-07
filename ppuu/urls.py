@@ -32,6 +32,7 @@ urlpatterns = [
     path('blog/', include('blog.urls')),
     path('review/', include('review.urls')),
     path('contact/', include('contact.urls')),
+    path('payment/', include('payment.urls')),
     path('previous-year-question-paper/', include('question_papers.urls')),
 ]+ debug_toolbar_urls()
 handler404 = 'base.views.custom_404'
