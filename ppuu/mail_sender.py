@@ -1,6 +1,8 @@
 from django.core.mail import send_mail
 from . import settings
 from django.core.mail import EmailMultiAlternatives
+from celery import shared_task
+from django.contrib.auth.models import User
 
 def verifyUser(email,uid):
     try:
@@ -18,7 +20,7 @@ def verifyUser(email,uid):
                 )
     except Exception as e:
         print(e)
-    
+
 def event_anouncement(emails,instance):
     try:
         for email in emails:
@@ -37,8 +39,10 @@ def event_anouncement(emails,instance):
     except Exception as e:
         print(e)
 
-
-def event_announcement(emails, instance):
+@shared_task
+def event_announcement(emails, id):
+    from events.models import Event    
+    instance = Event.objects.get(id=id)
     try:
         subject = f'Join {instance.title}'
         text_content = f'Join {instance.title}. Click the link below to register:\n{settings.DOMAIN_NAME}events/{instance.slug}'

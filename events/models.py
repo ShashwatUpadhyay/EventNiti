@@ -7,6 +7,7 @@ from django.dispatch import receiver
 from django.core.mail import send_mail
 from ppuu import settings
 from ppuu.mail_sender import event_anouncement, event_announcement,event_result_anouncement, ticket_issued_email
+from ppuu.tasks import event_announcement_task
 from django.db.models import Avg
 # Create your models here.
 
@@ -61,7 +62,7 @@ class Event(models.Model):
         if self.registration_open == True:
             if not self.text_status:
                 self.text_status = 'Registration Open'
-        super(Event, self).save(*args, **kwargs)
+        super(Event,self).save(*args, **kwargs)
 
     class Meta:
         ordering = ['-upload_time']
@@ -165,7 +166,7 @@ def new_event_anouncement(sender, instance, created, **kwargs):
     if instance.event_open:
         if instance.notify:
             emails = User.objects.values_list("email", flat=True)
-            event_announcement(emails, instance)
+            event_announcement_task.delay(list(emails), instance.id)
             instance.notify = False
             instance.save()
 
