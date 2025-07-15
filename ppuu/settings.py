@@ -16,8 +16,8 @@ from .ckeditorconfig import *
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DOMAIN_NAME = 'http://127.0.0.1:8000/'
-# DOMAIN_NAME = 'https://9319j0b7-8000.inc1.devtunnels.ms/'
+# DOMAIN_NAME = 'http://127.0.0.1:8000/'
+DOMAIN_NAME = 'https://event.swtu.in/'
 # DOMAIN_NAME = 'https://9319j0b7-8000.inc1.devtunnels.ms/'
 
 # Quick-start development settings - unsuitable for production
@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-($h@jyg6f%k0e^akfcq+a4@%-*vs6-h@fokhw936@d=n6*6**t
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['event.swtu.in','www.event.swtu.in']
 
 COMPANY_NAME = 'Event Niti'
 
@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'review',
     'contact',
     'payment',
+    'django_redis',
 ]
 
 
@@ -104,6 +105,7 @@ CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Kolkata'
 
 # ASGI_APPLICATION = 'ppuu.asgi.application'
 WSGI_APPLICATION = 'ppuu.wsgi.application'
@@ -116,25 +118,25 @@ DATABASES = {
     #     'ENGINE': 'django.db.backends.sqlite3',
     #     'NAME': BASE_DIR / 'db.sqlite3',
     # },
-    'default': {
-          'ENGINE':'django.db.backends.mysql',
-          'NAME':'ppuudb',
-          'USER':'root',
-          'PASSWORD':'',
-          'HOST':'localhost',
-          'PORT':'3306',
-          'OPTIONS': {
-            'charset': 'utf8mb4',  # This is the important part
-        },
-      },
-    #  'default': {
-    #       'ENGINE':'django.db.backends.mysql',
-    #       'NAME':'shashwat$ppuudb',
-    #       'USER':'shashwat',
-    #       'PASSWORD':'@Iampekka1',
-    #       'HOST':'shashwat.mysql.pythonanywhere-services.com',
-    #       'PORT':'3306',
-    #   }     
+    #'default': {
+    #      'ENGINE':'django.db.backends.mysql',
+    #      'NAME':'ppuudb',
+    #      'USER':'root',
+    #      'PASSWORD':'',
+    #      'HOST':'localhost',
+   #       'PORT':'3306',
+   #       'OPTIONS': {
+   #         'charset': 'utf8mb4',  # This is the important part
+    #    },
+     # },
+      'default': {
+           'ENGINE':'django.db.backends.mysql',
+           'NAME':'eventniti',
+           'USER':'shashwat',
+           'PASSWORD':'MyStrongPassword1234$',
+           'HOST':'localhost',
+           'PORT':'3306',
+       }     
 }
 
 

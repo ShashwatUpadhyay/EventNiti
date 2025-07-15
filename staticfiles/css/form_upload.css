@@ -1,0 +1,104 @@
+/* Global Styles */
+body {    
+  background-image: url('background.jpg');
+}
+
+/* Form Container */
+form {
+    width: 100%;
+    max-width: 600px;
+    margin: 50px auto; /* Center the form */
+    background-color: white; /* Form background */
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow */
+    border: 2px solid #ccc; /* Subtle border */
+}
+
+/* Form Title */
+h1 {
+    text-align: center;
+    color: #4b0082; /* Dark purple */
+    font-size: 30px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+/* Form Labels */
+label {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+/* Form Inputs */
+input[type="file"],
+select {
+    width: 100%; /* Full width */
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #f9f9f9;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Inner shadow */
+    transition: all 0.3s ease; /* Smooth transitions */
+}
+
+/* Hover and focus states for inputs */
+input[type="file"]:focus,
+select:focus {
+    border-color: #4b0082; /* Dark purple border on focus */
+    outline: none;
+}
+
+/* Submit Button */
+input[type="submit"] {
+    width: 100%;
+    padding: 12px 20px;
+    background-color: #4b0082; /* Dark purple button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out; /* Smooth color transition */
+}
+
+input[type="submit"]:hover {
+    background-color: #6a0dad; /* Lighter purple on hover */
+}
+
+/* Add subtle animations to form */
+form {
+    animation: fadeIn 1s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    form {
+        width: 90%; /* Form takes more width on smaller screens */
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 22px;
+    }
+}
