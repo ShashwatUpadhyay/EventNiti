@@ -199,5 +199,5 @@ EMAIL_USE_SSL = False
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-RAZOR_KEY_ID = 'rzp_test_fFBpYlGzvN55lA'
-RAZOR_KEY_SECRET = 'BtXZLUJmvHcGU9ZyMWllSgJv'
+RAZOR_KEY_ID = env("RAZOR_KEY_ID")
+RAZOR_KEY_SECRET = env("RAZOR_KEY_SECRET")
