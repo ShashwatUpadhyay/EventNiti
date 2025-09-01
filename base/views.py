@@ -34,7 +34,7 @@ User.add_to_class('is_head', property(is_head))
 from ppuu.settings import ALLOWED_HOSTS
 # Create your views here.
 
-@cache_page(60 * 3) 
+# @cache_page(60 * 3) 
 def home(request):
     event = Event.objects.filter(event_open=True,event_over = False).order_by('start_date')[:3]
     mem = Memories.objects.prefetch_related('memory_img').order_by('-event__start_date')[:3]
