@@ -1,0 +1,33 @@
+{
+  "name": "Event Niti - University Event Management",
+  "short_name": "Event Niti",
+  "description": "Complete university event management platform with digital certificates and QR ticketing",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#5a67d8",
+  "theme_color": "#5a67d8",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/static/images/logo/android/android-launchericon-192-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/static/images/logo/android/android-launchericon-512-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "screenshots": [
+    {
+      "src": "/static/images/screenshot.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ]
+}

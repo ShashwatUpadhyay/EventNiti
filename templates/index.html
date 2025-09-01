@@ -17,6 +17,18 @@
         <style src="{% static 'css/styles.css' %}"></style>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <link rel="shortcut icon" href="{% static 'images/logoo.png' %}">
+        
+        <!-- PWA Meta Tags -->
+        <meta name="theme-color" content="#5a67d8">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
+        <meta name="apple-mobile-web-app-title" content="Event Niti">
+        <link rel="apple-touch-icon" href="{% static 'images/logo/icon-192.png' %}">
+        
+        <!-- Web App Manifest -->
+        <link rel="manifest" href="{% static 'manifest.json' %}">
+        
+        {% block extra_head %}{% endblock extra_head %}
         <script>
             {% comment %} document.addEventListener("contextmenu", (event) => event.preventDefault());
             document.addEventListener("contextmenu", (event) => event.preventDefault());
