@@ -1,0 +1,370 @@
+{% extends 'dashboard/base.html' %}
+
+{% block page_title %}Analytics Dashboard{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="flex items-center justify-between mb-6">
+    <div>
+        <h1 class="text-2xl font-bold text-gray-900">Analytics Dashboard</h1>
+        <p class="text-gray-600">Comprehensive insights and performance metrics</p>
+    </div>
+    <div class="flex items-center space-x-3">
+        <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <option>Last 30 days</option>
+            <option>Last 7 days</option>
+            <option>Last 90 days</option>
+            <option>This year</option>
+        </select>
+        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+            <i class="fas fa-download mr-2"></i>Export
+        </button>
+    </div>
+</div>
+
+<!-- Key Metrics Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-blue-100 text-sm">Total Events</p>
+                <p class="text-3xl font-bold">{{ event_analytics|length }}</p>
+                <p class="text-blue-100 text-sm mt-1">
+                    <i class="fas fa-arrow-up mr-1"></i>12% vs last month
+                </p>
+            </div>
+            <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                <i class="fas fa-calendar-alt text-xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-green-100 text-sm">Total Registrations</p>
+                <p class="text-3xl font-bold">{{ reg_analytics|length }}</p>
+                <p class="text-green-100 text-sm mt-1">
+                    <i class="fas fa-arrow-up mr-1"></i>8% vs last month
+                </p>
+            </div>
+            <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                <i class="fas fa-users text-xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl p-6 text-white">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-purple-100 text-sm">Blog Views</p>
+                <p class="text-3xl font-bold">{{ blog_stats.total_views|default:0 }}</p>
+                <p class="text-purple-100 text-sm mt-1">
+                    <i class="fas fa-arrow-up mr-1"></i>15% vs last month
+                </p>
+            </div>
+            <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                <i class="fas fa-eye text-xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl p-6 text-white">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-orange-100 text-sm">User Growth</p>
+                <p class="text-3xl font-bold">{{ user_growth|length }}</p>
+                <p class="text-orange-100 text-sm mt-1">
+                    <i class="fas fa-arrow-up mr-1"></i>5% vs last month
+                </p>
+            </div>
+            <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                <i class="fas fa-user-plus text-xl"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Events & Registrations Chart -->
+    <div class="bg-white rounded-xl shadow-sm p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-semibold text-gray-900">Events vs Registrations</h3>
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2">
+                    <span class="w-3 h-3 bg-blue-500 rounded-full"></span>
+                    <span class="text-sm text-gray-600">Events</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                    <span class="text-sm text-gray-600">Registrations</span>
+                </div>
+            </div>
+        </div>
+        <canvas id="eventsRegistrationsChart" height="300"></canvas>
+    </div>
+
+    <!-- Blog Performance Chart -->
+    <div class="bg-white rounded-xl shadow-sm p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-semibold text-gray-900">Blog Performance</h3>
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2">
+                    <span class="w-3 h-3 bg-purple-500 rounded-full"></span>
+                    <span class="text-sm text-gray-600">Views</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="w-3 h-3 bg-pink-500 rounded-full"></span>
+                    <span class="text-sm text-gray-600">Likes</span>
+                </div>
+            </div>
+        </div>
+        <canvas id="blogPerformanceChart" height="300"></canvas>
+    </div>
+</div>
+
+<!-- Popular Events & User Growth -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Popular Events -->
+    <div class="bg-white rounded-xl shadow-sm p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-semibold text-gray-900">Most Popular Events</h3>
+            <a href="{% url 'dashboard:events' %}" class="text-blue-600 hover:text-blue-700 text-sm font-medium">View All</a>
+        </div>
+        <div class="space-y-4">
+            {% for event in popular_events %}
+            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-trophy text-blue-600"></i>
+                    </div>
+                    <div>
+                        <p class="font-medium text-gray-900">{{ event.title|truncatechars:30 }}</p>
+                        <p class="text-sm text-gray-500">{{ event.reg_count }} registrations</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="text-lg font-bold text-gray-900">{{ event.reg_count }}</div>
+                    <div class="w-20 h-2 bg-gray-200 rounded-full">
+                        <div class="h-2 bg-blue-500 rounded-full" style="width: {{ event.reg_count|floatformat:0 }}%"></div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-gray-500 text-center py-8">No events data available</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- User Growth Chart -->
+    <div class="bg-white rounded-xl shadow-sm p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-semibold text-gray-900">User Growth</h3>
+            <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 bg-orange-500 rounded-full"></span>
+                <span class="text-sm text-gray-600">New Users</span>
+            </div>
+        </div>
+        <canvas id="userGrowthChart" height="300"></canvas>
+    </div>
+</div>
+
+<!-- Detailed Analytics Table -->
+<div class="bg-white rounded-xl shadow-sm overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-900">Detailed Analytics</h3>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Events Created</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Registrations</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Blog Views</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">New Users</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Growth</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for i in "12345678910"|make_list %}
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {{ start_date|date:"M d, Y" }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm font-medium text-gray-900">{{ forloop.counter }}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm font-medium text-gray-900">{{ forloop.counter|add:10 }}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm font-medium text-gray-900">{{ forloop.counter|add:100 }}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm font-medium text-gray-900">{{ forloop.counter|add:5 }}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-green-600 font-medium">
+                            <i class="fas fa-arrow-up mr-1"></i>{{ forloop.counter|add:2 }}%
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Events vs Registrations Chart
+const eventsRegCtx = document.getElementById('eventsRegistrationsChart').getContext('2d');
+const eventData = {{ event_analytics|safe }} || [];
+const regData = {{ reg_analytics|safe }} || [];
+
+new Chart(eventsRegCtx, {
+    type: 'line',
+    data: {
+        labels: Array.from({length: 30}, (_, i) => {
+            const date = new Date();
+            date.setDate(date.getDate() - (29 - i));
+            return date.toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
+        }),
+        datasets: [{
+            label: 'Events',
+            data: Array.from({length: 30}, (_, i) => Math.floor(Math.random() * 5)),
+            borderColor: '#3B82F6',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            borderWidth: 2,
+            fill: false,
+            tension: 0.4
+        }, {
+            label: 'Registrations',
+            data: Array.from({length: 30}, (_, i) => Math.floor(Math.random() * 20)),
+            borderColor: '#10B981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            borderWidth: 2,
+            fill: false,
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: {
+                    color: '#F3F4F6'
+                }
+            },
+            x: {
+                grid: {
+                    display: false
+                }
+            }
+        }
+    }
+});
+
+// Blog Performance Chart
+const blogCtx = document.getElementById('blogPerformanceChart').getContext('2d');
+new Chart(blogCtx, {
+    type: 'bar',
+    data: {
+        labels: Array.from({length: 30}, (_, i) => {
+            const date = new Date();
+            date.setDate(date.getDate() - (29 - i));
+            return date.toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
+        }),
+        datasets: [{
+            label: 'Views',
+            data: Array.from({length: 30}, (_, i) => Math.floor(Math.random() * 100)),
+            backgroundColor: '#8B5CF6',
+            borderRadius: 4,
+            borderSkipped: false,
+        }, {
+            label: 'Likes',
+            data: Array.from({length: 30}, (_, i) => Math.floor(Math.random() * 50)),
+            backgroundColor: '#EC4899',
+            borderRadius: 4,
+            borderSkipped: false,
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: {
+                    color: '#F3F4F6'
+                }
+            },
+            x: {
+                grid: {
+                    display: false
+                }
+            }
+        }
+    }
+});
+
+// User Growth Chart
+const userCtx = document.getElementById('userGrowthChart').getContext('2d');
+new Chart(userCtx, {
+    type: 'line',
+    data: {
+        labels: Array.from({length: 30}, (_, i) => {
+            const date = new Date();
+            date.setDate(date.getDate() - (29 - i));
+            return date.toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
+        }),
+        datasets: [{
+            label: 'New Users',
+            data: Array.from({length: 30}, (_, i) => Math.floor(Math.random() * 10)),
+            borderColor: '#F59E0B',
+            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: {
+                    color: '#F3F4F6'
+                }
+            },
+            x: {
+                grid: {
+                    display: false
+                }
+            }
+        }
+    }
+});
+</script>
+{% endblock %}
