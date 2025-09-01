@@ -1,0 +1,24 @@
+{% extends "index.html" %}
+
+{% block title %}Offline - {{ company_name }}{% endblock title %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8 text-center">
+    <div>
+      <svg class="mx-auto h-24 w-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+      </svg>
+      <h2 class="mt-6 text-3xl font-extrabold text-gray-900">You're offline</h2>
+      <p class="mt-2 text-sm text-gray-600">
+        Please check your internet connection and try again.
+      </p>
+    </div>
+    <div class="mt-8">
+      <button onclick="window.location.reload()" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        Try Again
+      </button>
+    </div>
+  </div>
+</div>
+{% endblock content %}
