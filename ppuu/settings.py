@@ -13,23 +13,41 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 from .ckeditorconfig import *
+import environ
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# DOMAIN_NAME = 'http://127.0.0.1:8000/'
-DOMAIN_NAME = 'https://event.swtu.in/'
-# DOMAIN_NAME = 'https://9319j0b7-8000.inc1.devtunnels.ms/'
+env = environ.Env(
+    DEBUG=(bool, True),
+    SECRET_KEY=(
+        str,
+        "django-insecure-($h@jyg6f%k0e^akfcq+a4@%-*vs6-h@fokhw936@d=n6*6**t",
+    ),
+    DOMAIN_NAME=(
+        str,
+        "http://127.0.0.1:8000/",
+    ),
+    ALLOWED_HOSTS=(list, ["*"]),
+    INTERNAL_IPS=(list, ["127.0.0.1"]),
+)
+env.read_env(os.path.join(BASE_DIR, ".env"), overwrite=True)
+
+DOMAIN_NAME = env("DOMAIN_NAME")
+
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-($h@jyg6f%k0e^akfcq+a4@%-*vs6-h@fokhw936@d=n6*6**t'
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = ['event.swtu.in','www.event.swtu.in']
+ALLOWED_HOSTS = env("ALLOWED_HOSTS")
+
 
 COMPANY_NAME = 'Event Niti'
 
@@ -69,9 +87,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
+
+INTERNAL_IPS = env("INTERNAL_IPS")
 
 ROOT_URLCONF = 'ppuu.urls'
 TEMPLATES = [
@@ -101,42 +118,29 @@ CACHES = {
     }
 }
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Kolkata'
 
-# ASGI_APPLICATION = 'ppuu.asgi.application'
 WSGI_APPLICATION = 'ppuu.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # },
-    #'default': {
-    #      'ENGINE':'django.db.backends.mysql',
-    #      'NAME':'ppuudb',
-    #      'USER':'root',
-    #      'PASSWORD':'',
-    #      'HOST':'localhost',
-   #       'PORT':'3306',
-   #       'OPTIONS': {
-   #         'charset': 'utf8mb4',  # This is the important part
-    #    },
-     # },
-      'default': {
-           'ENGINE':'django.db.backends.mysql',
-           'NAME':'eventniti',
-           'USER':'shashwat',
-           'PASSWORD':'MyStrongPassword1234$',
-           'HOST':'localhost',
-           'PORT':'3306',
-       }     
+       'default': {
+          'ENGINE':'django.db.backends.mysql',
+          'NAME':env("DB_NAME", default=""),
+          'USER':env("DB_USER", default=""),
+          'PASSWORD':env("DB_PASSWORD", default=""),
+          'HOST':'localhost',
+          'PORT':'3306',
+          'OPTIONS': {
+            'charset': 'utf8mb4',  # This is the important part
+        },
+      },
 }
 
 
@@ -187,8 +191,8 @@ MEDIA_ROOT = BASE_DIR / 'media' # for production
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'imakemyownluck619@gmail.com'
-EMAIL_HOST_PASSWORD = 'miiu rgag ukri trjw'
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
@@ -200,80 +204,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 RAZOR_KEY_ID = 'rzp_test_fFBpYlGzvN55lA'
 RAZOR_KEY_SECRET = 'BtXZLUJmvHcGU9ZyMWllSgJv'
-
-# LOGGING = {
-#     "version": 1,
-#     "disable_existing_loggers": False,
-#     "handlers": {
-#         "console": {
-#             "class": "logging.StreamHandler",
-#         },
-#         'file' : {
-#             'level': 'DEBUG',
-#             'class': 'logging.FileHandler',
-#             'filename': os.path.join(BASE_DIR, 'info.log'),
-#         },
-#     },
-#     "root": {
-#         "handlers": ["console", 'file'],
-#         "level": "DEBUG",
-#     },
-# }
-
-
-# LOGGING = {
-#     "version": 1,
-#     "disable_existing_loggers": False,
-#     "formatters": {
-#         "verbose": {
-#             "format": "{levelname} {asctime} {module} {message}",
-#             "style": "{",
-#         },
-#         "simple": {
-#             "format": "{levelname} {message}",
-#             "style": "{",
-#         },
-#     },
-#     "handlers": {
-#         "console": {
-#             "class": "logging.StreamHandler",
-#             "formatter": "simple",
-#         },
-#         "info_file": {
-#             "level": "INFO",
-#             "class": "logging.FileHandler",
-#             "filename": os.path.join(BASE_DIR, "info.log"),
-#         },
-#         "error_file": {
-#             "level": "ERROR",
-#             "class": "logging.FileHandler",
-#             "filename": os.path.join(BASE_DIR, "error.log"),
-#         },
-#         "debug_file": {
-#             "level": "DEBUG",
-#             "class": "logging.FileHandler",
-#             "filename": os.path.join(BASE_DIR, "debug.log"),
-#         },
-#     },
-#     "loggers": {
-#         "django": {
-#             "handlers": ["info_file"],
-#             "level": "INFO",
-#             "propagate": True,
-#         },
-#         "error_logger": {
-#             "handlers": ["error_file"],
-#             "level": "ERROR",
-#             "propagate": False,
-#         },
-#         "debug_logger": {
-#             "handlers": ["debug_file"],
-#             "level": "DEBUG",
-#             "propagate": False,
-#         },
-#     },
-#     "root": {
-#         "handlers": ["console"],
-#         "level": "WARNING",
-#     },
-# }

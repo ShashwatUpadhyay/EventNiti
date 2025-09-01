@@ -31,7 +31,7 @@ User.add_to_class('is_teacher', property(is_teacher))
 User.add_to_class('is_student', property(is_student))
 User.add_to_class('is_head', property(is_head))
 
-
+from ppuu.settings import ALLOWED_HOSTS
 # Create your views here.
 
 @cache_page(60 * 3) 
