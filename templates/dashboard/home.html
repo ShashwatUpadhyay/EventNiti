@@ -1,0 +1,277 @@
+{% extends 'dashboard/base.html' %}
+
+{% block page_title %}Dashboard Overview{% endblock %}
+
+{% block content %}
+<!-- Quick Stats Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-blue-500">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-600">Total Events</p>
+                <p class="text-3xl font-bold text-gray-900">{{ total_events }}</p>
+                <p class="text-sm text-green-600 mt-1">
+                    <i class="fas fa-arrow-up mr-1"></i>
+                    <span id="today-events">0</span> today
+                </p>
+            </div>
+            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                <i class="fas fa-calendar-alt text-blue-600 text-xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-green-500">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-600">Total Registrations</p>
+                <p class="text-3xl font-bold text-gray-900">{{ total_registrations }}</p>
+                <p class="text-sm text-green-600 mt-1">
+                    <i class="fas fa-arrow-up mr-1"></i>
+                    <span id="today-registrations">0</span> today
+                </p>
+            </div>
+            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                <i class="fas fa-users text-green-600 text-xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-purple-500">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-600">Total Blogs</p>
+                <p class="text-3xl font-bold text-gray-900">{{ total_blogs }}</p>
+                <p class="text-sm text-green-600 mt-1">
+                    <i class="fas fa-arrow-up mr-1"></i>
+                    <span id="today-blogs">0</span> today
+                </p>
+            </div>
+            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                <i class="fas fa-blog text-purple-600 text-xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-orange-500">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-600">Total Users</p>
+                <p class="text-3xl font-bold text-gray-900">{{ total_users }}</p>
+                <p class="text-sm text-blue-600 mt-1">
+                    <i class="fas fa-eye mr-1"></i>
+                    <span id="active-events">0</span> active events
+                </p>
+            </div>
+            <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                <i class="fas fa-user-friends text-orange-600 text-xl"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Registrations Chart -->
+    <div class="bg-white rounded-xl shadow-sm p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-semibold text-gray-900">Daily Registrations</h3>
+            <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 bg-blue-500 rounded-full"></span>
+                <span class="text-sm text-gray-600">Last 30 days</span>
+            </div>
+        </div>
+        <canvas id="registrationsChart" height="300"></canvas>
+    </div>
+
+    <!-- Events Chart -->
+    <div class="bg-white rounded-xl shadow-sm p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-semibold text-gray-900">Daily Events Created</h3>
+            <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                <span class="text-sm text-gray-600">Last 30 days</span>
+            </div>
+        </div>
+        <canvas id="eventsChart" height="300"></canvas>
+    </div>
+</div>
+
+<!-- Content Row -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Recent Events -->
+    <div class="bg-white rounded-xl shadow-sm p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-semibold text-gray-900">Recent Events</h3>
+            <a href="{% url 'dashboard:events' %}" class="text-blue-600 hover:text-blue-700 text-sm font-medium">View All</a>
+        </div>
+        <div class="space-y-4">
+            {% for event in recent_events %}
+            <div class="flex items-center space-x-3 p-3 hover:bg-gray-50 rounded-lg transition">
+                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-calendar text-blue-600"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium text-gray-900 truncate">{{ event.title }}</p>
+                    <p class="text-xs text-gray-500">{{ event.upload_time|date:"M d, Y" }}</p>
+                </div>
+                <span class="px-2 py-1 text-xs font-medium rounded-full {% if event.event_open %}bg-green-100 text-green-800{% else %}bg-gray-100 text-gray-800{% endif %}">
+                    {% if event.event_open %}Active{% else %}Closed{% endif %}
+                </span>
+            </div>
+            {% empty %}
+            <p class="text-gray-500 text-center py-4">No recent events</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Top Performing Events -->
+    <div class="bg-white rounded-xl shadow-sm p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-semibold text-gray-900">Top Events</h3>
+            <a href="{% url 'dashboard:analytics' %}" class="text-blue-600 hover:text-blue-700 text-sm font-medium">Analytics</a>
+        </div>
+        <div class="space-y-4">
+            {% for event in top_events %}
+            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-trophy text-green-600 text-sm"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-900">{{ event.title|truncatechars:25 }}</p>
+                        <p class="text-xs text-gray-500">{{ event.reg_count }} registrations</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="w-12 h-2 bg-gray-200 rounded-full">
+                        <div class="h-2 bg-green-500 rounded-full" style="width: {{ event.reg_count|floatformat:0 }}%"></div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-gray-500 text-center py-4">No events data</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="bg-white rounded-xl shadow-sm p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-semibold text-gray-900">Recent Activity</h3>
+            <button class="text-gray-400 hover:text-gray-600">
+                <i class="fas fa-ellipsis-h"></i>
+            </button>
+        </div>
+        <div class="space-y-4">
+            {% for registration in recent_registrations %}
+            <div class="flex items-center space-x-3 p-3 hover:bg-gray-50 rounded-lg transition">
+                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-user text-blue-600 text-xs"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm text-gray-900">
+                        <span class="font-medium">{{ registration.user.get_full_name|default:registration.user.username }}</span>
+                        registered for
+                        <span class="font-medium">{{ registration.event.title|truncatechars:20 }}</span>
+                    </p>
+                    <p class="text-xs text-gray-500">Recently registered</p>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-gray-500 text-center py-4">No recent activity</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Registrations Chart
+const regCtx = document.getElementById('registrationsChart').getContext('2d');
+new Chart(regCtx, {
+    type: 'line',
+    data: {
+        labels: Array.from({length: 30}, (_, i) => {
+            const date = new Date();
+            date.setDate(date.getDate() - (29 - i));
+            return date.toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
+        }),
+        datasets: [{
+            label: 'Registrations',
+            data: {{ daily_registrations|safe }},
+            borderColor: '#3B82F6',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: {
+                    color: '#F3F4F6'
+                }
+            },
+            x: {
+                grid: {
+                    display: false
+                }
+            }
+        }
+    }
+});
+
+// Events Chart
+const eventCtx = document.getElementById('eventsChart').getContext('2d');
+new Chart(eventCtx, {
+    type: 'bar',
+    data: {
+        labels: Array.from({length: 30}, (_, i) => {
+            const date = new Date();
+            date.setDate(date.getDate() - (29 - i));
+            return date.toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
+        }),
+        datasets: [{
+            label: 'Events',
+            data: {{ daily_events|safe }},
+            backgroundColor: '#10B981',
+            borderRadius: 4,
+            borderSkipped: false,
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: {
+                    color: '#F3F4F6'
+                }
+            },
+            x: {
+                grid: {
+                    display: false
+                }
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

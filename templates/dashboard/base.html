@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Dashboard - Event Niti{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-gray-50">
+    <!-- Sidebar -->
+    <div class="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-in-out" id="sidebar">
+        <div class="flex items-center justify-center h-16 bg-gradient-to-r from-blue-600 to-purple-600">
+            <h1 class="text-white text-xl font-bold">Event Niti Admin</h1>
+        </div>
+        
+        <nav class="mt-8">
+            <div class="px-4 space-y-2">
+                <a href="{% url 'dashboard:home' %}" class="flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition {% if request.resolver_match.url_name == 'home' %}bg-blue-50 text-blue-600{% endif %}">
+                    <i class="fas fa-tachometer-alt mr-3"></i>
+                    Dashboard
+                </a>
+                
+                <a href="{% url 'dashboard:events' %}" class="flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition {% if request.resolver_match.url_name == 'events' %}bg-blue-50 text-blue-600{% endif %}">
+                    <i class="fas fa-calendar-alt mr-3"></i>
+                    Events
+                </a>
+                
+                <a href="{% url 'dashboard:blogs' %}" class="flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition {% if request.resolver_match.url_name == 'blogs' %}bg-blue-50 text-blue-600{% endif %}">
+                    <i class="fas fa-blog mr-3"></i>
+                    Blogs
+                </a>
+                
+                <a href="{% url 'dashboard:registrations' %}" class="flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition {% if request.resolver_match.url_name == 'registrations' %}bg-blue-50 text-blue-600{% endif %}">
+                    <i class="fas fa-users mr-3"></i>
+                    Registrations
+                </a>
+                
+                <a href="{% url 'dashboard:users' %}" class="flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition {% if request.resolver_match.url_name == 'users' %}bg-blue-50 text-blue-600{% endif %}">
+                    <i class="fas fa-user-friends mr-3"></i>
+                    Users
+                </a>
+                
+                <a href="{% url 'dashboard:analytics' %}" class="flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition {% if request.resolver_match.url_name == 'analytics' %}bg-blue-50 text-blue-600{% endif %}">
+                    <i class="fas fa-chart-bar mr-3"></i>
+                    Analytics
+                </a>
+            </div>
+            
+            <div class="mt-8 pt-8 border-t border-gray-200">
+                <div class="px-4 space-y-2">
+                    <a href="/" class="flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-gray-50 transition">
+                        <i class="fas fa-home mr-3"></i>
+                        Back to Site
+                    </a>
+                    
+                    <a href="{% url 'logout' %}" class="flex items-center px-4 py-3 text-red-600 rounded-lg hover:bg-red-50 transition">
+                        <i class="fas fa-sign-out-alt mr-3"></i>
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Mobile sidebar overlay -->
+    <div class="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden hidden" id="sidebar-overlay"></div>
+
+    <!-- Main content -->
+    <div class="lg:ml-64">
+        <!-- Top bar -->
+        <header class="bg-white shadow-sm border-b border-gray-200">
+            <div class="flex items-center justify-between px-6 py-4">
+                <div class="flex items-center">
+                    <button class="lg:hidden text-gray-600 hover:text-gray-900" id="sidebar-toggle">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <h2 class="ml-4 text-xl font-semibold text-gray-800">{% block page_title %}Dashboard{% endblock %}</h2>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button class="flex items-center text-gray-600 hover:text-gray-900">
+                            <i class="fas fa-bell text-xl"></i>
+                            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user text-white text-sm"></i>
+                        </div>
+                        <span class="text-gray-700 font-medium">{{ user.get_full_name|default:user.username }}</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page content -->
+        <main class="p-6">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script>
+        // Sidebar toggle
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+            sidebarOverlay.classList.toggle('hidden');
+        });
+
+        sidebarOverlay.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+            sidebarOverlay.classList.add('hidden');
+        });
+
+        // Auto-refresh stats every 30 seconds
+        setInterval(() => {
+            fetch('{% url "dashboard:quick_stats_api" %}')
+                .then(response => response.json())
+                .then(data => {
+                    // Update quick stats if elements exist
+                    const elements = {
+                        'today-registrations': data.today_registrations,
+                        'today-events': data.today_events,
+                        'today-blogs': data.today_blogs,
+                        'active-events': data.active_events,
+                        'pending-registrations': data.pending_registrations
+                    };
+                    
+                    Object.entries(elements).forEach(([id, value]) => {
+                        const element = document.getElementById(id);
+                        if (element) element.textContent = value;
+                    });
+                })
+                .catch(error => console.error('Error fetching stats:', error));
+        }, 30000);
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

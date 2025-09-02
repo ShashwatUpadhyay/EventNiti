@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Event Niti Blog Digest</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #3b82f6; color: white; padding: 20px; text-align: center; }
+        .blog-item { border-bottom: 1px solid #eee; padding: 20px 0; }
+        .blog-title { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+        .blog-excerpt { color: #666; margin-bottom: 10px; }
+        .blog-meta { font-size: 12px; color: #999; }
+        .footer { background: #f8f9fa; padding: 20px; text-align: center; margin-top: 30px; }
+        .btn { background: #3b82f6; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Event Niti Blog Digest</h1>
+            <p>{{ frequency|title }} Update</p>
+        </div>
+        
+        <div class="content">
+            <p>Hi {{ user.first_name|default:user.username }},</p>
+            <p>Here are the latest blog posts from Event Niti:</p>
+            
+            {% for blog in blogs %}
+            <div class="blog-item">
+                <div class="blog-title">{{ blog.title }}</div>
+                <div class="blog-excerpt">{{ blog.excerpt }}</div>
+                <div class="blog-meta">
+                    By {{ blog.user.get_full_name|default:blog.user.username }} • 
+                    {{ blog.published_at|date:"M d, Y" }} • 
+                    {{ blog.read_time }} min read
+                </div>
+                <p><a href="{{ domain }}{{ blog.get_absolute_url }}" class="btn">Read More</a></p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="footer">
+            <p>You're receiving this because you subscribed to Event Niti blog updates.</p>
+            <p><a href="{{ unsubscribe_url }}">Unsubscribe</a></p>
+        </div>
+    </div>
+</body>
+</html>

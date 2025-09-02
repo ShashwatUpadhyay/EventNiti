@@ -1,0 +1,178 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block title %}Newsletter Subscription - Event Niti{% endblock %}
+
+{% block extra_head %}
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-12">
+    <div class="container mx-auto px-4">
+        <div class="max-w-2xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-envelope text-3xl text-white"></i>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-900 mb-4">Stay Updated with Event Niti</h1>
+                <p class="text-lg text-gray-600">Get the latest blog posts, event updates, and exclusive content delivered to your inbox</p>
+            </div>
+
+            <!-- Subscription Form -->
+            <div class="bg-white rounded-xl shadow-sm p-8">
+                <form method="POST" class="space-y-6">
+                    {% csrf_token %}
+                    
+                    <!-- Frequency Selection -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">How often would you like to receive updates?</label>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <label class="relative">
+                                <input type="radio" name="frequency" value="daily" class="sr-only peer">
+                                <div class="p-4 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:bg-blue-50 hover:border-gray-300 transition">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="font-medium text-gray-900">Daily</div>
+                                            <div class="text-sm text-gray-500">Every day</div>
+                                        </div>
+                                        <i class="fas fa-calendar-day text-blue-600 opacity-0 peer-checked:opacity-100"></i>
+                                    </div>
+                                </div>
+                            </label>
+                            
+                            <label class="relative">
+                                <input type="radio" name="frequency" value="weekly" checked class="sr-only peer">
+                                <div class="p-4 border-2 border-blue-600 bg-blue-50 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:bg-blue-50 hover:border-gray-300 transition">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="font-medium text-gray-900">Weekly</div>
+                                            <div class="text-sm text-gray-500">Once a week</div>
+                                        </div>
+                                        <i class="fas fa-calendar-week text-blue-600"></i>
+                                    </div>
+                                </div>
+                            </label>
+                            
+                            <label class="relative">
+                                <input type="radio" name="frequency" value="monthly" class="sr-only peer">
+                                <div class="p-4 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:bg-blue-50 hover:border-gray-300 transition">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="font-medium text-gray-900">Monthly</div>
+                                            <div class="text-sm text-gray-500">Once a month</div>
+                                        </div>
+                                        <i class="fas fa-calendar-alt text-blue-600 opacity-0 peer-checked:opacity-100"></i>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Category Selection -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Which topics interest you? (Optional)</label>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {% for category in categories %}
+                            <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                <input type="checkbox" name="categories" value="{{ category.id }}" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                <div class="ml-3 flex items-center gap-2">
+                                    <div class="w-3 h-3 rounded-full" style="background-color: {{ category.color }}"></div>
+                                    <span class="text-sm font-medium text-gray-900">{{ category.name }}</span>
+                                </div>
+                            </label>
+                            {% endfor %}
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2">Leave unchecked to receive updates from all categories</p>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="pt-4">
+                        <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-lg font-medium text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105">
+                            <i class="fas fa-envelope mr-2"></i>
+                            Subscribe to Newsletter
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Benefits -->
+            <div class="mt-12 grid md:grid-cols-3 gap-6">
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-newspaper text-blue-600"></i>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-2">Latest Articles</h3>
+                    <p class="text-sm text-gray-600">Get notified about new blog posts and featured content</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-calendar-check text-green-600"></i>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-2">Event Updates</h3>
+                    <p class="text-sm text-gray-600">Stay informed about upcoming events and activities</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-star text-purple-600"></i>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-2">Exclusive Content</h3>
+                    <p class="text-sm text-gray-600">Access subscriber-only content and early announcements</p>
+                </div>
+            </div>
+
+            <!-- Privacy Notice -->
+            <div class="mt-8 p-4 bg-gray-100 rounded-lg">
+                <div class="flex items-start gap-3">
+                    <i class="fas fa-shield-alt text-green-600 mt-1"></i>
+                    <div>
+                        <h4 class="font-medium text-gray-900 mb-1">Your Privacy Matters</h4>
+                        <p class="text-sm text-gray-600">We respect your privacy and will never share your email address with third parties. You can unsubscribe at any time with a single click.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Back to Blog -->
+            <div class="text-center mt-8">
+                <a href="{% url 'blog_list' %}" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Blog
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Add interactive effects
+document.addEventListener('DOMContentLoaded', function() {
+    const radioInputs = document.querySelectorAll('input[name="frequency"]');
+    
+    radioInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            // Remove checked styles from all labels
+            radioInputs.forEach(radio => {
+                const label = radio.closest('label').querySelector('div');
+                label.className = 'p-4 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:bg-blue-50 hover:border-gray-300 transition';
+                const icon = label.querySelector('i');
+                icon.classList.add('opacity-0');
+                icon.classList.remove('opacity-100');
+            });
+            
+            // Add checked styles to selected label
+            if (this.checked) {
+                const label = this.closest('label').querySelector('div');
+                label.className = 'p-4 border-2 border-blue-600 bg-blue-50 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:bg-blue-50 hover:border-gray-300 transition';
+                const icon = label.querySelector('i');
+                icon.classList.remove('opacity-0');
+                icon.classList.add('opacity-100');
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

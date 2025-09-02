@@ -39,6 +39,8 @@ class Event(models.Model):
         max_length=100, null=True, blank=True, help_text=('let he backend handle it'))
     cert_distributed = models.BooleanField(default=False)
     badge_distributed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -84,6 +86,8 @@ class EventSubmission(models.Model):
         max_length=60, null=True, blank=True, verbose_name='Attendence Taken By/At ')
     uid = models.CharField(max_length=100, default=uuid.uuid4 ,null=True, blank=True)
     allowed = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True,blank=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True,blank=True)
 
     def __str__(self):
         return str(self.full_name + " - " + self.event.title)

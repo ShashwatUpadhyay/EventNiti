@@ -60,7 +60,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "debug_toolbar",
+    # "debug_toolbar",
     'django_ckeditor_5',
     'base',
     'account',
@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     'review',
     'contact',
     'payment',
+    'dashboard',
     'django_redis',
 ]
 
@@ -85,7 +86,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    # "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 INTERNAL_IPS = env("INTERNAL_IPS")
@@ -138,7 +139,9 @@ DATABASES = {
           'HOST':'localhost',
           'PORT':'3306',
           'OPTIONS': {
-            'charset': 'utf8mb4',  # This is the important part
+            'charset': 'utf8mb4',
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'isolation_level': None,
         },
       },
 }
@@ -173,7 +176,7 @@ TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -202,5 +205,5 @@ EMAIL_USE_SSL = False
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-RAZOR_KEY_ID = 'rzp_test_fFBpYlGzvN55lA'
-RAZOR_KEY_SECRET = 'BtXZLUJmvHcGU9ZyMWllSgJv'
+RAZOR_KEY_ID = env("RAZOR_KEY_ID")
+RAZOR_KEY_SECRET = env("RAZOR_KEY_SECRET")
