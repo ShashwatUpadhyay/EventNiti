@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseBadRequest
 from events.models import Event, TemporaryEventSubmission, EventSubmission
 from django.contrib import messages 
-from ppuu.settings import DOMAIN_NAME
+from .models import Payment
 import logging
 logger = logging.getLogger(__name__)
 
@@ -27,7 +27,9 @@ def event_payment(request,slug, token):
 
     # order id of newly created order.
     razorpay_order_id = razorpay_order['id']
-    callback_url = f'{DOMAIN_NAME}payment/{slug}/{token}/paymenthandler/'
+    domain = request.get_host()
+    protocol = request.scheme
+    callback_url = f'{protocol}://{domain}/payment/{slug}/{token}/paymenthandler/'
 
     # we need to pass these details to frontend.
     context = {}
@@ -68,9 +70,10 @@ def paymenthandler(request, slug, token):
             if result is not None:
                 amount = event.price*100  # Rs. 200
                 try:
-
                     # capture the payemt
                     razorpay_client.payment.capture(payment_id, amount)
+                    payment_details = razorpay_client.payment.fetch(payment_id)
+                    
                     data = {
                         'uu_id': tempSub.uu_id,
                         'full_name': tempSub.full_name,
@@ -79,12 +82,21 @@ def paymenthandler(request, slug, token):
                         'user': tempSub.user,
                         'course': tempSub.course,
                         'section': tempSub.section,
-                        'event': event
+                        'event': event,
                     }
                     submission = EventSubmission.objects.create(**data)
                     event.count = event.count + 1
                     event.save()
                     tempSub.delete()
+                    Payment.objects.create(
+                        user=tempSub.user,
+                        event=event,
+                        payment_id=payment_id,
+                        gatewate_response=payment_details,
+                        amount=amount/100,
+                        signature=signature, 
+                        order_id=razorpay_order_id
+                    )
                     # render success page on successful caputre of payment
                     messages.success(request, f"Payment Successful for {event.title} event")
                     logger.info(f'Payment successful for {event.title} by {submission.full_name}')
@@ -93,6 +105,15 @@ def paymenthandler(request, slug, token):
                     print(e)
 
                     # if there is an error while capturing payment.
+                    Payment.objects.create(
+                        user=tempSub.user,
+                        event=event,
+                        payment_id=payment_id,
+                        gatewate_response=payment_details,
+                        amount=amount/100,
+                        signature=signature, 
+                        order_id=razorpay_order_id
+                    )
                     tempSub.delete()
                     logger.error(f'Payment capture failed for {event.title} by {tempSub.full_name} \nException: {e}')
                     messages.error(request, "Payment Failed. Please try again.")
