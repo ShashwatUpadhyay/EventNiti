@@ -90,7 +90,6 @@ def paymenthandler(request, slug, token):
                     submission = EventSubmission.objects.create(**data)
                     event.count = event.count + 1
                     event.save()
-                    tempSub.delete()
                     Payment.objects.create(
                         user=tempSub.user,
                         event=event,
@@ -101,6 +100,7 @@ def paymenthandler(request, slug, token):
                         order_id=razorpay_order_id,
                         status='COMPLETED'
                     )
+                    tempSub.delete()
                     # render success page on successful caputre of payment
                     messages.success(request, f"Payment Successful for {event.title} event")
                     logger.info(f'Payment successful for {event.title} by {submission.full_name}')
