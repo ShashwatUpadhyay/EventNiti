@@ -6,6 +6,8 @@ from django.http import HttpResponseBadRequest
 from events.models import Event, TemporaryEventSubmission, EventSubmission
 from django.contrib import messages 
 from ppuu.settings import DOMAIN_NAME
+import logging
+logger = logging.getLogger(__name__)
 
 # authorize razorpay client with API Keys.
 razorpay_client = razorpay.Client(
@@ -35,7 +37,7 @@ def event_payment(request,slug, token):
     context['currency'] = currency
     context['callback_url'] = callback_url
     context['event'] = event
-
+    logger.info(f'Initiating payment for {event.title} by {tempSub.full_name}')
     return render(request, 'payment/payment.html', context=context)
 
 
@@ -85,12 +87,14 @@ def paymenthandler(request, slug, token):
                     tempSub.delete()
                     # render success page on successful caputre of payment
                     messages.success(request, f"Payment Successful for {event.title} event")
+                    logger.info(f'Payment successful for {event.title} by {submission.full_name}')
                     return redirect('event', slug=slug)
                 except Exception as e:
                     print(e)
 
                     # if there is an error while capturing payment.
                     tempSub.delete()
+                    logger.error(f'Payment capture failed for {event.title} by {tempSub.full_name} \nException: {e}')
                     messages.error(request, "Payment Failed. Please try again.")
                     return redirect('event', slug=slug)
             else:
@@ -98,14 +102,17 @@ def paymenthandler(request, slug, token):
                 # if signature verification fails.
                 print("Signature verification failed")
                 tempSub.delete()
+                logger.error(f'Payment signature verification failed for {event.title} by {tempSub.full_name}')
                 messages.error(request, "Payment Failed. Please try again.")
                 return redirect('event', slug=slug)
         except Exception as e:
 
             # if we don't find the required parameters in POST data
+            logger.error(f'Payment processing error for {event.title} by {tempSub.full_name} \nException: {e}')
             messages.error(request, "Payment Failed. Please try again.")
             print(e)
             return redirect('event', slug=slug)
     else:
        # if other than POST request is made.
-            return redirect('event', slug=slug)
+        logger.error(f'Invalid payment request method for {event.title} by {tempSub.full_name}')
+        return redirect('event', slug=slug)
