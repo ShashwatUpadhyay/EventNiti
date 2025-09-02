@@ -100,10 +100,10 @@ def paymenthandler(request, slug, token):
                         order_id=razorpay_order_id,
                         status='COMPLETED'
                     )
-                    tempSub.delete()
                     # render success page on successful caputre of payment
                     messages.success(request, f"Payment Successful for {event.title} event")
                     logger.info(f'Payment successful for {event.title} by {submission.full_name}')
+                    tempSub.delete()
                     return redirect('event', slug=slug)
                 except Exception as e:
                     print(e)
@@ -120,8 +120,8 @@ def paymenthandler(request, slug, token):
                         order_id=razorpay_order_id,
                         status='FAILED'
                     )
-                    tempSub.delete()
                     logger.error(f'Payment capture failed for {event.title} by {tempSub.full_name} \nException: {e}')
+                    tempSub.delete()
                     messages.error(request, "Payment Failed. Please try again.")
                     return redirect('event', slug=slug)
             else:
