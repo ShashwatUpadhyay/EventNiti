@@ -106,6 +106,7 @@ def paymenthandler(request, slug, token):
                     print(e)
 
                     # if there is an error while capturing payment.
+                    payment_details = razorpay_client.payment.fetch(payment_id)
                     Payment.objects.create(
                         user=tempSub.user,
                         event=event,
