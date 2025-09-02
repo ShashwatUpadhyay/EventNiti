@@ -1,0 +1,226 @@
+{% extends "index.html" %}
+
+{% block title %}
+Payment | {{ event.title }} | {{ company_name }}
+{% endblock title %}
+
+{% block content %}
+<style>
+    .payment-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .payment-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+    
+    .payment-header {
+        background: linear-gradient(to right, #4f46e5, #7c3aed);
+        color: white;
+        padding: 1.5rem;
+        text-align: center;
+    }
+    
+    .payment-body {
+        padding: 2rem;
+    }
+    
+    .payment-summary {
+        background: #f9fafb;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .payment-methods {
+        margin-top: 2rem;
+    }
+    
+    .payment-method {
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .payment-method:hover {
+        border-color: #a5b4fc;
+        background: #f8fafc;
+    }
+    
+    .payment-method.active {
+        border-color: #4f46e5;
+        background: #f0f4ff;
+    }
+    
+    .payment-method img {
+        height: 24px;
+        margin-right: 12px;
+    }
+    
+    .payment-btn {
+        width: 100%;
+        padding: 1rem;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+    }
+    
+    .payment-details {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+    
+    .payment-detail {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #f3f4f6;
+    }
+    
+    @media (max-width: 640px) {
+        .payment-details {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-r from-indigo-800 to-purple-700 py-16 overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-full opacity-10">
+        <div class="absolute top-20 left-10 w-40 h-40 rounded-full bg-purple-400 animate-pulse"></div>
+        <div class="absolute bottom-10 right-20 w-60 h-60 rounded-full bg-blue-400 animate-pulse animation-delay-2000"></div>
+    </div>
+    
+    <div class="container mx-auto px-6 relative z-10">
+        <div class="text-center">
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">
+                Complete Your Registration
+            </h1>
+            <p class="text-xl text-indigo-100 max-w-3xl mx-auto">
+                Secure your spot at {{ event.title }}
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Main Content -->
+<section class="py-12 bg-gray-50">
+    <div class="container mx-auto px-6">
+        <!-- Breadcrumbs -->
+        <div class="flex items-center text-sm text-gray-600 mb-6">
+            <a href="{% url 'events' %}" class="hover:text-indigo-600">Events</a>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+            <a href="{% url 'event' event.slug %}" class="hover:text-indigo-600">{{ event.title|truncatechars:30 }}</a>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+            <span class="text-indigo-600">Payment</span>
+        </div>
+        
+        <div class="payment-container">
+            <div class="payment-card">
+                <div class="payment-header">
+                    <h2 class="text-2xl font-bold">Payment Details</h2>
+                </div>
+                
+                <div class="payment-body">
+                    <!-- Event Summary -->
+                    <div class="payment-summary">
+                        <div class="flex items-center mb-4">
+                            {% if event.poster %}
+                            <img src="{{ event.poster.url }}" alt="{{ event.title }}" class="w-16 h-16 rounded-lg object-cover mr-4">
+                            {% else %}
+                            <div class="w-16 h-16 rounded-lg bg-gradient-to-r from-indigo-100 to-purple-100 flex items-center justify-center mr-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            {% endif %}
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-800">{{ event.title }}</h3>
+                                <p class="text-gray-600">{{ event.start_date|date:"F d, Y" }} • {{ event.location|default:"Virtual Event" }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-details">
+                            <div class="payment-detail">
+                                <span class="text-gray-600 ">Ticket Type</span>
+                                <span class="font-medium text-green-800">Standard Admission</span>
+                            </div>
+                            <br>
+                            <div class="payment-detail">
+                                <span class="text-gray-600">Price</span>
+                                <span class="font-medium text-green-800">₹{{ event.price }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Payment Button -->
+                    <button id="pay-btn" class="payment-btn bg-indigo-600 text-white hover:bg-indigo-700 mt-6">
+                        Pay ₹{{ event.price }} Now
+                    </button>
+                    
+                    <!-- Secure Payment Notice -->
+                    <div class="flex items-center justify-center mt-4 text-sm text-gray-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                        Secure payment processed by {{ company_name }}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Need Help Section -->
+            <div class="mt-6 bg-white rounded-lg shadow-sm p-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-3">Need help with your payment?</h3>
+                <p class="text-gray-600 mb-4">Contact our support team for assistance with your transaction.</p>
+                <a href="{% url 'contact' %}" class="inline-block px-4 py-2 border border-indigo-600 text-indigo-600 font-medium rounded-lg hover:bg-indigo-50">
+                    Contact Support
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+ <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    var options = {
+      
+      // Enter the Key ID generated from the Dashboard
+      key: "{{ razorpay_merchant_key }}", 
+      
+      // Amount is in currency subunits.
+      // Default currency is INR. Hence, 
+      // 50000 refers to 50000 paise
+      amount: "{{ razorpay_amount }}", 
+      currency: "{{ currency }}",
+      
+      // Your/store name.
+      name: "Event Niti", 
+      
+      // Pass the `id` obtained in the response of Step 1
+      order_id: "{{ razorpay_order_id }}", 
+      callback_url: "{{ callback_url }}",
+    };
+    
+    // initialise razorpay with the options.
+    var rzp1 = new Razorpay(options);
+    
+    // add event listener to the payment button.
+    document.getElementById("pay-btn").onclick = function (e) {
+      rzp1.open();
+      e.preventDefault();
+    };
+  </script>
+{% endblock content %}

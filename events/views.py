@@ -93,9 +93,13 @@ def eventregister(request, slug):
         course = request.POST.get('course')
         section = request.POST.get('section')
         year = request.POST.get('year')
-        submission = models.EventSubmission.objects.create(uu_id=uuid,full_name = full_name,year=year,email = email,user=request.user,course = course,section = section,event = event)
-        event.count = event.count + 1
-        event.save()
+        if event.price > 0:
+            submission , _ = models.TemporaryEventSubmission.objects.get_or_create(uu_id=uuid,full_name = full_name,year=year,email = email,user=request.user,course = course,section = section,event = event)
+            return redirect('payment', slug=event.slug, token=submission.uid)
+        else:
+            submission = models.EventSubmission.objects.create(uu_id=uuid,full_name = full_name,year=year,email = email,user=request.user,course = course,section = section,event = event)
+            event.count = event.count + 1
+            event.save()
         
         messages.success(request,f"Submission Successful in {event.title} event")
         return redirect('events')

@@ -1,0 +1,195 @@
+{% extends 'dashboard/base.html' %}
+
+{% block page_title %}Blogs Management{% endblock %}
+
+{% block content %}
+<!-- Header Actions -->
+<div class="flex items-center justify-between mb-6">
+    <div>
+        <h1 class="text-2xl font-bold text-gray-900">Blogs Management</h1>
+        <p class="text-gray-600">Manage all blog posts and content</p>
+    </div>
+    <a href="{% url 'my_blogs' %}" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition flex items-center gap-2">
+        <i class="fas fa-plus"></i>
+        Manage Blogs
+    </a>
+</div>
+
+<!-- Filters -->
+<div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+    <form method="GET" class="flex flex-wrap gap-4 items-end">
+        <div class="flex-1 min-w-64">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Search Blogs</label>
+            <input type="text" name="search" value="{{ search }}" placeholder="Search by title or content..." 
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        </div>
+        
+        <div class="min-w-48">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+            <select name="status" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <option value="">All Status</option>
+                <option value="draft" {% if status_filter == 'draft' %}selected{% endif %}>Draft</option>
+                <option value="published" {% if status_filter == 'published' %}selected{% endif %}>Published</option>
+                <option value="archived" {% if status_filter == 'archived' %}selected{% endif %}>Archived</option>
+            </select>
+        </div>
+        
+        <div class="min-w-48">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+            <select name="category" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <option value="">All Categories</option>
+                {% for category in categories %}
+                <option value="{{ category.id }}" {% if category_filter == category.id|stringformat:"s" %}selected{% endif %}>{{ category.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <button type="submit" class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition">
+            <i class="fas fa-search mr-2"></i>Filter
+        </button>
+        
+        <a href="{% url 'dashboard:blogs' %}" class="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-200 transition">
+            <i class="fas fa-times mr-2"></i>Clear
+        </a>
+    </form>
+</div>
+
+<!-- Blogs Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for blog in blogs %}
+    <div class="bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow overflow-hidden">
+        {% if blog.featured_image %}
+        <img src="{{ blog.featured_image.url }}" alt="{{ blog.title }}" class="w-full h-48 object-cover">
+        {% else %}
+        <div class="w-full h-48 bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center">
+            <i class="fas fa-blog text-4xl text-white opacity-50"></i>
+        </div>
+        {% endif %}
+        
+        <div class="p-6">
+            <!-- Status and Category -->
+            <div class="flex items-center gap-2 mb-3">
+                <span class="px-3 py-1 text-xs font-medium rounded-full
+                    {% if blog.status == 'published' %}bg-green-100 text-green-800
+                    {% elif blog.status == 'draft' %}bg-yellow-100 text-yellow-800
+                    {% else %}bg-gray-100 text-gray-800{% endif %}">
+                    {{ blog.status|title }}
+                </span>
+                {% if blog.category %}
+                <span class="px-3 py-1 text-xs font-medium rounded-full" style="background-color: {{ blog.category.color }}20; color: {{ blog.category.color }}">
+                    {{ blog.category.name }}
+                </span>
+                {% endif %}
+                {% if blog.is_featured %}
+                <span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium">
+                    <i class="fas fa-star mr-1"></i>Featured
+                </span>
+                {% endif %}
+            </div>
+            
+            <!-- Title and Excerpt -->
+            <h3 class="font-bold text-lg mb-2 line-clamp-2">{{ blog.title }}</h3>
+            <p class="text-gray-600 text-sm mb-4 line-clamp-3">{{ blog.excerpt|default:blog.content|truncatechars:150 }}</p>
+            
+            <!-- Stats -->
+            <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+                <div class="flex items-center gap-4">
+                    <span><i class="fas fa-eye mr-1"></i>{{ blog.view_count }}</span>
+                    <span><i class="fas fa-heart mr-1"></i>{{ blog.like_count }}</span>
+                    <span><i class="fas fa-comment mr-1"></i>{{ blog.comment_count }}</span>
+                </div>
+                <span>{{ blog.read_time }} min</span>
+            </div>
+            
+            <!-- Author and Date -->
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-xs text-gray-600"></i>
+                    </div>
+                    <div>
+                        <div class="text-sm font-medium text-gray-900">{{ blog.user.get_full_name|default:blog.user.username }}</div>
+                        <div class="text-xs text-gray-500">{{ blog.created_at|date:"M d, Y" }}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Actions -->
+            <div class="flex items-center gap-2">
+                <a href="{% url 'blog_detail' blog.slug %}" target="_blank" class="flex-1 bg-green-100 text-green-700 text-center py-2 rounded-lg hover:bg-green-200 transition text-sm font-medium">
+                    <i class="fas fa-eye mr-1"></i>View
+                </a>
+                <a href="{% url 'blog_detail' blog.slug %}" class="flex-1 bg-blue-100 text-blue-700 text-center py-2 rounded-lg hover:bg-blue-200 transition text-sm font-medium">
+                    <i class="fas fa-eye mr-1"></i>View
+                </a>
+                <a href="{% url 'soft_delete_blog' blog.slug %}" onclick="return confirm('Delete this blog?')" class="px-3 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition text-sm">
+                    <i class="fas fa-trash"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-span-full text-center py-12">
+        <i class="fas fa-blog text-6xl text-gray-300 mb-4"></i>
+        <h3 class="text-xl font-semibold text-gray-600 mb-2">No blogs found</h3>
+        <p class="text-gray-500 mb-6">Create your first blog post to get started</p>
+        <a href="{% url 'my_blogs' %}" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
+            Manage Blogs
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if blogs.has_other_pages %}
+<div class="mt-8 flex justify-center">
+    <nav class="flex items-center space-x-2">
+        {% if blogs.has_previous %}
+        <a href="?page={{ blogs.previous_page_number }}{% if search %}&search={{ search }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}" 
+           class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        {% endif %}
+        
+        {% for num in blogs.paginator.page_range %}
+        {% if num == blogs.number %}
+        <span class="px-4 py-2 bg-blue-600 text-white rounded-lg">{{ num }}</span>
+        {% else %}
+        <a href="?page={{ num }}{% if search %}&search={{ search }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}" 
+           class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition">{{ num }}</a>
+        {% endif %}
+        {% endfor %}
+        
+        {% if blogs.has_next %}
+        <a href="?page={{ blogs.next_page_number }}{% if search %}&search={{ search }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}" 
+           class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+            <i class="fas fa-chevron-right"></i>
+        </a>
+        {% endif %}
+    </nav>
+</div>
+{% endif %}
+
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Delete functionality moved to direct links
+</script>
+
+<style>
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+</style>
+{% endblock %}

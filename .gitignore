@@ -31,3 +31,4 @@ venv/
 instance/
 *.DS_Store
 .env
+staticfiles/

@@ -1,0 +1,846 @@
+{% extends "index.html" %}
+
+{% block title %}
+{{ company_name }} | University Event Management Platform - Digital Certificates & Ticketing
+{% endblock title %}
+
+<!-- SEO Meta Tags -->
+{% block extra_head %}
+<meta name="description" content="{{ company_name }} - Complete university event management platform with digital certificates, QR ticketing, attendance tracking, and analytics. Streamline your academic events today.">
+<meta name="keywords" content="university events, event management, digital certificates, QR tickets, student engagement, academic events, event analytics">
+<meta name="author" content="{{ company_name }}">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph Meta Tags -->
+<meta property="og:title" content="{{ company_name }} - University Event Management Platform">
+<meta property="og:description" content="Streamline university events with digital certificates, QR ticketing, and comprehensive analytics.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+{% if rand_mem %}<meta property="og:image" content="{{ request.build_absolute_uri }}{{ rand_mem }}">{% endif %}
+
+<!-- Twitter Card Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ company_name }} - University Event Management">
+<meta name="twitter:description" content="Complete event management solution for universities with digital credentials and analytics.">
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "{{ company_name }}",
+  "description": "University event management platform",
+  "url": "{{ request.build_absolute_uri }}",
+  "sameAs": [
+    "https://facebook.com/eventniti",
+    "https://twitter.com/eventniti",
+    "https://linkedin.com/company/eventniti"
+  ]
+}
+</script>
+{% endblock extra_head %}
+
+{% block content %}
+{% load static %}
+
+<!-- Preload critical resources -->
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" as="style">
+<link rel="preload" href="https://unpkg.com/swiper/swiper-bundle.min.css" as="style">
+<link rel="preload" href="https://unpkg.com/aos@2.3.1/dist/aos.css" as="style">
+
+<!-- Load stylesheets -->
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+  /* Performance optimizations */
+  * {
+    box-sizing: border-box;
+  }
+  
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #F8F9FA;
+    color: #343a40;
+  }
+
+  /* -- Hero Section Specific -- */
+  #hero-section {
+    position: relative;
+    height: 100vh;
+    min-height: 600px;
+    overflow: hidden;
+    will-change: transform;
+  }
+  #hero-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-image: radial-gradient(circle at 10% 15%, rgba(255,255,255,0.08) 0%, transparent 30%),
+                     radial-gradient(circle at 90% 85%, rgba(255,255,255,0.06) 0%, transparent 40%);
+    opacity: 0.7;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+  }
+  .hero-headline span {
+    display: inline-block;
+  }
+
+  /* -- General Section Styling -- */
+  .section-padding {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+  .section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #1a237e;
+  }
+  .section-subtitle {
+    font-size: 1.125rem;
+    color: #5a67d8;
+    margin-bottom: 4rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* -- Feature Card Styling -- */
+  .feature-card {
+    background-color: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e2e8f0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.15), 0 10px 10px -5px rgba(99, 102, 241, 0.1);
+  }
+  .feature-icon-wrapper {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%);
+  }
+  .feature-icon {
+    width: 2rem;
+    height: 2rem;
+    color: #5a67d8;
+  }
+
+  /* -- Event Card Styling -- */
+  .event-card {
+    background-color: white;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e2e8f0;
+  }
+  .event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.08);
+  }
+  .event-card-img-wrapper {
+    position: relative;
+    height: 14rem;
+    overflow: hidden;
+  }
+  .event-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  .event-card:hover .event-card-img {
+    transform: scale(1.05);
+  }
+  .event-status-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    z-index: 1;
+  }
+  .badge-concluded { background-color: #6b7280; color: white; }
+  .badge-open { background-color: #10b981; color: white; }
+  .badge-closed { background-color: #ef4444; color: white; }
+
+  /* -- Testimonial Styling -- */
+  .testimonial-card {
+    background-color: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    position: relative;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 1rem;
+  }
+  .testimonial-card::before {
+      content: '\201C';
+      position: absolute;
+      top: -0.5rem;
+      left: 1rem;
+      font-size: 4rem;
+      color: rgba(99, 102, 241, 0.15);
+      font-family: serif;
+      z-index: 0;
+  }
+  .testimonial-content {
+      position: relative;
+      z-index: 1;
+  }
+
+  /* -- Memories Gallery Styling -- */
+  .memory-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+   .memory-item:hover {
+    transform: scale(1.03);
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+  }
+  .memory-img {
+    width: 100%;
+    height: 16rem;
+    object-fit: cover;
+    display: block;
+  }
+  .memory-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.5rem;
+  }
+  .memory-item:hover .memory-overlay {
+    opacity: 1;
+  }
+
+  /* -- Swiper Customization -- */
+  .swiper-button-prev, .swiper-button-next {
+    background-color: rgba(99, 102, 241, 0.8);
+    color: white;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: background-color 0.3s ease;
+  }
+  .swiper-button-prev:hover, .swiper-button-next:hover {
+    background-color: #4338ca;
+  }
+  .swiper-button-prev::after, .swiper-button-next::after {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  .swiper-pagination-bullet-active {
+      background-color: #5a67d8 !important;
+  }
+
+  /* -- Button Styles -- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.875rem 2rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    border: 2px solid transparent;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  .btn-primary {
+    background-color: #5a67d8;
+    color: white;
+  }
+  .btn-primary:hover {
+    background-color: #4338ca;
+    box-shadow: 0 7px 14px rgba(67, 56, 202, 0.2);
+    transform: translateY(-2px);
+  }
+  .btn-secondary {
+    background-color: transparent;
+    color: white;
+    border-color: white;
+  }
+  .btn-secondary:hover {
+    background-color: white;
+    color: #5a67d8;
+    box-shadow: 0 7px 14px rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+  }
+  .btn-outline {
+     background-color: white;
+     color: #5a67d8;
+     border-color: #c7d2fe;
+  }
+   .btn-outline:hover {
+     background-color: #eef2ff;
+     border-color: #a5b4fc;
+     box-shadow: 0 7px 14px rgba(90, 103, 216, 0.1);
+     transform: translateY(-2px);
+  }
+
+  /* -- Form Styling -- */
+  .form-input, .form-textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      font-size: 1rem;
+      background-color: #fff;
+  }
+  .form-input:focus, .form-textarea:focus {
+      outline: none;
+      border-color: #5a67d8;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  }
+  .form-input:invalid {
+      border-color: #ef4444;
+  }
+  
+  /* Accessibility improvements */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  
+  /* Loading states */
+  .loading {
+    opacity: 0.7;
+    pointer-events: none;
+  }
+  
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+
+{% if rand_mem %}
+<section id="hero-section" class="flex items-center text-white bg-center bg-no-repeat bg-cover bg-[url('{{rand_mem}}')] bg-blend-multiply h-screen bg-gray-700" role="banner" aria-label="Hero section">
+{% else %}
+<section id="hero-section" class="flex items-center text-white bg-center bg-no-repeat bg-cover bg-blend-multiply h-screen bg-gray-700" role="banner" aria-label="Hero section">
+{% endif %}
+  
+  <div id="hero-particles"></div> 
+  <div class="container px-6 mx-auto hero-content text-center">
+    <h1 class="mb-4 text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl hero-headline" data-aos="fade-down" role="heading" aria-level="1">
+      <span>Streamline Your</span> <span class="text-teal-300">University</span>
+      <span class="block mt-2">Event Management</span>
+    </h1>
+    <p class="max-w-3xl mx-auto mb-10 text-lg md:text-xl text-indigo-100" data-aos="fade-up" data-aos-delay="200" role="text">
+      {{ company_name }}: Complete university event management with digital certificates, QR ticketing, attendance tracking, and comprehensive analytics. Transform your academic events today.
+    </p>
+    <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4" data-aos="fade-up" data-aos-delay="400" role="group" aria-label="Main navigation buttons">
+      <a href="{% url 'events' %}" class="btn btn-primary" aria-label="Explore upcoming events">
+        Explore Events
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ml-2" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+      </a>
+      <a href="#features" class="btn btn-secondary" aria-label="Learn about platform features">
+        Discover Features
+      </a>
+    </div>
+  </div>
+   <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce z-10">
+    <a href='#upcomming_events' aria-label="Scroll to upcoming events section" class="focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 rounded-full p-2">
+     <svg class="w-6 h-6 text-white opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+     </svg>
+     <span class="sr-only">Scroll down to see upcoming events</span>
+    </a>
+   </div>
+</section>
+
+<section id="features" class="section-padding bg-gray-50" role="region" aria-labelledby="features-heading">
+  <div class="container px-6 mx-auto">
+    <div class="mb-16 text-center">
+      <h2 id="features-heading" class="section-title">The Ultimate Event Toolkit</h2>
+      <p class="section-subtitle">Everything you need to plan, execute, and analyze successful events, all in one place.</p>
+    </div>
+
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="feature-icon-wrapper">
+          <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+          </svg>
+        </div>
+        <h3 class="mb-3 text-xl font-semibold text-gray-800">Digital Ticketing System</h3>
+        <p class="text-gray-600">QR code tickets, secure registration, automated check-in, and real-time attendance tracking for seamless event entry.</p>
+      </div>
+
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="feature-icon-wrapper">
+          <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+          </svg>
+        </div>
+        <h3 class="mb-3 text-xl font-semibold text-gray-800">Digital Certificates</h3>
+        <p class="text-gray-600">Automated certificate generation with secure hash verification, bulk distribution, and professional templates for academic events.</p>
+      </div>
+
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="feature-icon-wrapper">
+           <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+           </svg>
+        </div>
+        <h3 class="mb-3 text-xl font-semibold text-gray-800">Event Analytics</h3>
+        <p class="text-gray-600">Comprehensive analytics dashboard with attendance reports, engagement metrics, and performance insights for data-driven decisions.</p>
+      </div>
+
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+        <div class="feature-icon-wrapper">
+           <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+           </svg>
+        </div>
+        <h3 class="mb-3 text-xl font-semibold text-gray-800">Event Management</h3>
+        <p class="text-gray-600">Complete event lifecycle management from creation to post-event analysis, with coordinator tools and automated workflows.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id='upcomming_events' class="section-padding bg-white overflow-hidden" role="region" aria-labelledby="upcoming-events-heading">
+  <div class="container px-6 mx-auto">
+    <div class="flex flex-col items-center justify-between mb-12 md:flex-row">
+      <div class="mb-6 text-center md:text-left md:mb-0" data-aos="fade-right">
+        <h2 id="upcoming-events-heading" class="section-title">Upcoming Events</h2>
+        <p class="mt-2 text-lg text-gray-600">Explore exciting opportunities hosted on {{ company_name }}</p>
+      </div>
+      <div data-aos="fade-left">
+        <a href="{% url 'events' %}" class="btn btn-outline">
+          View All Events
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      {% if event %}
+        {% for events_item in event|slice:":3" %}
+          <div class="event-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
+             <div class="event-card-img-wrapper">
+               {% if events_item.poster %}
+                 <img src="{{ events_item.poster.url }}" alt="{{ events_item.title }} event poster" class="event-card-img" loading="lazy">
+               {% else %}
+                 <div class="flex items-center justify-center w-full h-full bg-gradient-to-br from-gray-100 to-gray-200" role="img" aria-label="Default event image">
+                    <svg class="w-16 h-16 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                 </div>
+               {% endif %}
+                <div class="event-status-badge {% if events_item.event_over %}badge-concluded{% elif events_item.registration_open %}badge-open{% else %}badge-closed{% endif %}">
+                 {% if events_item.event_over %} Concluded {% elif events_item.registration_open %} Open {% else %} Closed {% endif %}
+               </div>
+             </div>
+
+             <div class="p-5">
+                 <div class="flex items-center justify-between mb-3 text-sm text-gray-500">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                       {{ events_item.category|default:"General" }}
+                    </span>
+                    <span><svg class="inline w-4 h-4 mr-1 -mt-px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> {{ events_item.start_date|time:"h:i A"|default:"TBA" }}</span>
+                 </div>
+
+               <h3 class="mb-2 text-lg font-semibold text-gray-900 truncate">{{ events_item.title }}</h3>
+
+               <div class="flex items-center mb-4 text-sm text-gray-600">
+                  <svg class="flex-shrink-0 w-4 h-4 mr-2 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                 <span>{{ events_item.start_date|date:"M d, Y"|default:"Date TBA" }}</span>
+                 <span class="mx-2">·</span>
+                 <svg class="flex-shrink-0 w-4 h-4 mr-1.5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                 <span>{{ events_item.location|default:"Online" }}</span>
+               </div>
+
+               <div class="pt-3 mt-3 border-t border-gray-100">
+                 {% if user.is_authenticated and not user.is_student %}
+                    {% url 'teacherEvent' events_item.slug as event_url %}
+                 {% else %}
+                    {% url 'event' events_item.slug as event_url %}
+                 {% endif %}
+                 <a href="{{ event_url }}" class="inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-800 group">
+                   View Details
+                   <svg class="w-4 h-4 ml-1 transition-transform duration-200 ease-in-out group-hover:translate-x-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                   </svg>
+                 </a>
+               </div>
+             </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="col-span-full" data-aos="fade-up">
+          <div class="flex flex-col items-center justify-center p-10 text-center bg-indigo-50 border border-indigo-100 rounded-xl">
+             <svg class="w-12 h-12 mb-4 text-indigo-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+            <h3 class="mb-2 text-xl font-semibold text-indigo-800">No Upcoming Events Found</h3>
+            <p class="text-indigo-600">Keep an eye on this space, or consider hosting your own event with {{ company_name }}!</p>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="section-padding bg-gray-50">
+  <div class="container px-6 mx-auto">
+    <div class="mb-16 text-center" data-aos="fade-up">
+      <h2 class="section-title">Get in touch</h2>
+      <p class="section-subtitle">Reach out to learn how our platform has empowered past events and how we can support yours too.</p>
+    </div>
+    <div class="max-w-3xl p-8 mx-auto bg-white rounded-xl shadow-lg border border-gray-200" data-aos="fade-up">
+      <form action="{% url 'home' %}" method="POST" class="space-y-6" novalidate>
+        {% csrf_token %}
+        <div class="grid gap-6 md:grid-cols-2">
+          <div>
+            <label for="contact-name" class="block mb-2 text-sm font-medium text-gray-700">Your Name</label>
+            <input type="text" id="contact-name" name="name" class="form-input" placeholder="e.g., John Doe" required aria-describedby="name-error" autocomplete="name">
+            <div id="name-error" class="text-red-500 text-sm mt-1 hidden" role="alert"></div>
+          </div>
+          <div>
+            <label for="contact-email" class="block mb-2 text-sm font-medium text-gray-700">Email Address</label>
+            <input type="email" id="contact-email" name="email" class="form-input" placeholder="you@company.com" required aria-describedby="email-error" autocomplete="email">
+            <div id="email-error" class="text-red-500 text-sm mt-1 hidden" role="alert"></div>
+          </div>
+        </div>
+        <div>
+          <label for="contact-subject" class="block mb-2 text-sm font-medium text-gray-700">Subject</label>
+          <input type="text" id="contact-subject" name="subject" class="form-input" placeholder="Inquiry about..." required aria-describedby="subject-error">
+          <div id="subject-error" class="text-red-500 text-sm mt-1 hidden" role="alert"></div>
+        </div>
+        <div>
+          <label for="contact-message" class="block mb-2 text-sm font-medium text-gray-700">Message</label>
+          <textarea id="contact-message" name="message" rows="5" class="form-textarea" placeholder="How can we assist you today?" required aria-describedby="message-error"></textarea>
+          <div id="message-error" class="text-red-500 text-sm mt-1 hidden" role="alert"></div>
+        </div>
+        <div class="text-center pt-2">
+          <button type="submit" class="btn btn-primary w-full sm:w-auto" id="submit-btn">
+            <span id="submit-text">Send Your Message</span>
+            <span id="submit-loading" class="hidden">Sending...</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ml-2" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" /></svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- Load scripts with defer for better performance -->
+<script defer src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script defer src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize AOS (Animate on Scroll) with reduced motion support
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    AOS.init({
+      duration: prefersReducedMotion ? 0 : 800,
+      once: true,
+      offset: 100,
+      disable: prefersReducedMotion
+    });
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Form validation and submission
+    const contactForm = document.querySelector('form');
+    const submitBtn = document.getElementById('submit-btn');
+    const submitText = document.getElementById('submit-text');
+    const submitLoading = document.getElementById('submit-loading');
+    
+    if (contactForm) {
+      contactForm.addEventListener('submit', function(e) {
+        if (!validateForm()) {
+          e.preventDefault();
+          return;
+        }
+        
+        // Show loading state
+        submitBtn.disabled = true;
+        submitText.classList.add('hidden');
+        submitLoading.classList.remove('hidden');
+      });
+    }
+    
+    function validateForm() {
+      let isValid = true;
+      const fields = ['name', 'email', 'subject', 'message'];
+      
+      fields.forEach(field => {
+        const input = document.getElementById(`contact-${field}`);
+        const error = document.getElementById(`${field}-error`);
+        
+        if (!input.value.trim()) {
+          showError(error, `${field.charAt(0).toUpperCase() + field.slice(1)} is required`);
+          isValid = false;
+        } else if (field === 'email' && !isValidEmail(input.value)) {
+          showError(error, 'Please enter a valid email address');
+          isValid = false;
+        } else {
+          hideError(error);
+        }
+      });
+      
+      return isValid;
+    }
+    
+    function showError(errorElement, message) {
+      errorElement.textContent = message;
+      errorElement.classList.remove('hidden');
+    }
+    
+    function hideError(errorElement) {
+      errorElement.classList.add('hidden');
+    }
+    
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+    
+    // Django Messages with SweetAlert2
+    {% if messages %}
+      {% for message in messages %}
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: '{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}',
+          title: "{{ message|escapejs }}",
+          showConfirmButton: false,
+          timer: 3500,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+        });
+      {% endfor %}
+    {% endif %}
+    
+    // Performance monitoring
+    if ('performance' in window) {
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          const perfData = performance.getEntriesByType('navigation')[0];
+          console.log('Page load time:', perfData.loadEventEnd - perfData.loadEventStart, 'ms');
+        }, 0);
+      });
+    }
+    
+    // Lazy loading for images
+    if ('IntersectionObserver' in window) {
+      const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            if (img.dataset.src) {
+              img.src = img.dataset.src;
+              img.classList.remove('loading');
+              observer.unobserve(img);
+            }
+          }
+        });
+      });
+      
+      document.querySelectorAll('img[data-src]').forEach(img => {
+        imageObserver.observe(img);
+      });
+    }
+  });
+</script>
+
+<!-- PWA Install Button -->
+<div id="pwa-install-banner" class="fixed bottom-4 left-4 right-4 bg-indigo-600 text-white p-4 rounded-lg shadow-lg z-50 hidden">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center">
+      <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+      </svg>
+      <div>
+        <p class="font-semibold">Install Event Niti</p>
+        <p class="text-sm opacity-90">Get quick access from your home screen</p>
+      </div>
+    </div>
+    <div class="flex space-x-2">
+      <button id="pwa-install-btn" class="bg-white text-indigo-600 px-4 py-2 rounded font-medium">Install</button>
+      <button id="pwa-dismiss-btn" class="text-white opacity-75 hover:opacity-100">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- PWA & Service Worker Scripts -->
+<script>
+  let deferredPrompt;
+  const installBanner = document.getElementById('pwa-install-banner');
+  const installBtn = document.getElementById('pwa-install-btn');
+  const dismissBtn = document.getElementById('pwa-dismiss-btn');
+
+  // Service Worker Registration
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('/sw.js')
+        .then(function(registration) {
+          console.log('SW registered: ', registration);
+        })
+        .catch(function(registrationError) {
+          console.log('SW registration failed: ', registrationError);
+        });
+    });
+  }
+
+  // PWA Install Prompt
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    
+    // Show install banner if not dismissed
+    if (!localStorage.getItem('pwa-dismissed')) {
+      installBanner.classList.remove('hidden');
+    }
+  });
+
+  // Install button click
+  installBtn.addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      
+      if (outcome === 'accepted') {
+        console.log('User accepted the install prompt');
+      }
+      
+      deferredPrompt = null;
+      installBanner.classList.add('hidden');
+    }
+  });
+
+  // Dismiss button click
+  dismissBtn.addEventListener('click', () => {
+    installBanner.classList.add('hidden');
+    localStorage.setItem('pwa-dismissed', 'true');
+  });
+
+  // Hide banner after successful install
+  window.addEventListener('appinstalled', () => {
+    installBanner.classList.add('hidden');
+    console.log('PWA was installed');
+    
+    // Request notification permission after install
+    requestNotificationPermission();
+  });
+
+  // Request notification permission
+  function requestNotificationPermission() {
+    if ('Notification' in window && 'serviceWorker' in navigator) {
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+          console.log('Notification permission granted');
+          subscribeToNotifications();
+        }
+      });
+    }
+  }
+
+  // Subscribe to push notifications
+  async function subscribeToNotifications() {
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      const subscription = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: 'YOUR_VAPID_PUBLIC_KEY' // You'll need to generate this
+      });
+      
+      // Send subscription to your server
+      await fetch('/api/subscribe/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        body: JSON.stringify(subscription)
+      });
+      
+      console.log('Push subscription successful');
+    } catch (error) {
+      console.error('Push subscription failed:', error);
+    }
+  }
+</script>
+
+{% endblock content %}

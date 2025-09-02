@@ -296,25 +296,13 @@
                        
                         {% if registered %}
                             <div class="p-3 rounded-lg bg-green-100 text-green-800 my-5">You are Alredy Registered!</div>
-                            {% else %}
+                        {% else %}
                             <div class="mb-6">
                                 {% if event.price > 0 %}
                                 <div class="flex justify-between items-center mb-2">
-                                    <span class="text-gray-600">Standard Ticket</span>
-                                    <span class="font-bold text-gray-800">${{ event.price|floatformat:2 }}</span>
+                                    <span class="text-green-600 ">Fees</span>
+                                    <span class="font-bold text-green-800">₹{{ event.price|floatformat:2 }}</span>
                                 </div>
-                                {% if event.early_bird_price %}
-                                <div class="flex justify-between items-center text-sm text-green-600 mb-2">
-                                    <span>Early Bird (Limited)</span>
-                                    <span class="font-bold">${{ event.early_bird_price|floatformat:2 }}</span>
-                                </div>
-                                {% endif %}
-                                {% if event.vip_price %}
-                                <div class="flex justify-between items-center text-sm text-purple-600">
-                                    <span>VIP Experience</span>
-                                    <span class="font-bold">${{ event.vip_price|floatformat:2 }}</span>
-                                </div>
-                                {% endif %}
                                 {% else %}
                                 <div class="text-center py-4 bg-green-50 rounded-lg">
                                     <span class="font-bold text-green-700">FREE REGISTER</span>
