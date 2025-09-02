@@ -70,12 +70,12 @@ def paymenthandler(request, slug, token):
             if result is not None:
                 amount = event.price*100  # Rs. 200
                 try:
+                    razorpay_client.payment.capture(payment_id, amount)
                     payment_details = razorpay_client.payment.fetch(payment_id)
                     logger.debug(f'Payment details fetched: {payment_details}')
-                    if payment_details["status"] == "authorized" and not payment_details["captured"]:
-                        # capture only if not already captured
-                        razorpay_client.payment.capture(payment_id, amount)
-                        payment_details = razorpay_client.payment.fetch(payment_id)  # refresh
+                    # if payment_details["status"] == "authorized" and not payment_details["captured"]:
+                    #     # capture only if not already captured
+                    #     payment_details = razorpay_client.payment.fetch(payment_id)  # refresh
                         
                     
                     data = {
@@ -121,7 +121,7 @@ def paymenthandler(request, slug, token):
                         order_id=razorpay_order_id,
                         status='FAILED'
                     )
-                    logger.error(f'Payment capture failed for {event.title} by {tempSub.full_name} \nException: {e}')
+                    logger.exception(f'Payment processing error for {event.title} by {tempSub.full_name}\n EXCEPTION: {e}')
                     tempSub.delete()
                     messages.error(request, "Payment Failed. Please try again.")
                     return redirect('event', slug=slug)
@@ -136,7 +136,7 @@ def paymenthandler(request, slug, token):
         except Exception as e:
 
             # if we don't find the required parameters in POST data
-            logger.error(f'Payment processing error for {event.title} by {tempSub.full_name} \nException: {e}')
+            logger.exception(f'Payment processing error for {event.title} by {tempSub.full_name} \n EXCEPTION: {e}')
             messages.error(request, "Payment Failed. Please try again.")
             print(e)
             return redirect('event', slug=slug)

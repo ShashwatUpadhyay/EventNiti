@@ -29,7 +29,7 @@ env = environ.Env(
         "http://127.0.0.1:8000/",
     ),
     ALLOWED_HOSTS=(list, ["*"]),
-    INTERNAL_IPS=(list, ["127.0.0.1"]),
+    INTERNAL_IPS=(list, ["localhost",'127.0.0.1:8000']),
 )
 env.read_env(os.path.join(BASE_DIR, ".env"), overwrite=True)
 
