@@ -10,6 +10,12 @@ from django.http import HttpResponseRedirect
 # Create your views here.
 def memories(request):
     mem = models.Memories.objects.prefetch_related('memory_img').order_by('-event__start_date')
+    print(request.GET.get('event'))
+    if request.GET.get('event'):
+        mem = mem.filter(event__slug = request.GET.get('event'))
+    # p = Paginator(mem,20)
+    # page = request.GET.get('page')
+    # mem = p.get_page(page)
     return render(request, 'memories.html',{'mem':mem})
 
 # def event_memories_list(request, event_slug):
@@ -20,6 +26,9 @@ def memories(request):
 
 def event_memories_list(request):
     memories = models.MemoryImages.objects.all().order_by('-image_date')
+    if request.GET.get('event'):
+        memory = models.Memories.objects.filter(event__slug = request.GET.get('event')).first()
+        memories = memories.filter(memory = memory)
     p = Paginator(memories,20)
     page = request.GET.get('page')
     memories = p.get_page(page)
