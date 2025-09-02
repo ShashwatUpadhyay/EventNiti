@@ -70,9 +70,12 @@ def paymenthandler(request, slug, token):
             if result is not None:
                 amount = event.price*100  # Rs. 200
                 try:
-                    # capture the payemt
-                    razorpay_client.payment.capture(payment_id, amount)
                     payment_details = razorpay_client.payment.fetch(payment_id)
+                    if payment_details["status"] != "captured":
+                        # capture only if not already captured
+                        razorpay_client.payment.capture(payment_id, amount)
+                        payment_details = razorpay_client.payment.fetch(payment_id)  # refresh
+                        
                     
                     data = {
                         'uu_id': tempSub.uu_id,
