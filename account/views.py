@@ -126,6 +126,7 @@ def registrationpage(request):
             return redirect('register')
         except Exception as e:
             print(e)
+            logger.error(f'Error during user registration: {e}')
             messages.error(request, 'Something went wrong!')
             return redirect('register')
     return render(request , 'register.html')
