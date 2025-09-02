@@ -401,7 +401,7 @@ Events Hub | {{ company_name }}
                                              <div class="past-event-card-actions flex justify-between items-center px-5 pb-4">
                                                 {# URL for viewing event results/recap #}
                                                 {% url 'event_recacpe' past_event.slug as event_recacpe_url %}
-                                                 <a href="{{ event_recacpe_url }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-800 inline-flex items-center">
+                                                 <a href="{% url "memories" %}?event={{ past_event.slug }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-800 inline-flex items-center">
                                                      View Recap <i class="fas fa-arrow-right ml-1 text-xs"></i>
                                                  </a>
                                                  <a href="{% url "event_reviews" past_event.slug %}" class="text-sm font-medium text-gray-600 hover:text-indigo-800 inline-flex items-center"> {# Replace # with reviews URL/modal trigger #}
