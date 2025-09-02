@@ -201,17 +201,12 @@ EMAIL_USE_SSL = False
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-RAZOR_KEY_ID = env("RAZOR_KEY_ID")
-RAZOR_KEY_SECRET = env("RAZOR_KEY_SECRET")
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-
     'formatters': {
         'verbose': {
-            'format': '[{levelname}] {asctime} {name} {message}',
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
             'style': '{',
         },
         'simple': {
@@ -219,40 +214,41 @@ LOGGING = {
             'style': '{',
         },
     },
-
     'handlers': {
-        'file_error': {
-            'level': 'ERROR',
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/error.log'),
-            'formatter': 'verbose',
-        },
-        'file_server': {
+        'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/server.log'),
+            'filename': BASE_DIR / 'logs' / 'django.log',
             'formatter': 'verbose',
         },
         'console': {
+            'level': 'DEBUG',
             'class': 'logging.StreamHandler',
+            'formatter': 'simple',
         },
     },
-
     'root': {
-        'handlers': ['console', 'file_error'],
-        'level': 'WARNING',
+        'handlers': ['console', 'file'],
+        'level': 'INFO',
     },
-
     'loggers': {
         'django': {
-            'handlers': ['console', 'file_server'],
+            'handlers': ['file', 'console'],
             'level': 'INFO',
-            'propagate': True,
+            'propagate': False,
         },
-        'django.request': {   # logs unhandled exceptions
-            'handlers': ['file_error'],
-            'level': 'ERROR',
+        'events': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'blog': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
             'propagate': False,
         },
     },
 }
+
+RAZOR_KEY_ID = env("RAZOR_KEY_ID")
+RAZOR_KEY_SECRET = env("RAZOR_KEY_SECRET")
