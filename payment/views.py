@@ -95,7 +95,8 @@ def paymenthandler(request, slug, token):
                         gatewate_response=payment_details,
                         amount=amount/100,
                         signature=signature, 
-                        order_id=razorpay_order_id
+                        order_id=razorpay_order_id,
+                        status='COMPLETED'
                     )
                     # render success page on successful caputre of payment
                     messages.success(request, f"Payment Successful for {event.title} event")
@@ -112,7 +113,8 @@ def paymenthandler(request, slug, token):
                         gatewate_response=payment_details,
                         amount=amount/100,
                         signature=signature, 
-                        order_id=razorpay_order_id
+                        order_id=razorpay_order_id,
+                        status='FAILED'
                     )
                     tempSub.delete()
                     logger.error(f'Payment capture failed for {event.title} by {tempSub.full_name} \nException: {e}')
