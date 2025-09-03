@@ -86,7 +86,7 @@
 </div>
 
 <!-- Charts Row -->
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
     <!-- Events & Registrations Chart -->
     <div class="bg-white rounded-xl shadow-sm p-6">
         <div class="flex items-center justify-between mb-6">
@@ -102,7 +102,9 @@
                 </div>
             </div>
         </div>
-        <canvas id="eventsRegistrationsChart" height="300"></canvas>
+        <div style="height: 300px; position: relative;">
+            <canvas id="eventsRegistrationsChart"></canvas>
+        </div>
     </div>
 
     <!-- Blog Performance Chart -->
@@ -120,7 +122,23 @@
                 </div>
             </div>
         </div>
-        <canvas id="blogPerformanceChart" height="300"></canvas>
+        <div style="height: 300px; position: relative;">
+            <canvas id="blogPerformanceChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Event Registrations Comparison Chart -->
+    <div class="bg-white rounded-xl shadow-sm p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-semibold text-gray-900">Event Registrations</h3>
+            <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 bg-indigo-500 rounded-full"></span>
+                <span class="text-sm text-gray-600">Top Events</span>
+            </div>
+        </div>
+        <div style="height: 300px; position: relative;">
+            <canvas id="eventComparisonChart"></canvas>
+        </div>
     </div>
 </div>
 
@@ -166,7 +184,9 @@
                 <span class="text-sm text-gray-600">New Users</span>
             </div>
         </div>
-        <canvas id="userGrowthChart" height="300"></canvas>
+        <div style="height: 300px; position: relative;">
+            <canvas id="userGrowthChart"></canvas>
+        </div>
     </div>
 </div>
 
@@ -254,6 +274,7 @@ new Chart(eventsRegCtx, {
     options: {
         responsive: true,
         maintainAspectRatio: false,
+        animation: false,
         plugins: {
             legend: {
                 display: false
@@ -302,6 +323,7 @@ new Chart(blogCtx, {
     options: {
         responsive: true,
         maintainAspectRatio: false,
+        animation: false,
         plugins: {
             legend: {
                 display: false
@@ -346,6 +368,7 @@ new Chart(userCtx, {
     options: {
         responsive: true,
         maintainAspectRatio: false,
+        animation: false,
         plugins: {
             legend: {
                 display: false
@@ -361,6 +384,43 @@ new Chart(userCtx, {
             x: {
                 grid: {
                     display: false
+                }
+            }
+        }
+    }
+});
+
+// Event Registrations Comparison Chart
+const eventCompCtx = document.getElementById('eventComparisonChart').getContext('2d');
+new Chart(eventCompCtx, {
+    type: 'bar',
+    data: {
+        labels: [{% for event in popular_events %}'{{ event.title|truncatechars:20 }}'{% if not forloop.last %},{% endif %}{% endfor %}],
+        datasets: [{
+            data: [{% for event in popular_events %}{{ event.reg_count }}{% if not forloop.last %},{% endif %}{% endfor %}],
+            backgroundColor: [
+                '#6366F1',
+                '#8B5CF6',
+                '#06B6D4',
+                '#10B981',
+                '#F59E0B'
+            ],
+            borderWidth: 2,
+            borderColor: '#ffffff'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    padding: 15,
+                    usePointStyle: true,
+                    font: {
+                        size: 12
+                    }
                 }
             }
         }

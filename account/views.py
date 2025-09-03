@@ -199,7 +199,7 @@ def change_password(request,uid):
 @csrf_exempt
 def profile(request):
     year = Year.objects.all()
-    non_reviewed_enrolled_events = Event.objects.filter(participant__user=request.user,event_over=True).exclude(reviews__user=request.user)
+    non_reviewed_enrolled_events = Event.objects.filter(participant__user=request.user,event_over=True).order_by('-start_date')
     if request.method == "POST":
         action = request.POST.get('action')
         

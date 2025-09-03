@@ -30,11 +30,14 @@ def dashboard_home(request):
     
     # Analytics data for charts
     last_30_days = [today - timedelta(days=i) for i in range(30)]
+    
     daily_registrations = []
     daily_events = []
     
     for day in reversed(last_30_days):
-        reg_count = EventSubmission.objects.filter(id__gt=0).count()  # Simplified for now
+        start = timezone.make_aware(datetime.combine(day, datetime.min.time()))
+        end = timezone.make_aware(datetime.combine(day, datetime.max.time()))
+        reg_count = EventSubmission.objects.filter(created_at__range=(start, end)).count()  # Simplified for now
         event_count = Event.objects.filter(upload_time__date=day).count()
         daily_registrations.append(reg_count if reg_count else 0)
         daily_events.append(event_count if event_count else 0)
@@ -52,7 +55,7 @@ def dashboard_home(request):
         total_likes=Sum('likes'),
         total_shares=Sum('shares')
     )
-    
+    print(json.dumps(daily_registrations))
     context = {
         'total_events': total_events,
         'total_blogs': total_blogs,

@@ -3,6 +3,7 @@
 
 {% block content %}
 {% load static %}
+{% load review_tag %}
 <div class="min-h-screen bg-gray-50 py-8 pt-24">
     <div class="max-w-4xl mx-auto px-4">
         
@@ -116,7 +117,7 @@
 
                 <!-- Event Reviews & Ratings -->
                 <div class="bg-white rounded-2xl shadow-lg p-8">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Pending Event Reviews</h2>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">My Event Reviews</h2>
                     
                     <div class="space-y-4">
                         {% for submission in non_reviewed_enrolled_events %}
@@ -126,14 +127,20 @@
                                         <h3 class="font-semibold text-gray-900">{{ submission.title }}</h3>
                                         <p class="text-sm text-gray-500">{{ submission.start_date|date:"M d, Y" }}</p>
                                     </div>
-                                    <button onclick="openReviewModal('{{ submission.id }}', '{{ submission.title }}')" class="px-3 py-1 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors">
+                                    {% if submission|event_reviewed:request.user %}
+                                        <a href='{% url "event_reviews" submission.slug %}?back={{ request.get_full_path }}#my-review' class="px-3 py-1 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors">
+                                            Reviewed
+                                        </a>
+                                    {% else %}
+                                    <button onclick="openReviewModal('{{ submission.id }}', '{{ submission.title }}')" class="px-3 py-1 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 transition-colors">
                                         Rate Event
                                     </button>
+                                    {% endif %}
                                 </div>
                             </div>
                         {% empty %}
                         <div class="text-center py-8">
-                            <p class="text-gray-500">No pending event for review</p>
+                            <p class="text-gray-500">No events to review.</p>
                         </div>
                         {% endfor %}
                     </div>
