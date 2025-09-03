@@ -34,17 +34,17 @@ def loginpage(request):
             return redirect('login')
         
         user = User.objects.get(username = username)
-        user_obj=None
         try:
-            user_obj = models.UserExtra.objects.get(user = user)
-        except:
             user_obj = authenticate(username = username, password = password)
             if not user_obj:
                 messages.error(request, "Invalid Credential")
                 return redirect('login') 
             login(request,user_obj)
             logger.info(f'[{current_time}] {user_obj.get_full_name()} logged in')
-            return redirect('/admin')
+            return redirect('home')
+        except:
+            messages.error(request, "Invalid Credential")
+            return redirect('login')
         
         # if not user_obj.is_verified:
         #     if cache.get(username):
@@ -66,15 +66,7 @@ def loginpage(request):
                
         #     verifyUser(user.email,user_obj.uid)
         #     messages.error(request,"Verification mail has been sent to the registered!.. Please verify your account.")
-        #     return redirect('login')
-        
-        user_obj = authenticate(username = username, password = password)
-        if not user_obj:
-            messages.error(request, "Invalid Credential")
-            return redirect('login')
-        login(request,user_obj)
-        logger.info(f'[{current_time}] {user_obj.get_full_name()} logged in')
-        return redirect('home')
+        #     return redirect('login') 
     
     return render(request , 'login.html')
 
@@ -93,31 +85,52 @@ def registrationpage(request):
         uuid = request.POST.get('uuid') 
         password = request.POST.get('password')
         re_password = request.POST.get('re-password')
-        
+        print(
+            f'first name: {first_name}\nlast_name: {last_name}\nusername : {username}\nemail : {email}\nphone : {phone}\ncourse : {course}\nsection : {section}\nyear : {year}\nuuid : {uuid}\npassword : {password}\nre_password : {re_password}\n'
+            )
+        err = False
         if models.UserExtra.objects.filter(uu_id = uuid).exists():
+            err = True
             messages.error(request, 'UUID already Exists!')
-            return redirect('register')
         if User.objects.filter(email = email).exists():
+            err = True
             messages.error(request, 'Email already Exists!')
-            return redirect('register')
         if len(str(phone))!=10:
+            err = True
             messages.error(request, 'Mobile number is Invalid!')
-            return redirect('register')
         if User.objects.filter(username = username).exists():
+            err = True
             messages.error(request, 'Username already Exists!')
-            return redirect('register')
         if password != re_password:
+            err = True
             messages.error(request, "Passwords doesn't not match")
+        if err:
             return redirect('register')
-       
-        user_obj = User.objects.create(first_name = first_name, last_name = last_name, username = username,email = email)
-        user_obj.set_password(password)
-        user_obj.save()
-        group = Group.objects.get(name='STUDENT')
-        group.user_set.add(user_obj)
-        models.UserExtra.objects.create(user = user_obj,phone = phone, uu_id = uuid, course = course, section = section,year=year,forget_password_token = secrets.token_hex(20),forget_password_token_time = current_time)
-        messages.success(request, 'Your Account has been Created!')
-        return redirect('register')
+        try:
+            user_obj = User.objects.create_user(first_name = first_name, last_name = last_name, username = username,email = email,password= password)
+            group = Group.objects.get(name='STUDENT')
+            group.user_set.add(user_obj)
+            extras = {
+                'user' : user_obj,
+                'phone' : phone, 
+                'uu_id' : uuid, 
+                'course' : course, 
+                'section' : section,
+                'year': year,
+                'forget_password_token' : secrets.token_hex(20),
+                'forget_password_token_time' : current_time
+            }
+            print(extras)
+            models.UserExtra.objects.create(**extras)
+            messages.success(request, 'Your Account has been Created!')
+            return redirect('register')
+        except Exception as e:
+            print(e)
+            logger.error(
+                f'Error during user registration: {e} \nfirst name: {first_name}\nlast_name: {last_name}\nusername : {username}\nemail : {email}\nphone : {phone}\ncourse : {course}\nsection : {section}\nyear : {year}uuid : {uuid}\npassword : {password}\nre_password : {re_password}'
+                )
+            messages.error(request, 'Something went wrong!')
+            return redirect('register')
     return render(request , 'register.html')
 
 def accountVerify(request, uid):

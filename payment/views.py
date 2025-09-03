@@ -5,7 +5,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseBadRequest
 from events.models import Event, TemporaryEventSubmission, EventSubmission
 from django.contrib import messages 
-from ppuu.settings import DOMAIN_NAME
+from .models import Payment
+import logging
+logger = logging.getLogger(__name__)
 
 # authorize razorpay client with API Keys.
 razorpay_client = razorpay.Client(
@@ -25,7 +27,9 @@ def event_payment(request,slug, token):
 
     # order id of newly created order.
     razorpay_order_id = razorpay_order['id']
-    callback_url = f'{DOMAIN_NAME}payment/{slug}/{token}/paymenthandler/'
+    domain = request.get_host()
+    protocol = request.scheme
+    callback_url = f'{protocol}://{domain}/payment/{slug}/{token}/paymenthandler/'
 
     # we need to pass these details to frontend.
     context = {}
@@ -35,7 +39,7 @@ def event_payment(request,slug, token):
     context['currency'] = currency
     context['callback_url'] = callback_url
     context['event'] = event
-
+    logger.info(f'Initiating payment for {event.title} by {tempSub.full_name}')
     return render(request, 'payment/payment.html', context=context)
 
 
@@ -66,9 +70,14 @@ def paymenthandler(request, slug, token):
             if result is not None:
                 amount = event.price*100  # Rs. 200
                 try:
-
-                    # capture the payemt
                     razorpay_client.payment.capture(payment_id, amount)
+                    payment_details = razorpay_client.payment.fetch(payment_id)
+                    logger.debug(f'Payment details fetched: {payment_details}')
+                    # if payment_details["status"] == "authorized" and not payment_details["captured"]:
+                    #     # capture only if not already captured
+                    #     payment_details = razorpay_client.payment.fetch(payment_id)  # refresh
+                        
+                    
                     data = {
                         'uu_id': tempSub.uu_id,
                         'full_name': tempSub.full_name,
@@ -77,19 +86,42 @@ def paymenthandler(request, slug, token):
                         'user': tempSub.user,
                         'course': tempSub.course,
                         'section': tempSub.section,
-                        'event': event
+                        'event': event,
                     }
                     submission = EventSubmission.objects.create(**data)
                     event.count = event.count + 1
                     event.save()
-                    tempSub.delete()
+                    Payment.objects.create(
+                        user=tempSub.user,
+                        event=event,
+                        payment_id=payment_id,
+                        gatewate_response=payment_details,
+                        amount=amount/100,
+                        signature=signature, 
+                        order_id=razorpay_order_id,
+                        status='COMPLETED'
+                    )
                     # render success page on successful caputre of payment
                     messages.success(request, f"Payment Successful for {event.title} event")
+                    logger.info(f'Payment successful for {event.title} by {submission.full_name}')
+                    tempSub.delete()
                     return redirect('event', slug=slug)
                 except Exception as e:
                     print(e)
 
                     # if there is an error while capturing payment.
+                    payment_details = razorpay_client.payment.fetch(payment_id)
+                    Payment.objects.create(
+                        user=tempSub.user,
+                        event=event,
+                        payment_id=payment_id,
+                        gatewate_response=payment_details,
+                        amount=amount/100,
+                        signature=signature, 
+                        order_id=razorpay_order_id,
+                        status='FAILED'
+                    )
+                    logger.exception(f'Payment processing error for {event.title} by {tempSub.full_name}\n EXCEPTION: {e}')
                     tempSub.delete()
                     messages.error(request, "Payment Failed. Please try again.")
                     return redirect('event', slug=slug)
@@ -98,14 +130,17 @@ def paymenthandler(request, slug, token):
                 # if signature verification fails.
                 print("Signature verification failed")
                 tempSub.delete()
+                logger.error(f'Payment signature verification failed for {event.title} by {tempSub.full_name}')
                 messages.error(request, "Payment Failed. Please try again.")
                 return redirect('event', slug=slug)
         except Exception as e:
 
             # if we don't find the required parameters in POST data
+            logger.exception(f'Payment processing error for {event.title} by {tempSub.full_name} \n EXCEPTION: {e}')
             messages.error(request, "Payment Failed. Please try again.")
             print(e)
             return redirect('event', slug=slug)
     else:
        # if other than POST request is made.
-            return redirect('event', slug=slug)
+        logger.error(f'Invalid payment request method for {event.title} by {tempSub.full_name}')
+        return redirect('event', slug=slug)

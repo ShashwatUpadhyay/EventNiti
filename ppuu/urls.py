@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from . import settings
 from django.conf.urls.static import static
-# from debug_toolbar.toolbar import debug_toolbar_urls
+from debug_toolbar.toolbar import debug_toolbar_urls
 from django.views.generic import TemplateView
 
 urlpatterns = [
@@ -38,7 +38,7 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls')),
     path('sw.js', TemplateView.as_view(template_name='sw.js', content_type='application/javascript'), name='sw'),
     path('offline/', TemplateView.as_view(template_name='offline.html'), name='offline'),
-]# + debug_toolbar_urls()
+] + debug_toolbar_urls()
 handler404 = 'base.views.custom_404'
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
