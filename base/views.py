@@ -9,6 +9,8 @@ from memories.models import Memories, MemoryImages
 import uuid
 from contact.models import Contact
 from django.views.decorators.cache import cache_page
+import logging
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 
@@ -40,9 +42,6 @@ def home(request):
     mem = Memories.objects.prefetch_related('memory_img').order_by('-event__start_date')[:3]
     events = Event.objects.filter(event_over = True,event_open=True).order_by('start_date')
     rand_mem=None
-    import logging
-    logger = logging.getLogger(__name__)
-    logger.info(f'Home page loaded with {len(event)} events')
     try:
         rand_mem = MemoryImages.objects.order_by('?').first()
     except:
