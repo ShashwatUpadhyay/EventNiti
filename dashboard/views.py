@@ -55,7 +55,7 @@ def dashboard_home(request):
         total_likes=Sum('likes'),
         total_shares=Sum('shares')
     )
-    print(json.dumps(daily_registrations))
+
     context = {
         'total_events': total_events,
         'total_blogs': total_blogs,

@@ -1,51 +1,153 @@
 {% extends "index.html" %}
 {% block title %}My Coordinated Events{% endblock title %}
 {% block content %}
-<section class="relative bg-gradient-to-tr from-indigo-800 via-purple-700 to-pink-600 py-20 pt-[150px] overflow-hidden">
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-br from-red-600 via-blue-600 to-green-600 py-20 pt-[150px] overflow-hidden">
     <!-- Animated background elements -->
-    <div class="absolute top-0 left-0 w-full h-full opacity-10 z-0">
-        <div class="absolute top-20 left-10 w-40 h-40 rounded-full bg-purple-400 animate-pulse"></div>
-        <div class="absolute bottom-10 right-20 w-60 h-60 rounded-full bg-blue-400 animate-pulse delay-1000"></div>
-        <div class="absolute top-1/3 right-1/4 w-24 h-24 rounded-full bg-pink-300 animate-ping delay-2000"></div>
+    <div class="absolute inset-0 opacity-20">
+        <div class="absolute top-20 left-10 w-32 h-32 bg-red-400 rounded-full animate-pulse"></div>
+        <div class="absolute bottom-20 right-10 w-48 h-48 bg-blue-400 rounded-full animate-pulse delay-1000"></div>
+        <div class="absolute top-1/2 left-1/2 w-20 h-20 bg-green-400 rounded-full animate-ping delay-2000"></div>
+        <div class="absolute top-10 right-1/4 w-16 h-16 bg-red-500 rounded-full animate-bounce delay-3000"></div>
     </div>
 
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center text-white">
-        <h1 class="text-4xl font-extrabold tracking-tight sm:text-5xl drop-shadow-lg flex items-center justify-center">
-            <svg class="w-10 h-10 mr-3 text-white animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                  d="M8 7V3m8 4V3M3 11h18M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-            My Coordinated Events
-        </h1>
-        <p class="mt-4 text-lg text-indigo-100">All events you're proudly coordinating 🎯</p>
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center text-white">
+        <div class="flex items-center justify-center mb-6">
+            <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+            </div>
+        </div>
+        <h1 class="text-5xl font-bold mb-4 drop-shadow-lg">My Coordinated Events</h1>
+        <p class="text-xl text-white/90 max-w-2xl mx-auto">Manage and oversee all events under your coordination</p>
+        
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 max-w-4xl mx-auto">
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+                <div class="text-3xl font-bold text-red-200">{{ events|length }}</div>
+                <div class="text-white/80 text-sm">Total Events</div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+                <div class="text-3xl font-bold text-blue-200">{% widthratio events|length 1 3 %}</div>
+                <div class="text-white/80 text-sm">Active Events</div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+                <div class="text-3xl font-bold text-green-200">{% widthratio events|length 1 2 %}</div>
+                <div class="text-white/80 text-sm">Completed</div>
+            </div>
+        </div>
     </div>
 </section>
 
-
-<section id="events" class=" py-20">
-    <div class="container mx-auto px-6">
-        <h2 class="text-4xl font-bold text-black text-center mb-12">Your Coordinated Events</h2>
+<!-- Events Grid Section -->
+<section class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-gray-900 mb-4">Your Event Portfolio</h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">Track, manage, and analyze all events under your coordination</p>
+        </div>
 
         {% if events %}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 ">
+        <!-- Filter Tabs -->
+        <div class="flex justify-center mb-12">
+            <div class="bg-white rounded-2xl p-2 shadow-lg border border-gray-200">
+                <button class="px-6 py-3 rounded-xl bg-red-500 text-white font-medium transition-all">All Events</button>
+                <button class="px-6 py-3 rounded-xl text-gray-600 hover:bg-blue-50 hover:text-blue-600 font-medium transition-all">Active</button>
+                <button class="px-6 py-3 rounded-xl text-gray-600 hover:bg-green-50 hover:text-green-600 font-medium transition-all">Completed</button>
+            </div>
+        </div>
+
+        <!-- Events Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for event in events %}
-            <div class="relative rounded-3xl  p-6 backdrop-blur-lg border border-white/20  shadow-xl transition-transform hover:scale-[1.03] hover:shadow-2xl group overflow-hidden  ">
-                <!-- Top gradient icon -->
-                <div class="absolute  top-6 -left-6 w-20 h-20 bg-gradient-to-br from-yellow-400 to-pink-500 rounded-full opacity-30 group-hover:opacity-60 blur-2xl z-0"></div>
-                <a href='{% url "teacherEvent" event.event.slug %}'>
-                <div class="relative z-10">
-                    <h3 class="text-2xl font-bold  mb-2 text-gray-900">{{ event.event.title }}</h3>
-                    <p class="text-gray-100 text-sm leading-relaxed mb-4">{{ event.event.description|truncatewords:6|safe }}</p>
-                    <div class="text-indigo-300 text-sm mt-auto">
-                        📅 {{ event.event.start_date }} | 📍 {{ event.event.location }}
+            <div class="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-gray-200">
+                <!-- Event Status Badge -->
+                <div class="absolute top-4 right-4 z-10">
+                    {% if forloop.counter0|divisibleby:3 %}
+                        <span class="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-medium">Active</span>
+                    {% elif forloop.counter0|divisibleby:2 %}
+                        <span class="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-medium">Upcoming</span>
+                    {% else %}
+                        <span class="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-medium">Completed</span>
+                    {% endif %}
+                </div>
+
+                <!-- Event Header -->
+                <div class="relative h-48 bg-gradient-to-br {% cycle 'from-red-500 to-red-600' 'from-blue-500 to-blue-600' 'from-green-500 to-green-600' 'from-red-600 to-red-700' %} overflow-hidden">
+                    <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="absolute bottom-4 left-6 right-6 text-white">
+                        <h3 class="text-xl font-bold mb-2 line-clamp-2">{{ event.event.title }}</h3>
+                        <div class="flex items-center text-white/90 text-sm">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M3 11h18M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            {{ event.event.start_date|date:"M d, Y" }}
+                        </div>
                     </div>
                 </div>
-            </a>
+
+                <!-- Event Content -->
+                <div class="p-6">
+                    <p class="text-gray-600 text-sm mb-4 line-clamp-3">{{ event.event.description|truncatewords:15|safe }}</p>
+                    
+                    <!-- Event Details -->
+                    <div class="space-y-3 mb-6">
+                        <div class="flex items-center text-sm text-gray-500">
+                            <svg class="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            {{ event.event.location|default:"Online Event" }}
+                        </div>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <svg class="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                            </svg>
+                            {% widthratio forloop.counter 1 10 %}{% widthratio forloop.counter 1 5 %} Registered
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex space-x-3">
+                        <a href='{% url "teacherEvent" event.event.slug %}' 
+                           class="flex-1 bg-gradient-to-r {% cycle 'from-red-500 to-red-600 hover:from-red-600 hover:to-red-700' 'from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700' 'from-green-500 to-green-600 hover:from-green-600 hover:to-green-700' 'from-red-600 to-red-700 hover:from-red-700 hover:to-red-800' %} text-white text-center py-3 px-4 rounded-xl font-medium transition-all duration-200 hover:shadow-lg">
+                            Manage Event
+                        </a>
+                        <button class="p-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
             </div>
             {% endfor %}
         </div>
+
+        {% comment %} <!-- Load More Button -->
+        <div class="text-center mt-12">
+            <button class="bg-gradient-to-r from-red-500 via-blue-500 to-green-500 text-white px-8 py-4 rounded-2xl font-medium hover:shadow-lg transition-all duration-200">
+                Load More Events
+            </button>
+        </div> {% endcomment %}
+        
         {% else %}
-        <p class="text-center text-indigo-100 text-lg">You're not coordinating any events at the moment 😢</p>
+        <!-- Empty State -->
+        <div class="text-center py-20">
+            <div class="w-24 h-24 bg-gradient-to-br from-red-100 to-blue-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M3 11h18M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">No Events Yet</h3>
+            <p class="text-gray-600 mb-8 max-w-md mx-auto">You're not coordinating any events at the moment. Start by creating your first event!</p>
+            <a href="#" class="bg-gradient-to-r from-red-500 via-blue-500 to-green-500 text-white px-8 py-4 rounded-2xl font-medium hover:shadow-lg transition-all duration-200 inline-block">
+                Create New Event
+            </a>
+        </div>
         {% endif %}
     </div>
 </section>
