@@ -1,9 +1,10 @@
-from django.shortcuts import render,redirect,HttpResponse
+from django.shortcuts import render,redirect,HttpResponse,get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.models import User
 from . import models
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_protect,csrf_exempt
 from django.contrib.auth.models import Group
 from ppuu.mail_sender import verifyUser, change_password_email
 from base.models import Course,Section,Year
@@ -12,7 +13,8 @@ import logging
 import datetime
 import pytz
 import secrets
-
+from events.models import Event
+from review.models import EventReview
 time_zone = pytz.timezone("Asia/Kolkata")
 current_time = datetime.datetime.now(time_zone)
 
@@ -194,38 +196,63 @@ def change_password(request,uid):
     return render(request, 'changepassword.html')  
 
 @login_required(login_url='login')
+@csrf_exempt
 def profile(request):
     year = Year.objects.all()
+    non_reviewed_enrolled_events = Event.objects.filter(participant__user=request.user,event_over=True).exclude(reviews__user=request.user)
     if request.method == "POST":
-        year= request.POST.get('year')
-        old_password= request.POST.get('old_password')
-        new_password1= request.POST.get('new_password1')
-        new_password2= request.POST.get('new_password2')
+        action = request.POST.get('action')
         
-        print(year, old_password,new_password1, new_password2)
-        
-        if year != '':
-            user = request.user.user_extra
-            user.year = year
-            user.save()
+        if action == 'update_profile':
+            print("Updating profile...")
+            year_val = request.POST.get('year')
+            print(year_val)
+            if year_val:
+                request.user.user_extra.year = year_val
+                request.user.user_extra.save()
             
-        if old_password != '':
-            user = request.user
-            check = user.check_password(old_password)
-            if check:
-                if new_password1 != '' or new_password2 != '':
+            messages.success(request, "Profile updated successfully!")
+            
+        elif action == 'change_password':
+            old_password = request.POST.get('old_password')
+            new_password1 = request.POST.get('new_password1')
+            new_password2 = request.POST.get('new_password2')
+            
+            if old_password and new_password1 and new_password2:
+                if request.user.check_password(old_password):
                     if new_password1 == new_password2:
-                        user.set_password(new_password1)
-                        messages.success(request,"Password changed sucessfully!!")
-                        
+                        request.user.set_password(new_password1)
+                        request.user.save()
+                        messages.success(request, "Password changed successfully!")
                     else:
-                        messages.error(request,"    New password does't match")
+                        messages.error(request, "New passwords don't match")
                 else:
-                    messages.error(request,"Change password fields are empty!!")
+                    messages.error(request, "Old password is incorrect")
             else:
-                messages.error(request , 'Old password is wrong!!')
+                messages.error(request, "All password fields are required")
+        
+        elif action == 'submit_review':
+            event_id = request.POST.get('event_id')
+            rating = request.POST.get('rating')
+            review = request.POST.get('review')
+            event = get_object_or_404(Event, id=event_id)
+            try:
+                if event_id and rating:
+                    EventReview.objects.create(
+                        user=request.user,
+                        event=event,
+                        rating=rating,
+                        message=review
+                    )
+                    messages.success(request, "Review submitted successfully!")
+            except Exception as e:
+                logger.error(f'Error submitting review: {e}')
+                messages.error(request, "Failed to submit review. Please try again.")
+            
         return redirect('profile')
+    
     context = {
-        'years' : year,
+        'years': year,
+        'non_reviewed_enrolled_events': non_reviewed_enrolled_events,
     }
-    return render(request,'profile.html', context)
+    return render(request, 'profile.html', context)
