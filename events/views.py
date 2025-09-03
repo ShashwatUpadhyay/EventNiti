@@ -106,10 +106,9 @@ def eventregister(request, slug):
             logger.info(f'Temporary submission created for user {request.user.username} for event {event.title}')
             return redirect('payment', slug=event.slug, token=submission.uid)
         else:
-            submission = models.EventSubmission.objects.create(uu_id=uuid,full_name = full_name,year=year,email = email,user=request.user,course = course,section = section,event = event)
-            logger.info(f'Free event submission created for user {request.user.username} for event {event.title}')
-            event.count = event.count + 1
-            event.save()
+            models.EventSubmission.objects.create(uu_id=uuid,full_name = full_name,year=year,email = email,user=request.user,course = course,section = section,event = event)
+            logger.info(f'Free event submission created for user {full_name} for event {event.title}')
+
         logger.info(f'User {request.user.username} successfully registered for event {event.title}')
         messages.success(request,f"Submission Successful in {event.title} event")
         return redirect('events')
@@ -368,3 +367,4 @@ def remove_coordinator(request,uid):
 
 def live_polling_qna(request):
     return render(request, 'events/live_poll_qna.html')
+

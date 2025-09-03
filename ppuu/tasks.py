@@ -1,6 +1,8 @@
 from celery import shared_task
 from . import settings
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives,send_mail
+import logging
+logger = logging.getLogger(__name__)
 
 @shared_task
 def event_announcement_task(emails, id):
@@ -29,6 +31,50 @@ def event_announcement_task(emails, id):
         )
         email.attach_alternative(html_content, "text/html")
         email.send()
+        logger.info(f'Event announcement email sent for event {instance.title} to {len(emails)} recipients.')
+    except Exception as e:
+        logger.error(f'Failed to send event announcement email for event {instance.title}. Error: {e}')
+        print(e)
+
+@shared_task     
+def ticket_issued_email(instance_email, event_title ,ticket_uid):
+    try:
+        send_mail(
+                'Ticket Issued',
+                'You received a ticket from PPUU',
+                settings.EMAIL_HOST_USER,
+                [instance_email],
+                fail_silently=False,
+                html_message=f"""<p>
+                    <h1>Received {event_title} ticket</h1>
+                    <a href='{settings.DOMAIN_NAME}events/ticket/{ticket_uid}'><button>OPEN</button></a>
+                </p>"""
+            )
+        logger.info(f'Ticket issued email sent to {instance_email} for event {event_title}.')
+    except Exception as e:
+        logger.error(f'Failed to send ticket issued email to {instance_email} for event {event_title}. Error: {e}')
+        print(e)
+
+
+@shared_task        
+def event_result_anouncement(emails, instance):
+    try:
+        subject =f'{instance.event.title} result is out!'
+        text_content = f'{instance.event.title} result is out!'
+        html_content = f"""<p>
+                        <h1>We are thrilled to announce that {instance.event.title} event result is out!</h1>
+                        <h4>Click the link below to see the result</h4>
+                        <button><a href='{settings.DOMAIN_NAME}events/{instance.slug}/'>OPEN</a></button>
+                    </p>"""
+                    
+        email = EmailMultiAlternatives(
+            subject=subject,
+            body=text_content,
+            from_email=settings.EMAIL_HOST_USER,
+            to=[],  # Keep "To" empty to avoid showing a main recipient
+            bcc=emails[1:],  # Add all recipients in BCC
+        )
+        email.attach_alternative(html_content, "text/html")
+        email.send()
     except Exception as e:
         print(e)
-    

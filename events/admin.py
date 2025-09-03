@@ -17,6 +17,8 @@ class EventAdmin(admin.ModelAdmin):
     list_display = ('title','location', 'start_date','event_open','registration_open','notify')
     search_fields = ('title','organized_by__username', 'location','start_date')
     list_filter = ('event_open', 'registration_open', 'notify')
+    prepopulated_fields = {'slug': ('title',)}
+        
 
 admin.site.register(EventSubmission, EventSubmissionAdmin)
 admin.site.register(EventTicket,EventTicketAdmin)
