@@ -154,14 +154,14 @@ class EventResult(models.Model):
 def resultAnounced(sender, instance, created, **kwargs):
     if instance.result_announced:
         emails = User.objects.values_list("email", flat=True)
-        event_result_anouncement(emails, instance.event)
+        # event_result_anouncement(emails, instance.event)
 
 @receiver(post_save, sender=EventSubmission)
 def generate_ticket(sender, instance, created, **kwargs):
     if created:
         ticket = EventTicket.objects.create(
             user=instance.user, submission_uid=instance.uid, event=instance.event)
-        ticket_issued_email(instance,ticket)
+        # ticket_issued_email(instance,ticket)
         print('Ticket Created!')
 
 
