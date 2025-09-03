@@ -18,6 +18,8 @@ from openpyxl.styles import PatternFill
 import io
 from django.core.paginator import Paginator
 india_timezone = pytz.timezone('Asia/Kolkata')
+import logging 
+logger = logging.getLogger(__name__)
 
 def is_cordinator(request,event):
     for event in event.cordinators.all():
@@ -60,22 +62,27 @@ def event(request, slug):
 def eventregister(request, slug):
     user_obj = None
     event=None
+    logger.info(f'User {request.user.username} is attempting to register for event with slug: {slug}')
     try:
         user_obj = UserExtra.objects.get(user=request.user)
     except Exception as e:
         print(e)
     try:
         event = models.Event.objects.get(slug= slug)
+        msg = False
         if  event.event_over:
             messages.error(request, "Event is Over!")
-            return redirect('event',slug =slug)
+            msg = True
         if not event.registration_open:
             messages.error(request, "Registration is Closed!")
-            return redirect('event', slug =slug)
+            msg = True
         if models.EventSubmission.objects.filter(user=request.user, event=event).exists():
             messages.error(request, "Rejected!")
+            msg = True
+        if msg:
             return redirect('event', slug =slug)
     except Exception as e:
+        logger.error(f'Error fetching event with slug {slug}: {e}')
         messages.error(request, f"Error: {e}   ")  
         return redirect('home')
     
@@ -93,14 +100,17 @@ def eventregister(request, slug):
         course = request.POST.get('course')
         section = request.POST.get('section')
         year = request.POST.get('year')
+        logger.debug(f'Form data received: uuid={uuid}, full_name={full_name}, email={email}, course={course}, section={section}, year={year}')
         if event.price > 0:
             submission , _ = models.TemporaryEventSubmission.objects.get_or_create(uu_id=uuid,full_name = full_name,year=year,email = email,user=request.user,course = course,section = section,event = event)
+            logger.info(f'Temporary submission created for user {request.user.username} for event {event.title}')
             return redirect('payment', slug=event.slug, token=submission.uid)
         else:
             submission = models.EventSubmission.objects.create(uu_id=uuid,full_name = full_name,year=year,email = email,user=request.user,course = course,section = section,event = event)
+            logger.info(f'Free event submission created for user {request.user.username} for event {event.title}')
             event.count = event.count + 1
             event.save()
-        
+        logger.info(f'User {request.user.username} successfully registered for event {event.title}')
         messages.success(request,f"Submission Successful in {event.title} event")
         return redirect('events')
 
