@@ -71,7 +71,7 @@
 </div>
 
 <!-- Charts Row -->
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
     <!-- Registrations Chart -->
     <div class="bg-white rounded-xl shadow-sm p-6">
         <div class="flex items-center justify-between mb-6">
@@ -81,7 +81,9 @@
                 <span class="text-sm text-gray-600">Last 30 days</span>
             </div>
         </div>
-        <canvas id="registrationsChart" height="300"></canvas>
+        <div style="height: 300px; position: relative;">
+            <canvas id="registrationsChart"></canvas>
+        </div>
     </div>
 
     <!-- Events Chart -->
@@ -93,7 +95,23 @@
                 <span class="text-sm text-gray-600">Last 30 days</span>
             </div>
         </div>
-        <canvas id="eventsChart" height="300"></canvas>
+        <div style="height: 300px; position: relative;">
+            <canvas id="eventsChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Event Registrations Comparison Chart -->
+    <div class="bg-white rounded-xl shadow-sm p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-semibold text-gray-900">Event Registrations</h3>
+            <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 bg-purple-500 rounded-full"></span>
+                <span class="text-sm text-gray-600">Top Events</span>
+            </div>
+        </div>
+        <div style="height: 300px; position: relative;">
+            <canvas id="eventRegistrationsChart"></canvas>
+        </div>
     </div>
 </div>
 
@@ -211,6 +229,7 @@ new Chart(regCtx, {
     options: {
         responsive: true,
         maintainAspectRatio: false,
+        animation: false,
         plugins: {
             legend: {
                 display: false
@@ -253,6 +272,7 @@ new Chart(eventCtx, {
     options: {
         responsive: true,
         maintainAspectRatio: false,
+        animation: false,
         plugins: {
             legend: {
                 display: false
@@ -268,6 +288,41 @@ new Chart(eventCtx, {
             x: {
                 grid: {
                     display: false
+                }
+            }
+        }
+    }
+});
+
+// Event Registrations Chart
+const eventRegCtx = document.getElementById('eventRegistrationsChart').getContext('2d');
+new Chart(eventRegCtx, {
+    type: 'bar',
+    data: {
+        labels: [{% for event in top_events %}'{{ event.title|truncatechars:20 }}'{% if not forloop.last %},{% endif %}{% endfor %}],
+        datasets: [{
+            data: [{% for event in top_events %}{{ event.reg_count }}{% if not forloop.last %},{% endif %}{% endfor %}],
+            backgroundColor: [
+                '#8B5CF6',
+                '#06B6D4',
+                '#10B981',
+                '#F59E0B',
+                '#EF4444'
+            ],
+            borderWidth: 2,
+            borderColor: '#ffffff'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    padding: 20,
+                    usePointStyle: true
                 }
             }
         }
