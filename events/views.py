@@ -342,7 +342,7 @@ def edit_event(request, slug):
 
 @login_required(login_url='login')
 def add_coordinators(request,slug):
-    users = User.objects.exclude(username = request.user.username)
+    users = User.objects.filter(groups__name__icontains='COORDINATOR').exclude(username = request.user.username)
     event = get_object_or_404(models.Event , slug=slug)
     if not is_event_host(request,event):
         return redirect('events')
