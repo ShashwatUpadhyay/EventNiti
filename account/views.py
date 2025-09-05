@@ -75,6 +75,11 @@ def loginpage(request):
 def registrationpage(request):
     if request.user.is_authenticated:
         return redirect('home')
+
+    course = Course.objects.all()
+    section = Section.objects.all()
+    year = Year.objects.all()
+    
     if request.method == "POST":
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -133,7 +138,12 @@ def registrationpage(request):
                 )
             messages.error(request, 'Something went wrong!')
             return redirect('register')
-    return render(request , 'register.html')
+    data = {
+        'courses' : course,
+        'sections' : section,
+        'years' : year
+    }
+    return render(request , 'register.html',data)
 
 def accountVerify(request, uid):
     user_obj=None

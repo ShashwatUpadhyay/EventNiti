@@ -115,6 +115,24 @@ def eventregister(request, slug):
 
     return render(request, 'eventregister.html',{'event':event, 'user_obj':user_obj})
 
+def create_event(request):
+    if request.method == "POST":
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        start_date = request.POST.get('start_date')
+        location = request.POST.get('location')
+        end_date = request.POST.get('end_date')
+        last_date_of_registration = request.POST.get('last_date_of_registration')
+        poster = request.FILES.get('poster')
+        limit = request.POST.get('limit')
+        price = request.POST.get('price')
+        offers_certification = request.POST.get('offers_certification')
+        notify = request.POST.get('notify')
+        registration_open = request.POST.get('registration_open')
+        event_open = request.POST.get('event_open')
+        print(title,description,start_date,location,end_date,last_date_of_registration,poster,limit,price,offers_certification,notify,registration_open,event_open)
+        # models.Event.objects.create(title=title, description=description, start_date=start_date, location=location, end_date=end_date, last_date_of_registration=last_date_of_registration, poster=poster, limit=limit, price=price, offers_certification=offers_certification, notify=notify, registration_open=registration_open, event_open=event_open)
+    return render(request, 'events/create_event.html')
 
 def eventTicket(request, uid):
     ticket = None
