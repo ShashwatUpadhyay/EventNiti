@@ -105,6 +105,23 @@ def events_management(request):
     })
 
 @staff_member_required
+def event_approvals(request):
+    pending_events = Event.objects.filter(status='pending').select_related('organized_by').order_by('-upload_time')
+    approved_events = Event.objects.filter(status='approved').select_related('organized_by').order_by('-upload_time')
+    rejected_events = Event.objects.filter(status='rejected').select_related('organized_by').order_by('-upload_time')
+    
+    paginator = Paginator(pending_events, 20)
+    page = request.GET.get('page')
+    pending_events = paginator.get_page(page)
+    
+    return render(request, 'dashboard/event_approvals.html', {
+        'pending_events': pending_events,
+        'approved_events': approved_events,
+        'rejected_events': rejected_events
+    })
+    
+
+@staff_member_required
 def blogs_management(request):
     blogs = Blog.objects.select_related('user', 'category').order_by('-created_at')
     

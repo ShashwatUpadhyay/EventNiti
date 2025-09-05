@@ -44,6 +44,8 @@ class Event(models.Model):
     cert_distributed = models.BooleanField(default=False)
     badge_distributed = models.BooleanField(default=False)
     status = models.CharField(max_length=100, choices=EVENT_STATUS, default='pending')
+    approved_at = models.DateTimeField(null=True, blank=True)
+    rejected_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
@@ -53,6 +55,14 @@ class Event(models.Model):
     @property
     def review_count(self):
         return len(self.reviews.all())
+    
+    @property
+    def registered_percentage(self):
+        if self.limit > 0:
+            registrations = self.participant.count()
+            percentage = (registrations / self.limit) * 100
+            return percentage
+        return 0
     
     @property
     def avg_rating(self):

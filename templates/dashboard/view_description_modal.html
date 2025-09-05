@@ -1,0 +1,151 @@
+<!-- Button trigger modal -->
+<button type="button" onclick="openEventModal('{{ event.id }}')" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-indigo-700 bg-indigo-100 rounded-lg hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
+  <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+  </svg>
+  View Description
+</button>
+
+<!-- Modal -->
+<div id="eventModal-{{ event.id }}" class="fixed inset-0 z-50 overflow-y-auto hidden w-full" aria-labelledby="eventModalLabel" role="dialog" aria-modal="true">
+  <!-- Backdrop -->
+  <div class="fixed inset-0 bg-black bg-opacity-60 transition-opacity duration-300 backdrop-blur-sm"></div>
+  
+  <!-- Modal wrapper -->
+  <div class="flex items-start justify-center min-h-screen p-4 pt-20 text-center sm:p-0 sm:pt-16">
+    <!-- Modal content -->
+    <div class="relative bg-white rounded-xl shadow-xl max-w-md w-full mx-auto mt-10 transform transition-all duration-300 animate__animated animate__fadeInUp animate__faster">
+      <!-- Modal header -->
+      <div class="flex items-center justify-between px-6 pt-5 pb-2 border-b border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-900" id="eventModalLabel">
+          {{ event.title }}
+        </h3>
+        <button type="button" onclick="closeEventModal('{{ event.id }}')" class="text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full p-1">
+          <span class="sr-only">Close</span>
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      {% comment %} event poster {% endcomment %}
+      <div class="px-6 py-4">
+        <img src="{{ event.poster.url }}" alt="{{ event.title }}" class="w-full h-auto rounded-lg">
+      </div>
+      <!-- Modal body -->
+      <div class="px-6 py-4 max-h-[40vh] overflow-y-auto">
+        <div class="prose max-w-none text-gray-900">
+          {{ event.description|safe }}
+        </div>
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="px-6 py-4 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
+        <div class="flex items-center text-gray-700">
+          <svg class="w-4 h-4 text-indigo-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <span class="text-sm">{{ event.start_date|date:"F j, Y" }} at {{ event.start_date|date:"g:i A"|default:"TBA" }}</span>
+        </div>
+        <button type="button" onclick="closeEventModal('{{ event.id }}')" class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Custom animations for modal */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes fadeOutDown {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(20px); }
+  }
+  
+  .modal-backdrop-fade {
+    animation: fadeIn 0.2s ease-out forwards;
+  }
+  
+  .modal-content-slide {
+    animation: fadeInUp 0.3s ease-out forwards;
+  }
+  
+  .modal-content-slide-out {
+    animation: fadeOutDown 0.3s ease-out forwards;
+  }
+</style>
+
+<script>
+  function openEventModal(id) {
+    const modal = document.getElementById(`eventModal-${id}`);
+    if (modal) {
+      // Prevent body scrolling
+      document.body.style.overflow = 'hidden';
+      // Show modal
+      modal.classList.remove('hidden');
+      modal.classList.add('flex', 'items-start', 'justify-center');
+      
+      // Scroll to top of page to ensure modal is visible
+      window.scrollTo(0, 0);
+      
+      // Add animations
+      const backdrop = modal.querySelector('.fixed.inset-0.bg-black');
+      const content = modal.querySelector('.animate__animated');
+      
+      if (backdrop) backdrop.classList.add('modal-backdrop-fade');
+      if (content && !content.classList.contains('animate__fadeInUp')) {
+        content.classList.add('animate__fadeInUp');
+      }
+    }
+  }
+  
+  function closeEventModal(id) {
+    const modal = document.getElementById(`eventModal-${id}`);
+    if (modal) {
+      // Add closing animation
+      const modalContent = modal.querySelector('.animate__fadeInUp');
+      if (modalContent) {
+        modalContent.classList.remove('animate__fadeInUp');
+        modalContent.classList.add('animate__fadeOutDown');
+        
+        // Wait for animation to complete
+        setTimeout(() => {
+          // Hide modal
+          modal.classList.add('hidden');
+          modal.classList.remove('flex', 'items-start', 'justify-center');
+          // Reset animation classes for next open
+          modalContent.classList.remove('animate__fadeOutDown');
+          modalContent.classList.add('animate__fadeInUp');
+          // Restore body scrolling
+          document.body.style.overflow = '';
+        }, 300);
+      } else {
+        // Fallback if animation element not found
+        modal.classList.add('hidden');
+        modal.classList.remove('flex', 'items-start', 'justify-center');
+        document.body.style.overflow = '';
+      }
+    }
+  }
+  
+  // Initialize any modals on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    // Hide all modals initially
+    const modals = document.querySelectorAll('[id^="eventModal-"]');
+    modals.forEach(modal => {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    });
+  });
+</script>
