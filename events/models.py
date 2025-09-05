@@ -149,6 +149,20 @@ class EventResult(models.Model):
     
     class Meta:
         verbose_name = '4. Event Result'
+
+class EventCordinator(models.Model):
+    uid = models.CharField(max_length=100, default=uuid.uuid4, null=True,blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE,  related_name='cordinator')
+    event = models.ForeignKey(Event, on_delete=models.CASCADE,related_name='cordinators')
+    role = models.CharField(max_length=100, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.user.get_full_name()) + " - " + str(self.event.title)
+
+    class Meta:
+        verbose_name = '5. Event Cordinator'
+        unique_together = ('user', 'event')
     
 
 @receiver(post_save, sender=EventResult)
@@ -182,18 +196,3 @@ def event_submission_deleted(sender, instance, **kwargs):
     instance.event.count -= 1
     instance.event.save()
 
-
-
-class EventCordinator(models.Model):
-    uid = models.CharField(max_length=100, default=uuid.uuid4, null=True,blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE,  related_name='cordinator')
-    event = models.ForeignKey(Event, on_delete=models.CASCADE,related_name='cordinators')
-    role = models.CharField(max_length=100, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return str(self.user.get_full_name()) + " - " + str(self.event.title)
-
-    class Meta:
-        verbose_name = '5. Event Cordinator'
-        unique_together = ('user', 'event')
