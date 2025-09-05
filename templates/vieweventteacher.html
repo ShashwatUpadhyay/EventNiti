@@ -91,8 +91,8 @@
                                     <p class="font-semibold text-lg">{{ coordinator.user.get_full_name }}</p>
                                     <p class="text-sm text-gray-500">
                                         {% if coordinator.user.user_extra.phone %}
-                                        <a class='text-blue-400 hover:text-blue-800' href='https://wa.me/{{ coordinator.user.user_extra.phone|default:'' }}'>Whatsapp</a> 
-                                        {% endif %}- <a class='text-blue-400 hover:text-blue-800' href="{{ coordinator.user.email }}">Email</a></p>
+                                        <a class='text-blue-400 hover:text-blue-800' target='_blank' href='https://wa.me/{{ coordinator.user.user_extra.phone|default:'' }}'>Whatsapp</a> 
+                                        {% endif %}- <a class='text-blue-400 hover:text-blue-800' target='_blank' href="mailto:{{ coordinator.user.email }}">Email</a></p>
                                     </p>
                                 </div>
                                 <div class="flex items-center space-x-2">

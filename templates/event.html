@@ -277,7 +277,7 @@
                     </a>
                 <!-- Registration Card -->
                  
-                <div class="bg-white rounded-xl shadow-xl overflow-hidden sticky top-[100px] transition-all duration-300 hover:shadow-2xl">
+                <div  id='register' class="bg-white rounded-xl shadow-xl overflow-hidden sticky top-[100px] transition-all duration-300 hover:shadow-2xl">
                     <div class="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 text-white">
                         <h3 class="text-xl font-bold mb-1">Join This Event</h3>
                         <p class="text-indigo-100 text-sm">Secure your spot now</p>
@@ -314,6 +314,7 @@
                                 {% if not event.event_over %}
                                     {% if event.registration_open %}
                                         <a href="{% url 'eventregister' event.slug %}" 
+                                          
                                             class="block w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300 mb-3">
                                             Register Now
                                         </a>

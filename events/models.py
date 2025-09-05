@@ -29,6 +29,8 @@ class Event(models.Model):
     count = models.IntegerField(default=0)
     upload_time = models.DateTimeField(auto_now_add=True)
     start_date = models.DateTimeField(null=True, blank=True)
+    end_date = models.DateTimeField(null=True, blank=True)
+    last_date_of_registration = models.DateTimeField(null=True, blank=True)
     offers_certification = models.BooleanField(default=False)
     event_open = models.BooleanField(default=True)
     registration_open = models.BooleanField(default=True)
@@ -40,6 +42,7 @@ class Event(models.Model):
         max_length=100, null=True, blank=True, help_text=('let he backend handle it'))
     cert_distributed = models.BooleanField(default=False)
     badge_distributed = models.BooleanField(default=False)
+    approved_by_admin = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
