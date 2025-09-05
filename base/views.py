@@ -38,9 +38,9 @@ from ppuu.settings import ALLOWED_HOSTS
 
 # @cache_page(60 * 3) 
 def home(request):
-    event = Event.objects.filter(event_open=True,event_over = False,status='pending').order_by('start_date')[:3]
+    event = Event.objects.filter(event_open=True,event_over = False,status='approved').order_by('start_date')[:3]
     mem = Memories.objects.prefetch_related('memory_img').order_by('-event__start_date')[:3]
-    events = Event.objects.filter(event_over = True,event_open=True,status='pending').order_by('start_date')
+    events = Event.objects.filter(event_over = True,event_open=True,status='approved').order_by('start_date')
     rand_mem=None
     try:
         rand_mem = MemoryImages.objects.order_by('?').first()
