@@ -8,6 +8,7 @@ from django.core.mail import send_mail
 from ppuu import settings
 from ppuu.tasks import event_announcement_task,ticket_issued_email
 from django.db.models import Avg
+from events.choices import EVENT_STATUS
 import logging
 logger = logging.getLogger(__name__)
 # Create your models here.
@@ -42,7 +43,7 @@ class Event(models.Model):
         max_length=100, null=True, blank=True, help_text=('let he backend handle it'))
     cert_distributed = models.BooleanField(default=False)
     badge_distributed = models.BooleanField(default=False)
-    approved_by_admin = models.BooleanField(default=False)
+    status = models.CharField(max_length=100, choices=EVENT_STATUS, default='pending')
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 

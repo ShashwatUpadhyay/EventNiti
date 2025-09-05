@@ -81,11 +81,14 @@
                     <div class="absolute inset-0 bg-black/20"></div>
                     <div class="absolute bottom-4 left-6 right-6 text-white">
                         <h3 class="text-xl font-bold mb-2 line-clamp-2">{{ event.title }}</h3>
-                        <div class="flex items-center text-white/90 text-sm">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M3 11h18M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                            </svg>
-                            {{ event.start_date|date:"M d, Y" }}
+                        <div class="flex justify-between text-white/90 text-sm">
+                            <div class="flex items-center mr-4">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M3 11h18M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                {{ event.start_date|date:"M d, Y" }}
+                            </div>
+                            {% include 'events/event_status.html' with event=event %}
                         </div>
                     </div>
                 </div>
@@ -136,12 +139,12 @@
             {% endfor %}
         </div>
 
-        <!-- Load More Button -->
+        {% comment %} <!-- Load More Button -->
         <div class="text-center mt-12">
             <button class="bg-gradient-to-r from-red-500 via-blue-500 to-green-500 text-white px-8 py-4 rounded-2xl font-medium hover:shadow-lg transition-all duration-200">
                 Load More Events
             </button>
-        </div>
+        </div> {% endcomment %}
         
         {% else %}
         <!-- Empty State -->
