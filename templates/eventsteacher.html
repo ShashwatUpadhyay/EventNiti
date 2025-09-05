@@ -50,7 +50,7 @@ All Events | {{ company_name }}
                 <!-- Event Details -->
                 <div class="p-6">
                     <h2 class="text-xl font-bold text-blue-600">{{ events.title }}</h2>
-                    <p class="text-gray-700 mt-2"><strong>📍 Location:</strong> {{ events.location }}</p>
+                    <p class="text-gray-700 mt-2"><strong>📍 Location:</strong> {{ events.location|default:'TBA' }}</p>
 
                     <!-- Registration Status Badge -->
                     <div class="mt-4">
@@ -71,6 +71,8 @@ All Events | {{ company_name }}
                         {% endif %}
                     </div>
 
+                    
+
                     <!-- Registration Count -->
                     <div class="mt-2">
                         <span class="inline-block bg-yellow-600 text-white font-semibold py-1 px-3 rounded-full text-sm">
@@ -78,16 +80,13 @@ All Events | {{ company_name }}
                         </span>
                     </div>
 
-                    <p class="text-gray-700 mt-4 truncate">
-                       
-                        {{ events.description|safe|truncatewords:6 }}
-                    </p>
-
+                    <p class="text-gray-500 text-sm mt-2">Host: {{ events.organized_by.get_full_name|default:events.organized_by.username }}</p>
                     <!-- View Details Button -->
-                    <div class="text-right mt-4">
+                    <div class="text-right mt-4 flex flex-row justify-between space-x-4">
                         <a href="{% url 'teacherEvent' events.slug %}" class="inline-block bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-blue-700 transition">
                             View Details →
                         </a>
+                        {% include 'events/event_status.html' with event=events %}
                     </div>
                 </div>
             </div>

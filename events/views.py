@@ -38,8 +38,8 @@ def registered_in_event(request,event):
     return False
 
 def events(request):
-    event = models.Event.objects.filter(event_open=True,event_over = False).order_by('start_date').order_by('-registration_open')
-    over_event = models.Event.objects.filter(event_open=True,event_over = True).order_by('start_date')
+    event = models.Event.objects.filter(event_open=True,event_over = False,status='approved').order_by('start_date').order_by('-registration_open')
+    over_event = models.Event.objects.filter(event_open=True,event_over = True,status='approved').order_by('start_date')
     
     p = Paginator(event,3)
     page = request.GET.get('page')
@@ -50,7 +50,7 @@ def events(request):
 @login_required(login_url='login')
 def event(request, slug):
     try:
-        event = models.Event.objects.get(slug= slug)
+        event = models.Event.objects.get(slug= slug,status='approved')
     except Exception as e:
         return redirect('home')
     registered = False
@@ -68,7 +68,7 @@ def eventregister(request, slug):
     except Exception as e:
         print(e)
     try:
-        event = models.Event.objects.get(slug= slug)
+        event = models.Event.objects.get(slug= slug,status='approved')
         msg = False
         if  event.event_over:
             messages.error(request, "Event is Over!")
@@ -115,7 +115,11 @@ def eventregister(request, slug):
 
     return render(request, 'eventregister.html',{'event':event, 'user_obj':user_obj})
 
+@login_required(login_url='login')
 def create_event(request):
+    if not request.user.groups.filter(name__in=['HOST']).exists() and not request.user.is_staff:
+        return redirect('events')
+    
     if request.method == "POST":
         title = request.POST.get('title')
         description = request.POST.get('description')
@@ -131,7 +135,28 @@ def create_event(request):
         registration_open = request.POST.get('registration_open')
         event_open = request.POST.get('event_open')
         print(title,description,start_date,location,end_date,last_date_of_registration,poster,limit,price,offers_certification,notify,registration_open,event_open)
-        # models.Event.objects.create(title=title, description=description, start_date=start_date, location=location, end_date=end_date, last_date_of_registration=last_date_of_registration, poster=poster, limit=limit, price=price, offers_certification=offers_certification, notify=notify, registration_open=registration_open, event_open=event_open)
+        try:
+            models.Event.objects.create(
+                title=title, 
+                description=description, 
+                organized_by=request.user,
+                start_date=start_date, 
+                location=location, 
+                end_date=end_date, 
+                last_date_of_registration=last_date_of_registration, 
+                poster=poster, 
+                limit=limit, 
+                price=price, 
+                offers_certification=True if offers_certification=='on' else False, 
+                notify=True if notify=='on' else False, 
+                registration_open=True if registration_open=='on' else False, 
+                event_open=True if event_open=='on' else False,
+                )
+            messages.success(request, "Event sent to admin for approval")
+        except Exception as e:
+            print(e)
+            messages.error(request, f"Error: {e}   ")  
+            return redirect('create_event')
     return render(request, 'events/create_event.html')
 
 def eventTicket(request, uid):
