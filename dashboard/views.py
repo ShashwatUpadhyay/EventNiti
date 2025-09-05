@@ -114,10 +114,18 @@ def event_approvals(request):
     page = request.GET.get('page')
     pending_events = paginator.get_page(page)
     
+    pending_count = len(pending_events)
+    approved_count = len(approved_events)
+    rejected_count = len(rejected_events)
+    
     return render(request, 'dashboard/event_approvals.html', {
         'pending_events': pending_events,
         'approved_events': approved_events,
-        'rejected_events': rejected_events
+        'rejected_events': rejected_events,
+        'pending_count': pending_count,
+        'approved_count': approved_count,
+        'rejected_count': rejected_count,
+        'total_count': pending_count + approved_count + rejected_count,
     })
     
 
