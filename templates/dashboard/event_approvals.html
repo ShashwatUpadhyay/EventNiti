@@ -481,21 +481,38 @@
                                 <div class="space-y-3 text-sm">
                                     <div class="flex flex-col">
                                         <span class="font-medium text-gray-700">Description:</span>
-                                        <p class="text-gray-600 mt-1">{{ event.description }}</p>
+                                        {% include "dashboard/view_description_modal.html" with event=event %}
                                     </div>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                         <div>
-                                            <span class="font-medium text-gray-700">Category:</span>
-                                            <p class="text-gray-600">{{ event.category }}</p>
+                                            <span class="font-medium text-gray-700">Location:</span>
+                                            <p class="text-gray-600">{{ event.location|default:"TBA" }}</p>
                                         </div>
                                         <div>
-                                            <span class="font-medium text-gray-700">Capacity:</span>
-                                            <p class="text-gray-600">{{ event.capacity }} attendees</p>
+                                            <span class="font-medium text-gray-700">Total Seats:</span>
+                                            <p class="text-gray-600">{% if event.limit > 0 %}
+                                            {{ event.limit }}
+                                            {% else %}
+                                            Unlimited
+                                            {% endif %}</p>
                                         </div>
                                         <div>
-                                            <span class="font-medium text-gray-700">Duration:</span>
-                                            <p class="text-gray-600">{{ event.duration }} hours</p>
+                                            <span class="font-medium text-gray-700">Start Date & Time:</span>
+                                            <p class="text-gray-600">{{ event.start_date|date:'M d, Y h:i A' }}</p>
                                         </div>
+                                        <div>
+                                            <span class="font-medium text-gray-700">End Date & Time:</span>
+                                            <p class="text-gray-600">{{ event.end_date|date:'M d, Y h:i A' }}</p>
+                                        </div>
+                                        <div>
+                                            <span class="font-medium text-gray-700">Registration Deadline:</span>
+                                            <p class="text-gray-600">{{ event.last_date_of_registration|date:'M d, Y h:i A' }}</p>
+                                        </div>
+                                        <div>
+                                            <span class="font-medium text-gray-700">Price:</span>
+                                            <p class="text-gray-600">{{ event.price }}</p>
+                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -517,11 +534,7 @@
                                     </div>
                                     <div>
                                         <span class="font-medium text-gray-700">Phone:</span>
-                                        <p class="text-gray-600">{{ event.organized_by.phone|default:"Not provided" }}</p>
-                                    </div>
-                                    <div>
-                                        <span class="font-medium text-gray-700">Organization:</span>
-                                        <p class="text-gray-600">{{ event.organization|default:"Not specified" }}</p>
+                                        <p class="text-gray-600">{{ event.organized_by.user_extra.phone|default:"Not provided" }}</p>
                                     </div>
                                 </div>
                             </div>
