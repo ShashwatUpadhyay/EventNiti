@@ -12,6 +12,9 @@ from account.models import User
 from .models import DashboardMetrics, ActivityLog
 import json
 from django.contrib import messages
+import logging
+logger = logging.getLogger(__name__)
+
 
 
 @staff_member_required
@@ -313,19 +316,19 @@ def approve_event(request):
             if action == 'approve':
                 event.status = 'approved'
                 event.save()
-                messages.success(request, "Event Approved")
+                logger.info(f"Event {event.title} (ID: {event.id}) approved by {request.user.username}")
                 return JsonResponse({'status': 'success', 'message': 'Event Approved'})
             elif action == 'reject':
                 event.status = 'rejected'
                 event.save()
-                messages.success(request, "Event Rejected")
+                logger.info(f"Event {event.title} (ID: {event.id}) rejected by {request.user.username}")
                 return JsonResponse({'status': 'success', 'message': 'Event Rejected'})
             else:
-                messages.error(request, "Invalid Action")
+                logger.error(f"Invalid Action: {action}")
                 return JsonResponse({'status': 'error', 'message': 'Invalid Action'})
         except Exception as e:
             print(e)
-            messages.error(request, "Error processing request")
+            logger.error(f"Error in approve_event: {e}")
             return JsonResponse({'status': 'error', 'message': str(e)})
         
     return redirect('events')
