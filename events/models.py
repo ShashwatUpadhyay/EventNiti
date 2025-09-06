@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 class Event(models.Model):
+    uid = models.CharField(max_length=100, default=uuid.uuid4, null=True, blank=True)
     title = models.CharField(max_length=200)
     slug = models.CharField(max_length=300, null=True,
                             blank=True, help_text=("Slug(leave it blank)"))

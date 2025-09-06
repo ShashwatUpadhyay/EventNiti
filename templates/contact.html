@@ -42,7 +42,7 @@ Contact Us | {{ company_name }}
                     </div>
                     
                     <div class="p-8">
-                        <form action="#" method="POST" class="space-y-6">
+                        <form action="#" method="POST" class="space-y-6" id="contactForm">
                             {% csrf_token %}
                             
                             <!-- Name Input -->
@@ -107,13 +107,17 @@ Contact Us | {{ company_name }}
 
                             <!-- Submit Button -->
                             <div class="pt-4">
-                                <button type="submit" 
-                                    class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transform transition duration-300 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2">
-                                    <span class="flex items-center justify-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <button type="submit" id="submitBtn"
+                                    class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transform transition duration-300 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                                    <span class="flex items-center justify-center" id="btnContent">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="sendIcon">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                         </svg>
-                                        Send Message
+                                        <svg class="animate-spin h-5 w-5 mr-2 hidden" id="loadingIcon" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        <span id="btnText">Send Message</span>
                                     </span>
                                 </button>
                             </div>
@@ -125,7 +129,7 @@ Contact Us | {{ company_name }}
             <!-- Contact Information -->
             <div class="lg:w-1/3 space-y-8">
                 <!-- Location Card -->
-                <div class="bg-white shadow-2xl rounded-2xl overflow-hidden transform transition-all duration-500 hover:shadow-3xl">
+                <div class="bg-white shadow-2xl rounded-2xl overflow-hidden contact-card">
                     <div class="bg-gradient-to-r from-blue-500 to-indigo-600 p-6 text-white">
                         <h3 class="text-xl font-bold flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -150,7 +154,7 @@ Contact Us | {{ company_name }}
                 </div>
 
                 <!-- Contact Details Card -->
-                <div class="bg-white shadow-2xl rounded-2xl overflow-hidden transform transition-all duration-500 hover:shadow-3xl">
+                <div class="bg-white shadow-2xl rounded-2xl overflow-hidden contact-card">
                     <div class="bg-gradient-to-r from-blue-500 to-indigo-600 p-6 text-white">
                         <h3 class="text-xl font-bold flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -190,7 +194,7 @@ Contact Us | {{ company_name }}
                 </div>
 
                 <!-- Social Media Card -->
-                <div class="bg-white shadow-2xl rounded-2xl overflow-hidden transform transition-all duration-500 hover:shadow-3xl">
+                <div class="bg-white shadow-2xl rounded-2xl overflow-hidden contact-card">
                     <div class="bg-gradient-to-r from-blue-500 to-indigo-600 p-6 text-white">
                         <h3 class="text-xl font-bold flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -202,23 +206,23 @@ Contact Us | {{ company_name }}
                     <div class="p-6">
                         <p class="text-gray-600 mb-4">Follow us on social media for updates and announcements</p>
                         <div class="flex justify-center space-x-6">
-                            <a href="#" class="text-blue-400 hover:text-blue-600 transform transition duration-300 hover:scale-125">
+                            <a href="#" class="text-blue-400 hover:text-blue-600 social-icon">
                                 <span class="sr-only">Twitter</span>
                                 <i class="fab fa-twitter text-2xl"></i>
                             </a>
-                            <a href="#" class="text-pink-600 hover:text-pink-800 transform transition duration-300 hover:scale-125">
+                            <a href="#" class="text-pink-600 hover:text-pink-800 social-icon">
                                 <span class="sr-only">Instagram</span>
                                 <i class="fab fa-instagram text-2xl"></i>
                             </a>
-                            <a href="#" class="text-blue-700 hover:text-blue-900 transform transition duration-300 hover:scale-125">
+                            <a href="#" class="text-blue-700 hover:text-blue-900 social-icon">
                                 <span class="sr-only">LinkedIn</span>
                                 <i class="fab fa-linkedin text-2xl"></i>
                             </a>
-                            <a href="#" class="text-green-500 hover:text-green-700 transform transition duration-300 hover:scale-125">
+                            <a href="#" class="text-green-500 hover:text-green-700 social-icon">
                                 <span class="sr-only">WhatsApp</span>
                                 <i class="fab fa-whatsapp text-2xl"></i>
                             </a>
-                            <a href="mailto:event.niti@gmail.com" class="text-red-500 hover:text-red-700 transform transition duration-300 hover:scale-125">
+                            <a href="mailto:event.niti@gmail.com" class="text-red-500 hover:text-red-700 social-icon">
                                 <span class="sr-only">Email</span>
                                 <i class="fas fa-envelope text-2xl"></i>
                             </a>
@@ -245,7 +249,7 @@ Contact Us | {{ company_name }}
         </div>
     </section>
 
-    <!-- Animation Styles -->
+    <!-- Enhanced Animation Styles -->
     <style>
         .animate-fade-in-down {
             animation: fadeInDown 0.8s ease-out;
@@ -268,22 +272,270 @@ Contact Us | {{ company_name }}
             0%, 100% { opacity: 0.2; }
             50% { opacity: 0.3; }
         }
+        
+        /* Enhanced form input focus effects */
+        .form-input:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.15);
+        }
+        
+        /* Floating label effect */
+        .floating-label {
+            position: relative;
+        }
+        
+        .floating-label input:focus + label,
+        .floating-label input:not(:placeholder-shown) + label {
+            transform: translateY(-1.5rem) scale(0.85);
+            color: #3b82f6;
+        }
+        
+        /* Card hover effects */
+        .contact-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Gradient text effect */
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Enhanced button ripple effect */
+        .btn-ripple {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-ripple::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn-ripple:active::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        /* Social media icon animations */
+        .social-icon {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .social-icon::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: currentColor;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+        
+        .social-icon:hover::after {
+            opacity: 0.1;
+            transform: scale(1.5);
+        }
+        
+        /* Loading animation improvements */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+        
+        /* Form validation styles */
+        .input-error {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+        }
+        
+        .input-success {
+            border-color: #10b981 !important;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important;
+        }
     </style>
 </div>
 
 <script>
-
+    // Form handling with enhanced UX
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const sendIcon = document.getElementById('sendIcon');
+        const loadingIcon = document.getElementById('loadingIcon');
+        
+        // Form validation
+        const inputs = form.querySelectorAll('input, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('blur', validateField);
+            input.addEventListener('input', clearErrors);
+        });
+        
+        function validateField(e) {
+            const field = e.target;
+            const value = field.value.trim();
+            
+            // Remove existing error styling
+            field.classList.remove('border-red-500', 'ring-red-500');
+            
+            if (!value) {
+                field.classList.add('border-red-500');
+                return false;
+            }
+            
+            if (field.type === 'email' && !isValidEmail(value)) {
+                field.classList.add('border-red-500');
+                return false;
+            }
+            
+            field.classList.add('border-green-500');
+            return true;
+        }
+        
+        function clearErrors(e) {
+            const field = e.target;
+            field.classList.remove('border-red-500', 'border-green-500');
+        }
+        
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+        
+        // Form submission
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate all fields
+            let isValid = true;
+            inputs.forEach(input => {
+                if (!validateField({target: input})) {
+                    isValid = false;
+                }
+            });
+            
+            if (!isValid) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validation Error',
+                    text: 'Please fill in all fields correctly.',
+                    customClass: {
+                        popup: 'rounded-xl'
+                    }
+                });
+                return;
+            }
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            btnText.textContent = 'Sending...';
+            sendIcon.classList.add('hidden');
+            loadingIcon.classList.remove('hidden');
+            
+            // Submit form
+            const formData = new FormData(form);
+            
+            fetch(form.action || window.location.href, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Message Sent!',
+                        text: 'Thank you for contacting us. We\'ll get back to you within 24 hours.',
+                        customClass: {
+                            popup: 'rounded-xl'
+                        }
+                    }).then(() => {
+                        form.reset();
+                        inputs.forEach(input => {
+                            input.classList.remove('border-green-500', 'border-red-500');
+                        });
+                    });
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Something went wrong. Please try again later.',
+                    customClass: {
+                        popup: 'rounded-xl'
+                    }
+                });
+            })
+            .finally(() => {
+                // Reset button state
+                submitBtn.disabled = false;
+                btnText.textContent = 'Send Message';
+                sendIcon.classList.remove('hidden');
+                loadingIcon.classList.add('hidden');
+            });
+        });
+        
+        // Smooth scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in-up');
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.lg\\:w-1\\/3 > div').forEach(el => {
+            observer.observe(el);
+        });
+    });
+    
     // Django Messages with SweetAlert2
     {% if messages %}
       {% for message in messages %}
         Swal.fire({
-          toast: true, // Make it a toast notification
+          toast: true,
           position: 'top-end',
           icon: '{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}',
-          title: "{{ message|escapejs }}", // Escape JS characters in message
+          title: "{{ message|escapejs }}",
           showConfirmButton: false,
-          timer: 3500, // Show for 3.5 seconds
+          timer: 4000,
           timerProgressBar: true,
+          customClass: {
+            popup: 'rounded-xl'
+          },
           didOpen: (toast) => {
             toast.addEventListener('mouseenter', Swal.stopTimer)
             toast.addEventListener('mouseleave', Swal.resumeTimer)
@@ -291,7 +543,6 @@ Contact Us | {{ company_name }}
         });
       {% endfor %}
     {% endif %}
-
 </script>
 
 {% endblock content %}

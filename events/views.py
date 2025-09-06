@@ -19,6 +19,7 @@ import io
 from django.core.paginator import Paginator
 india_timezone = pytz.timezone('Asia/Kolkata')
 import logging 
+from django.contrib.admin.views.decorators import staff_member_required
 logger = logging.getLogger(__name__)
 
 def is_cordinator(request,event):
