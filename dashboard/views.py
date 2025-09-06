@@ -104,6 +104,7 @@ def events_management(request):
     events = paginator.get_page(page)
     
     return render(request, 'dashboard/events_management.html', {
+        'pending_approval_exist' : Event.objects.filter(status='pending').exists(),
         'events': events,
         'status_filter': status_filter,
         'search': search

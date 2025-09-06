@@ -16,23 +16,43 @@
 </div>
 
 {% comment %} pending approval {% endcomment %}
-<div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6" role="alert">
+ {% if pending_approval_exist %}
+ 
+ <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6" role="alert">
+     <div class="flex">
+         <div class="flex-shrink-0">
+             <i class="fas fa-exclamation-triangle text-yellow-500 mr-3"></i>
+            </div>
+            <div>
+                <p class="font-bold">Pending Approval</p>
+                <p class="text-sm">Some events are pending approval. Please review and take necessary actions.</p>
+            </div>
+        </div>
+        
+        <div class="mt-4">
+            <a href='{% url "dashboard:event_status" %}' class="text-yellow-700 underline hover:text-yellow-900">
+                View Pending Events
+            </a>
+        </div>
+</div>
+{% else %}
+<div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6" role="alert">
     <div class="flex">
         <div class="flex-shrink-0">
-            <i class="fas fa-exclamation-triangle text-yellow-500 mr-3"></i>
+            <i class="fas fa-check-circle text-green-500 mr-3"></i>
         </div>
         <div>
-            <p class="font-bold">Pending Approval</p>
-            <p class="text-sm">Some events are pending approval. Please review and take necessary actions.</p>
+            <p class="font-bold">All Clear</p>
+            <p class="text-sm">There are no events pending approval at the moment.</p>
         </div>
     </div>
-
     <div class="mt-4">
-        <a href='{% url "dashboard:event_status" %}' class="text-yellow-700 underline hover:text-yellow-900">
-            View Pending Events
+        <a href='{% url "dashboard:event_status" %}' class="text-green-700 underline hover:text-green-900">
+            View Event Status
         </a>
     </div>
 </div>
+{% endif %}
 
 <!-- Filters -->
 <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
