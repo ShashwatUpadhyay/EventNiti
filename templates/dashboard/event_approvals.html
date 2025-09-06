@@ -637,14 +637,6 @@
                                     Rejection Details
                                 </h4>
                                 <div class="space-y-3 text-sm">
-                                    {% comment %} <div>
-                                        <span class="font-medium text-gray-700">Rejected By:</span>
-                                        <p class="text-gray-600">{{ event.rejected_by.get_full_name|default:event.rejected_by.username }}</p>
-                                    </div> {% endcomment %}
-                                    {% comment %} <div>
-                                        <span class="font-medium text-gray-700">Reason:</span>
-                                        <p class="text-gray-600">{{ event.rejection_reason|default:"No reason provided" }}</p>
-                                    </div> {% endcomment %}
                                     <div>
                                         <span class="font-medium text-gray-700">Rejected At:</span>
                                         <p class="text-gray-600">{{ event.rejected_at|date:"F j, Y, g:i a" }}</p>
