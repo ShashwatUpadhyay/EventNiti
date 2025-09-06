@@ -11,6 +11,8 @@ from blog.models import Blog, BlogCategory, BlogAnalytics
 from account.models import User
 from .models import DashboardMetrics, ActivityLog
 import json
+from django.contrib import messages
+
 
 @staff_member_required
 def dashboard_home(request):
@@ -127,7 +129,6 @@ def event_approvals(request):
         'rejected_count': rejected_count,
         'total_count': pending_count + approved_count + rejected_count,
     })
-    
 
 @staff_member_required
 def blogs_management(request):
@@ -297,3 +298,34 @@ def quick_stats_api(request):
     }
     
     return JsonResponse(stats)
+
+@staff_member_required(login_url='login')
+def approve_event(request):
+    if request.method == "POST":
+        if not request.user.is_superuser:
+            messages.error(request, "You are not authorized to perform this action.")
+            return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
+        uid = request.POST.get('uid')
+        action = request.POST.get('action')
+        print(uid, action,request.POST.dict())
+        try:
+            event = Event.objects.get(uid=uid)
+            if action == 'approve':
+                event.status = 'approved'
+                event.save()
+                messages.success(request, "Event Approved")
+                return JsonResponse({'status': 'success', 'message': 'Event Approved'})
+            elif action == 'reject':
+                event.status = 'rejected'
+                event.save()
+                messages.success(request, "Event Rejected")
+                return JsonResponse({'status': 'success', 'message': 'Event Rejected'})
+            else:
+                messages.error(request, "Invalid Action")
+                return JsonResponse({'status': 'error', 'message': 'Invalid Action'})
+        except Exception as e:
+            print(e)
+            messages.error(request, "Error processing request")
+            return JsonResponse({'status': 'error', 'message': str(e)})
+        
+    return redirect('events')
