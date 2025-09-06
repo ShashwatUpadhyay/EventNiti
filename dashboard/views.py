@@ -315,11 +315,13 @@ def approve_event(request):
             event = Event.objects.get(uid=uid)
             if action == 'approve':
                 event.status = 'approved'
+                event.approved_at = timezone.now()
                 event.save()
                 logger.info(f"Event {event.title} (ID: {event.id}) approved by {request.user.username}")
                 return JsonResponse({'status': 'success', 'message': 'Event Approved'})
             elif action == 'reject':
                 event.status = 'rejected'
+                event.rejected_at = timezone.now()
                 event.save()
                 logger.info(f"Event {event.title} (ID: {event.id}) rejected by {request.user.username}")
                 return JsonResponse({'status': 'success', 'message': 'Event Rejected'})
