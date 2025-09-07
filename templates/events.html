@@ -188,16 +188,7 @@ Events Hub | {{ company_name }}
                      {% if not upcoming_event.event_over %} {# Filter for upcoming only #}
                         <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 group">
                             <div class="relative">
-                                {% if upcoming_event.poster %}
-                                <img src="{{ upcoming_event.poster.url }}" alt="Event Poster" class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500">
-                                {% else %}
-                                <div class="w-full h-56 bg-gradient-to-r from-indigo-100 to-purple-100 flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
-                                </div>
-                                {% endif %}
-
+                                <img src="{{ upcoming_event.get_image_url }}" alt="Event Poster" class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500">
                                 <div class="absolute top-4 right-4">
                                    {% if upcoming_event.registration_open %}
                                    <span class="inline-block bg-green-500 text-white font-semibold py-1 px-3 rounded-full text-xs uppercase tracking-wide">
@@ -352,15 +343,7 @@ Events Hub | {{ company_name }}
                                      <div class="swiper-slide">
                                          <div class="past-event-card w-full">
                                              <div class="relative flex-shrink-0 ">
-                                                 {% if past_event.poster %}
-                                                 <img src="{{ past_event.poster.url }}" alt="{{ past_event.title }}" class="w-full h-48 object-cover">
-                                                 {% else %}
-                                                  <div class="w-full h-48 bg-gradient-to-r from-gray-100 to-gray-200 flex items-center justify-center">
-                                                      <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                      </svg>
-                                                  </div>
-                                                 {% endif %}
+                                                 <img src="{{ past_event.get_image_url }}" alt="{{ past_event.title }}" class="w-full h-48 object-cover">
                                                  <div class="absolute top-3 right-3">
                                                      <span class="inline-block bg-gray-500 text-white font-semibold py-1 px-2.5 rounded-full text-xs uppercase tracking-wide shadow">
                                                          Concluded

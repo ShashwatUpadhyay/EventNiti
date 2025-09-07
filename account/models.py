@@ -6,7 +6,7 @@ from django.dispatch import receiver
 # Create your models here.
 
 class UserExtra(models.Model):
-    uid = models.CharField(max_length=100, null=True, blank=True)
+    uid = models.CharField(max_length=100,default=uuid.uuid4, null=True, blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_extra')
     phone = models.CharField(max_length=10, null= True, blank=True)
     course = models.CharField(max_length=10,null= True, blank=True)
@@ -32,12 +32,7 @@ class UserExtra(models.Model):
     
     def __str__(self):
         return str(self.user.first_name + " " + self.user.last_name)
-    
-    def save(self, *args, **kwargs):
-        if not self.uid:
-            self.uid = uuid.uuid4()
-        super(UserExtra, self).save(*args, **kwargs)
-        
+            
     class Meta:
         verbose_name_plural  = 'User Informations'
 

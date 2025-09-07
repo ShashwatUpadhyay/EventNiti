@@ -32,8 +32,8 @@ def registered_in_event(request,event):
     return event.participant.filter(user=request.user).exists()
 
 def events(request):
-    event = models.Event.objects.filter(event_open=True,event_over = False,status='approved').order_by('start_date').order_by('-registration_open')
-    over_event = models.Event.objects.filter(event_open=True,event_over = True,status='approved').order_by('start_date')
+    event = models.Event.objects.filter(event_open=True,event_over = False,status='approved').order_by('start_date','-registration_open')
+    over_event = models.Event.objects.filter(event_open=True,event_over = True,status='approved').order_by('-start_date')
     
     p = Paginator(event,3)
     page = request.GET.get('page')

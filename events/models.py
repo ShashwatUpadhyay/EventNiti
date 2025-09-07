@@ -72,6 +72,15 @@ class Event(models.Model):
         star = int(rate) * '⭐'
         return star
     
+    @property
+    def get_image_url(self):
+        if self.poster:
+            return self.poster.url
+        elif self.poster_url:
+            return self.poster_url
+        else:
+            return settings.DEFAULT_EVENT_IMAGE_URL
+    
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)

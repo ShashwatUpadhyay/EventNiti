@@ -255,3 +255,5 @@ LOGGING = {
 
 RAZOR_KEY_ID = env("RAZOR_KEY_ID")
 RAZOR_KEY_SECRET = env("RAZOR_KEY_SECRET")
+
+DEFAULT_EVENT_IMAGE_URL='https://fulbrightscholars.org/themes/custom/de_theme/src/img/default/event_default.svg'

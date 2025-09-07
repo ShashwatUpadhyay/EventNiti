@@ -11,11 +11,14 @@ class Command(BaseCommand):
     help = 'Populate dummy event data'
     def handle(self, *args, **options):
         for i in range(5):
+            color = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444']
+            height = [200, 300, 400, 500]
+            width = [200, 300, 400, 500]
             data = {
                 'title': Faker.sentence(nb_words=6),
                 'description': Faker.paragraph(nb_sentences=5),
                 'price': random.choice([0, 99, 299, 399, 499, 599]),
-                'poster_url': Faker.image_url(),
+                'poster_url': f'https://dummyimage.com/{random.choice(width)}x{random.choice(height)}/{random.choice(color)[1:]}/fff&text=Event+Poster',
                 'location' : Faker.city(),
                 'limit': random.choice([None, 50, 100, 150, 200]),
                 'start_date': timezone.now() + timezone.timedelta(days=random.randint(1, 30)),
