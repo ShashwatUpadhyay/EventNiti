@@ -31,7 +31,11 @@
       
       {% comment %} event poster {% endcomment %}
       <div class="px-6 py-4">
+        {% if event.poster %}
         <img src="{{ event.poster.url }}" alt="{{ event.title }}" class="w-full h-auto rounded-lg">
+        {% elif event.poster_url %}
+        <img src="{{ event.poster_url }}" alt="{{ event.title }}" class="w-full h-auto rounded-lg">
+        {% endif %}
       </div>
       <!-- Modal body -->
       <div class="px-6 py-4 max-h-[40vh] overflow-y-auto">

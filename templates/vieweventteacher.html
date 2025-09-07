@@ -24,7 +24,7 @@
                         📅 {{ event.start_date|date:"F j, Y" }}
                     </span>
                     <span class="bg-white bg-opacity-20 text-white px-4 py-2 rounded-full text-sm font-medium">
-                        📍 {{ event.location }}
+                        📍 {{ event.location|default:'TBA' }}
                     </span>
                     <span class="bg-white bg-opacity-20 text-white px-4 py-2 rounded-full text-sm font-medium">
                         👥 {{ event.count }} registered
@@ -163,7 +163,7 @@
                                 </div>
                                 <div class="ml-4">
                                     <h4 class="text-sm font-medium text-gray-500">Location</h4>
-                                    <p class="text-sm font-semibold text-gray-900">{{ event.location }}</p>
+                                    <p class="text-sm font-semibold text-gray-900">{{ event.location|default:"TBA" }}</p>
                                 </div>
                             </div>
                             
@@ -175,7 +175,19 @@
                                 </div>
                                 <div class="ml-4">
                                     <h4 class="text-sm font-medium text-gray-500">Start Date</h4>
-                                    <p class="text-sm font-semibold text-gray-900">{{ event.start_date }}</p>
+                                    <p class="text-sm font-semibold text-gray-900">{{ event.start_date|date:"M. d, Y, H:i a" }}</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="text-sm font-medium text-gray-500">End Date</h4>
+                                    <p class="text-sm font-semibold text-gray-900">{{ event.end_date|date:"M. d, Y, H:i a" }}</p>
                                 </div>
                             </div>
                             
@@ -187,9 +199,10 @@
                                 </div>
                                 <div class="ml-4">
                                     <h4 class="text-sm font-medium text-gray-500">Uploaded</h4>
-                                    <p class="text-sm font-semibold text-gray-900">{{ event.upload_time }}</p>
+                                    <p class="text-sm font-semibold text-gray-900">{{ event.upload_time|date:"M. d, Y, H:i a" }}</p>
                                 </div>
                             </div>
+                           
                             {% if event.status == 'pending' %}
                             <div class="flex items-start">
                                 <div class="flex-shrink-0 h-10 w-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600">
@@ -307,7 +320,7 @@
                                 </a>                  
                     {% endif %}
 
-                    {% if is_host %}
+                    {% if is_host or user.is_superuser %}
                         <a href="{% url "create_poll" event.slug %}" 
                                 class="max-w-full m-1 flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 shadow-md transition-all">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
