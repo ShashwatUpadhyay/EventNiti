@@ -1,5 +1,4 @@
 from django.core.management.base import BaseCommand
-from django.utils import timezone
 from account.models import User , UserExtra
 from django.contrib.auth.models import Group
 from base.models import Year,Section,Course

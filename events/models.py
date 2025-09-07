@@ -23,11 +23,12 @@ class Event(models.Model):
         upload_to='event_poster/', null=True, blank=True)
     poster_url = models.URLField(max_length=500, null=True, blank=True)
     description = models. TextField()
+    enrolled_description = models.TextField(null=True, blank=True)
     price = models.PositiveIntegerField(
         default=0, help_text=('Price of the Event (leave it 0 if free)'))
     organized_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='host')
     location = models.CharField(max_length=100, null=True, blank=True)
-    limit = models.IntegerField(null=True, blank=True, help_text=(
+    limit = models.IntegerField(null=True, blank=True,default=0, help_text=(
         'Limit (leave it blank if no registration limit)'))
     count = models.IntegerField(default=0)
     upload_time = models.DateTimeField(auto_now_add=True)

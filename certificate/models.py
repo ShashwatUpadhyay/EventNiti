@@ -8,7 +8,7 @@ import hashlib
 import secrets 
 from events.models import Event
 from ppuu import settings
-from ppuu.mail_sender import certificate_issued_email
+from ppuu.tasks import certificate_issued_email
 import uuid
 
 # Create your models here.
@@ -50,5 +50,12 @@ class Certificate(models.Model):
 @receiver(post_save, sender = Certificate)
 def save_certificate(sender,created, instance, **kwargs):
     if created:
-        certificate_issued_email(instance)
+        data = {
+            'email': instance.user.email,
+            'event': instance.event.title,
+            'certificate_for': instance.certificate_for.title,
+            'hash': instance.hash
+        }
+        print(data)
+        certificate_issued_email.delay(data)
         print(f"Certificate Created for {instance.user.username}")

@@ -1,0 +1,80 @@
+<button onclick='console.log("clicked")'>
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-1 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+    </svg>                        
+</button>
+
+<!-- Edit Description Popup Modal -->
+<div id="editDescModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen px-4 py-8">
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-900 opacity-50"></div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-lg z-10">
+            <!-- Header Section -->
+            <div class="bg-indigo-600 text-white rounded-t-lg px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-semibold">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        Edit Event Description For All Users
+                    </h2>
+                    <button id="closeEditDescModal" class="text-white hover:text-gray-300 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <!-- Form Section -->
+            <div class="px-6 py-4">
+                <form method="POST" class="space-y-6">
+                    {% csrf_token %}
+                    <div class="space-y-2">
+                        <label for="description" class="block text-sm font-medium text-gray-700 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v6a2 2 0 01-2 2h-3l-4 4z" />
+                            </svg>
+                            Event Description (Use HTML + Tailwind CSS for formatting)
+                        </label>
+                        <textarea id="description" name="description" rows="4" required
+                            class="block w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 shadow-sm transition duration-150">{{ event.description }}</textarea>
+                    </div>
+                    <div class="flex justify-end space-x-3">
+                        <button type="button" id="cancelEditDesc" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 focus:outline-none">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none">
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const editDescModal = document.getElementById('editDescModal');
+        const openEditDescBtn = document.querySelector('button[onclick]');
+        const closeEditDescBtn = document.getElementById('closeEditDescModal');
+        const cancelEditDescBtn = document.getElementById('cancelEditDesc');
+
+        // Function to open the modal
+        function openModal() {
+            editDescModal.classList.remove('hidden');
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            editDescModal.classList.add('hidden');
+        }
+
+        // Event listeners
+        openEditDescBtn.addEventListener('click', openModal);
+        closeEditDescBtn.addEventListener('click', closeModal);
+        cancelEditDescBtn.addEventListener('click', closeModal);
+    });
+</script>
