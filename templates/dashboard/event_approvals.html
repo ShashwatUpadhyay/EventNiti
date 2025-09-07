@@ -341,33 +341,36 @@
                                         <span class="font-medium text-gray-700">Description:</span>
                                         {% include "dashboard/view_description_modal.html" with event=event %}
                                     </div>
-                                    <div class="flex flex-col">
-                                        <span class="font-medium text-gray-700">Location:</span>
-                                        <p class="text-gray-600">{{ event.location|default:"Online" }}</p>
-                                    </div>
-                                    <div class="flex flex-col">
-                                        <span class="font-medium text-gray-700">Start Date & Time:</span>
-                                        <p class="text-gray-600">{{ event.start_date|date:"M d, Y h:i A" }}</p>
-                                    </div>
-                                    <div class="flex flex-col">
-                                        <span class="font-medium text-gray-700">End Date & Time:</span>
-                                        <p class="text-gray-600">{{ event.end_date|date:"M d, Y h:i A" }}</p>
-                                    </div>
-                                    <div class="flex flex-col">
-                                        <span class="font-medium text-gray-700">Registration Deadline:</span>
-                                        <p class="text-gray-600">{{ event.last_date_of_registration|date:"M d, Y h:i A" }}</p>
-                                    </div>
-                                    <div class="flex flex-col">
-                                        <span class="font-medium text-gray-700">Total Seats:</span>
-                                        {% if event.limit > 0 %}
-                                        <p class="text-gray-600">{{ event.limit }}</p>
-                                        {% else %}
-                                        <p class="text-gray-600">Unlimited</p>
-                                        {% endif %}
-                                    </div>
-                                    <div class="flex flex-col">
-                                        <span class="font-medium text-gray-700">Ticket Price:</span>
-                                        <p class="text-gray-600">{{ event.price }}</p>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        <div>
+                                            <span class="font-medium text-gray-700">Location:</span>
+                                            <p class="text-gray-600">{{ event.location|default:"TBA" }}</p>
+                                        </div>
+                                        <div>
+                                            <span class="font-medium text-gray-700">Total Seats:</span>
+                                            <p class="text-gray-600">{% if event.limit > 0 %}
+                                            {{ event.limit }}
+                                            {% else %}
+                                            Unlimited
+                                            {% endif %}</p>
+                                        </div>
+                                        <div>
+                                            <span class="font-medium text-gray-700">Start Date & Time:</span>
+                                            <p class="text-gray-600">{{ event.start_date|date:'M d, Y h:i A' }}</p>
+                                        </div>
+                                        <div>
+                                            <span class="font-medium text-gray-700">End Date & Time:</span>
+                                            <p class="text-gray-600">{{ event.end_date|date:'M d, Y h:i A' }}</p>
+                                        </div>
+                                        <div>
+                                            <span class="font-medium text-gray-700">Registration Deadline:</span>
+                                            <p class="text-gray-600">{{ event.last_date_of_registration|date:'M d, Y h:i A' }}</p>
+                                        </div>
+                                        <div>
+                                            <span class="font-medium text-gray-700">Ticket Price:</span>
+                                            <p class="text-gray-600">{{ event.price }}</p>
+                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -470,7 +473,7 @@
                 </tr>
                 <tr class="dropdown-content" id="details-{{ event.id }}-approved">
                     <td colspan="5" class="px-6 py-4 bg-gray-50">
-                        <div class="grid grid-cols-2 gap-6 event-details-grid">
+                        <div class="grid grid-cols-3 gap-6 event-details-grid">
                             <div class="bg-white p-4 rounded-lg shadow-sm">
                                 <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
                                     <svg class="w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
@@ -535,6 +538,20 @@
                                     <div>
                                         <span class="font-medium text-gray-700">Phone:</span>
                                         <p class="text-gray-600">{{ event.organized_by.user_extra.phone|default:"Not provided" }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                    </svg>
+                                    Approval Details
+                                </h4>
+                                <div class="space-y-3 text-sm">
+                                    <div>
+                                        <span class="font-medium text-gray-700">Approved At:</span>
+                                        <p class="text-gray-600">{{ event.approved_at|date:"F j, Y, g:i a" }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -613,7 +630,7 @@
                 </tr>
                 <tr class="dropdown-content" id="details-{{ event.id }}-rejected">
                     <td colspan="5" class="px-6 py-4 bg-gray-50">
-                        <div class="grid grid-cols-2 gap-6 event-details-grid">
+                        <div class="grid grid-cols-3 gap-6 event-details-grid">
                             <div class="bg-white p-4 rounded-lg shadow-sm">
                                 <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
                                     <svg class="w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
@@ -624,21 +641,61 @@
                                 <div class="space-y-3 text-sm">
                                     <div class="flex flex-col">
                                         <span class="font-medium text-gray-700">Description:</span>
-                                        <p class="text-gray-600 mt-1">{{ event.description }}</p>
+                                        {% include "dashboard/view_description_modal.html" with event=event %}
                                     </div>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                         <div>
-                                            <span class="font-medium text-gray-700">Category:</span>
-                                            <p class="text-gray-600">{{ event.category }}</p>
+                                            <span class="font-medium text-gray-700">Location:</span>
+                                            <p class="text-gray-600">{{ event.location|default:"TBA" }}</p>
                                         </div>
                                         <div>
-                                            <span class="font-medium text-gray-700">Capacity:</span>
-                                            <p class="text-gray-600">{{ event.capacity }} attendees</p>
+                                            <span class="font-medium text-gray-700">Total Seats:</span>
+                                            <p class="text-gray-600">{% if event.limit > 0 %}
+                                            {{ event.limit }}
+                                            {% else %}
+                                            Unlimited
+                                            {% endif %}</p>
                                         </div>
                                         <div>
-                                            <span class="font-medium text-gray-700">Duration:</span>
-                                            <p class="text-gray-600">{{ event.duration }} hours</p>
+                                            <span class="font-medium text-gray-700">Start Date & Time:</span>
+                                            <p class="text-gray-600">{{ event.start_date|date:'M d, Y h:i A' }}</p>
                                         </div>
+                                        <div>
+                                            <span class="font-medium text-gray-700">End Date & Time:</span>
+                                            <p class="text-gray-600">{{ event.end_date|date:'M d, Y h:i A' }}</p>
+                                        </div>
+                                        <div>
+                                            <span class="font-medium text-gray-700">Registration Deadline:</span>
+                                            <p class="text-gray-600">{{ event.last_date_of_registration|date:'M d, Y h:i A' }}</p>
+                                        </div>
+                                        <div>
+                                            <span class="font-medium text-gray-700">Ticket Price:</span>
+                                            <p class="text-gray-600">{{ event.price }}</p>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
+                                    </svg>
+                                    Organizer Details
+                                </h4>
+                                <div class="space-y-3 text-sm">
+                                    <div>
+                                        <span class="font-medium text-gray-700">Name:</span>
+                                        <p class="text-gray-600">{{ event.organized_by.get_full_name|default:event.organized_by.username }}</p>
+                                    </div>
+                                    <div>
+                                        <span class="font-medium text-gray-700">Email:</span>
+                                        <p class="text-gray-600">{{ event.organized_by.email }}</p>
+                                    </div>
+                                    <div>
+                                        <span class="font-medium text-gray-700">Phone:</span>
+                                        <p class="text-gray-600">{{ event.organized_by.user_extra.phone|default:"Not provided" }}</p>
                                     </div>
                                 </div>
                             </div>

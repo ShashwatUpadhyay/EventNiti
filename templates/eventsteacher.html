@@ -33,14 +33,8 @@ All Events | {{ company_name }}
                 
                 <!-- Event Poster -->
                 <div class="relative">
-                    {% if events.poster %}
-                    <img src="{{ events.poster.url }}" alt="Event Poster" class="w-full h-48 object-cover"
+                    <img src="{{ events.get_image_url }}" alt="Event Poster" class="w-full h-48 object-cover"
                          onerror="this.onerror=null; this.src='';">
-                    {% else %}
-                    <div class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">
-                        No Poster Available
-                    </div>
-                    {% endif %}
                     
                     <div class="absolute top-2 left-2 bg-black bg-opacity-50 text-white py-1 px-3 text-sm rounded-full">
                         {{ events.start_date }}

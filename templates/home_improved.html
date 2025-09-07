@@ -479,15 +479,7 @@
         {% for events_item in event|slice:":3" %}
           <div class="event-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
              <div class="event-card-img-wrapper">
-               {% if events_item.poster %}
-                 <img src="{{ events_item.poster.url }}" alt="{{ events_item.title }} event poster" class="event-card-img" loading="lazy">
-               {% else %}
-                 <div class="flex items-center justify-center w-full h-full bg-gradient-to-br from-gray-100 to-gray-200" role="img" aria-label="Default event image">
-                    <svg class="w-16 h-16 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                 </div>
-               {% endif %}
+                 <img src="{{ events_item.get_image_url }}" alt="{{ events_item.title }} event poster" class="event-card-img" loading="lazy">
                 <div class="event-status-badge {% if events_item.event_over %}badge-concluded{% elif events_item.registration_open %}badge-open{% else %}badge-closed{% endif %}">
                  {% if events_item.event_over %} Concluded {% elif events_item.registration_open %} Open {% else %} Closed {% endif %}
                </div>

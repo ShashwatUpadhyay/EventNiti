@@ -3,7 +3,7 @@ const CACHE_NAME = 'eventniti-v1';
 const urlsToCache = [
   '/',
   '/static/css/styles.css',
-  '/static/images/logoo.png',
+  '/static/images/en2.png',
   'https://cdn.tailwindcss.com',
   'https://unpkg.com/aos@2.3.1/dist/aos.css',
   'https://unpkg.com/swiper/swiper-bundle.min.css'

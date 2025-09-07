@@ -391,15 +391,7 @@
         {% for events_item in event|slice:":3" %} {# Show only first 3 upcoming events #}
           <div class="event-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
              <div class="event-card-img-wrapper">
-               {% if events_item.poster %}
-                 <img src="{{ events_item.poster.url }}" alt="{{ events_item.title }} Poster" class="event-card-img">
-               {% else %}
-                 <div class="flex items-center justify-center w-full h-full bg-gradient-to-br from-gray-100 to-gray-200">
-                    <svg class="w-16 h-16 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                 </div>
-               {% endif %}
+                 <img src="{{ events_item.get_image_url }}" alt="{{ events_item.title }} Poster" class="event-card-img">
                 <div class="event-status-badge {% if events_item.event_over %}badge-concluded{% elif events_item.registration_open %}badge-open{% else %}badge-closed{% endif %}">
                  {% if events_item.event_over %} Concluded {% elif events_item.registration_open %} Open {% else %} Closed {% endif %}
                </div>
@@ -470,13 +462,7 @@
                      <div class="block h-full">
                        <div class="event-card h-full flex flex-col"> {# Use flex column #}
                           <div class="event-card-img-wrapper flex-shrink-0">
-                             {% if past_event.poster %}
-                                <img src="{{ past_event.poster.url }}" alt="{{ past_event.title }} Poster" class="event-card-img">
-                             {% else %}
-                                <div class="flex items-center justify-center w-full h-full bg-gradient-to-br from-gray-100 to-gray-200">
-                                    <svg class="w-16 h-16 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                                </div>
-                             {% endif %}
+                                <img src="{{ past_event.get_image_url }}" alt="{{ past_event.title }} Poster" class="event-card-img">
                              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                              <div class="absolute bottom-0 left-0 p-4 text-white">
                                 <h4 class="text-lg font-semibold">{{ past_event.title }}</h4>

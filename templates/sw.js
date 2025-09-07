@@ -3,7 +3,7 @@ const CACHE_NAME = 'eventniti-v2';
 const urlsToCache = [
   '/',
   '/static/css/styles.css',
-  '/static/images/logoo.png',
+  '/static/images/en2.png',
   '/static/images/logo/icon-192.png',
   '/static/images/logo/icon-512.png',
   '/static/manifest.json',
