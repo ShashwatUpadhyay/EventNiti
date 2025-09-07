@@ -23,20 +23,13 @@ from django.contrib.admin.views.decorators import staff_member_required
 logger = logging.getLogger(__name__)
 
 def is_cordinator(request,event):
-    for event in event.cordinators.all():
-        if request.user == event.user:
-            return True
-    return False
+    return event.cordinators.filter(user=request.user).exists()
 
 def is_event_host(request,event): 
-    return event.organized_by == request.user
+    return event.organized_by == request.user or request.user.is_superuser
     
 def registered_in_event(request,event):
-    submissions = event.participant.all
-    for user in submissions:
-        if submissions.user == request.user:
-            return True
-    return False
+    return event.participant.filter(user=request.user).exists()
 
 def events(request):
     event = models.Event.objects.filter(event_open=True,event_over = False,status='approved').order_by('start_date').order_by('-registration_open')
@@ -54,10 +47,7 @@ def event(request, slug):
         event = models.Event.objects.get(slug= slug,status='approved')
     except Exception as e:
         return redirect('home')
-    registered = False
-    if models.EventSubmission.objects.filter(user=request.user, event=event).exists():
-        registered = True
-    return render(request, 'event.html',{'event':event,'registered':registered})
+    return render(request, 'event.html',{'event':event,'registered': registered_in_event(request,event)})
 
 @login_required(login_url='login')
 def eventregister(request, slug):

@@ -18,6 +18,6 @@ urlpatterns = [
     path('attendence/<submissionid>/', views.takeSudentAttendence, name = 'takeSudentAttendence'),
     path('coordinator/my_coordinated_events/', views.my_coordinated_events, name = 'my_coordinated_events'),
     path('host/my_hosted_events/', views.my_hosted_events, name = 'my_hosted_events'),
-    path('live/polling_qna/', views.live_polling_qna, name = 'live_polling_qna'),
+    # path('live/polling_qna/', views.live_polling_qna, name = 'live_polling_qna'),
     path('a/<slug>/registrations/csv/', views.registeredStudentListExcel, name = 'registeredStudentListCSV'),
 ]

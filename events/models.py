@@ -21,6 +21,7 @@ class Event(models.Model):
                             blank=True, help_text=("Slug(leave it blank)"))
     poster = models.ImageField(
         upload_to='event_poster/', null=True, blank=True)
+    poster_url = models.URLField(max_length=500, null=True, blank=True)
     description = models. TextField()
     price = models.PositiveIntegerField(
         default=0, help_text=('Price of the Event (leave it 0 if free)'))
