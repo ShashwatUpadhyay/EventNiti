@@ -78,3 +78,21 @@ def event_result_anouncement(emails, instance):
         email.send()
     except Exception as e:
         print(e)
+        
+@shared_task 
+def certificate_issued_email(instance):
+    print(instance['email'],instance['event'],instance['certificate_for'],instance['hash'])
+    try:
+        send_mail(
+                'Congratulations!! You got Certificate from PPUU',
+                'You received a Certificate from PPUU',
+                settings.EMAIL_HOST_USER,
+                [instance['email']],
+                fail_silently=False,
+                html_message=f"""<p>
+                    <h1>Received {instance['event']} {instance['certificate_for']} Certificate</h1>
+                    <a href='{settings.DOMAIN_NAME}certificate/{instance['hash']}'><button>OPEN</button></a>
+                </p>"""
+            )
+    except Exception as e:
+        print(e)

@@ -83,6 +83,16 @@
                             <div class="prose max-w-none text-gray-600">
                                 {{ event.description|safe }}
                             </div>
+                            {% if registered %}
+                            {% if event.enrolled_description %}
+                            <div class="mt-6 p-4 bg-indigo-50 border-l-4 border-indigo-400 rounded">
+                                <h4 class="font-semibold text-indigo-700 mb-2">Additional Info for Attendees</h4>
+                                <div class="prose max-w-none text-gray-600">
+                                    {{ event.enrolled_description|safe }}
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endif %}
                         </div>
                         
                         <!-- Highlights -->

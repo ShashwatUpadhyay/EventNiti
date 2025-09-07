@@ -106,18 +106,3 @@ def ticket_issued_email(instance,ticket):
     except Exception as e:
         print(e)
     
-def certificate_issued_email(instance):
-    try:
-        send_mail(
-                'Congratulations!! You got Certificate from PPUU',
-                'You received a Certificate from PPUU',
-                settings.EMAIL_HOST_USER,
-                [instance.user.email],
-                fail_silently=False,
-                html_message=f"""<p>
-                    <h1>Received {instance.event.title} {instance.certificate_for} Certificate</h1>
-                    <a href='{settings.DOMAIN_NAME}certificate/{instance.hash}'><button>OPEN</button></a>
-                </p>"""
-            )
-    except Exception as e:
-        print(e)
