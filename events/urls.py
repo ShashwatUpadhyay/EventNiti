@@ -20,4 +20,9 @@ urlpatterns = [
     path('host/my_hosted_events/', views.my_hosted_events, name = 'my_hosted_events'),
     # path('live/polling_qna/', views.live_polling_qna, name = 'live_polling_qna'),
     path('a/<slug>/registrations/csv/', views.registeredStudentListExcel, name = 'registeredStudentListCSV'),
+    
+    # update description
+    path('a/event_update/description/', views.update_description, name = 'update_description'),
+    path('a/event_update/additional-description/', views.update_enrolled_description, name = 'update_enrolled_description'),
 ]
+

@@ -15,10 +15,10 @@ def verifyUser(email,uid):
                     html_message=f"""<p>
                         <h1>Click the button below to verify your account 👇!</h1>
                         <button><a href='{settings.DOMAIN_NAME}user/verify/{uid}/'>OPEN</a></button>
-                        
+                            
                     </p>"""
                 )
-    except Exception as e:
+    except Exception as e:  
         print(e)
 
 @shared_task

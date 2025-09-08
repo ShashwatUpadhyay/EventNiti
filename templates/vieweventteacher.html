@@ -59,7 +59,7 @@
                     </div>
                     
                     <div class="prose max-w-none text-gray-600 flex items-center justify-between">
-                        <p>{{ event.description|safe }}</p>
+                        <p>{{ event.description|default:'-'|safe }}</p>
                         {% include "events/components/edit_desc_popup.html" %}
                     </div>
                     <div class="mt-6 p-4 bg-indigo-50 border-l-4 border-indigo-400 rounded">
@@ -68,7 +68,7 @@
                             {% include "events/components/edit_enrolled_desc_popup.html" %}
                             </div>
                         <div class="prose max-w-none text-gray-600">
-                            {{ event.enrolled_description|safe }}
+                            {{ event.enrolled_description|default:'-'|safe }}
                         </div>
                     </div>
                 </div>
