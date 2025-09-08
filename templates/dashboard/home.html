@@ -72,29 +72,10 @@
 
 <!-- Charts Row -->
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-    <!-- Registrations Chart -->
-    <div class="bg-white rounded-xl shadow-sm p-6">
-        <div class="flex items-center justify-between mb-6">
-            <h3 class="text-lg font-semibold text-gray-900">Daily Registrations</h3>
-            <div class="flex items-center space-x-2">
-                <span class="w-3 h-3 bg-blue-500 rounded-full"></span>
-                <span class="text-sm text-gray-600">Last 30 days</span>
-            </div>
-        </div>
-        <canvas id="registrationsChart" height="300"></canvas>
-    </div>
-
     <!-- Events Chart -->
-    <div class="bg-white rounded-xl shadow-sm p-6">
-        <div class="flex items-center justify-between mb-6">
-            <h3 class="text-lg font-semibold text-gray-900">Daily Events Created</h3>
-            <div class="flex items-center space-x-2">
-                <span class="w-3 h-3 bg-green-500 rounded-full"></span>
-                <span class="text-sm text-gray-600">Last 30 days</span>
-            </div>
-        </div>
-        <canvas id="eventsChart" height="300"></canvas>
-    </div>
+    {% include "dashboard/charts/daily_event_registration_chart.html" with daily_registrations=daily_registrations %}
+    {% include "dashboard/charts/daily_event_created_chart.html" with daily_events=daily_events %}
+    {% include "dashboard/charts/event_registration_chart.html" with top_events=top_events %}
 </div>
 
 <!-- Content Row -->
@@ -115,9 +96,10 @@
                     <p class="text-sm font-medium text-gray-900 truncate">{{ event.title }}</p>
                     <p class="text-xs text-gray-500">{{ event.upload_time|date:"M d, Y" }}</p>
                 </div>
-                <span class="px-2 py-1 text-xs font-medium rounded-full {% if event.event_open %}bg-green-100 text-green-800{% else %}bg-gray-100 text-gray-800{% endif %}">
+                {% include "events/event_status.html" with event=event %}
+                {% comment %} <span class="px-2 py-1 text-xs font-medium rounded-full {% if event.event_open %}bg-green-100 text-green-800{% else %}bg-gray-100 text-gray-800{% endif %}">
                     {% if event.event_open %}Active{% else %}Closed{% endif %}
-                </span>
+                </span> {% endcomment %}
             </div>
             {% empty %}
             <p class="text-gray-500 text-center py-4">No recent events</p>
@@ -143,10 +125,14 @@
                         <p class="text-xs text-gray-500">{{ event.reg_count }} registrations</p>
                     </div>
                 </div>
-                <div class="text-right">
-                    <div class="w-12 h-2 bg-gray-200 rounded-full">
-                        <div class="h-2 bg-green-500 rounded-full" style="width: {{ event.reg_count|floatformat:0 }}%"></div>
+                <div class="text-right space-y-1 flex flex-row justify-end items-center">
+                    {% if event.limit > 0  %}
+                    <div class="w-12 h-3 bg-gray-200 rounded-full">
+                        <div class="h-3 bg-green-500 rounded-full" style="width: {{ event.registered_percentage|floatformat:0 }}%"></div>
                     </div>
+                    <span class="text-xs text-gray-500">{{ event.registered_percentage|floatformat:0 }}%</span>
+                    {% else %}
+                    {% endif %}
                 </div>
             </div>
             {% empty %}
@@ -188,90 +174,6 @@
 
 {% block extra_js %}
 <script>
-// Registrations Chart
-const regCtx = document.getElementById('registrationsChart').getContext('2d');
-new Chart(regCtx, {
-    type: 'line',
-    data: {
-        labels: Array.from({length: 30}, (_, i) => {
-            const date = new Date();
-            date.setDate(date.getDate() - (29 - i));
-            return date.toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
-        }),
-        datasets: [{
-            label: 'Registrations',
-            data: {{ daily_registrations|safe }},
-            borderColor: '#3B82F6',
-            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-            borderWidth: 2,
-            fill: true,
-            tension: 0.4
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: false
-            }
-        },
-        scales: {
-            y: {
-                beginAtZero: true,
-                grid: {
-                    color: '#F3F4F6'
-                }
-            },
-            x: {
-                grid: {
-                    display: false
-                }
-            }
-        }
-    }
-});
 
-// Events Chart
-const eventCtx = document.getElementById('eventsChart').getContext('2d');
-new Chart(eventCtx, {
-    type: 'bar',
-    data: {
-        labels: Array.from({length: 30}, (_, i) => {
-            const date = new Date();
-            date.setDate(date.getDate() - (29 - i));
-            return date.toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
-        }),
-        datasets: [{
-            label: 'Events',
-            data: {{ daily_events|safe }},
-            backgroundColor: '#10B981',
-            borderRadius: 4,
-            borderSkipped: false,
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: false
-            }
-        },
-        scales: {
-            y: {
-                beginAtZero: true,
-                grid: {
-                    color: '#F3F4F6'
-                }
-            },
-            x: {
-                grid: {
-                    display: false
-                }
-            }
-        }
-    }
-});
 </script>
 {% endblock %}

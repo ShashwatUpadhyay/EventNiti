@@ -6,28 +6,35 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.core.mail import send_mail
 from ppuu import settings
-from ppuu.mail_sender import event_anouncement, event_announcement,event_result_anouncement, ticket_issued_email
-from ppuu.tasks import event_announcement_task
+from ppuu.tasks import event_announcement_task,ticket_issued_email
 from django.db.models import Avg
+from events.choices import EVENT_STATUS
+import logging
+logger = logging.getLogger(__name__)
 # Create your models here.
 
 
 class Event(models.Model):
+    uid = models.CharField(max_length=100, default=uuid.uuid4, null=True, blank=True)
     title = models.CharField(max_length=200)
     slug = models.CharField(max_length=300, null=True,
                             blank=True, help_text=("Slug(leave it blank)"))
     poster = models.ImageField(
         upload_to='event_poster/', null=True, blank=True)
+    poster_url = models.URLField(max_length=500, null=True, blank=True)
     description = models. TextField()
+    enrolled_description = models.TextField(null=True, blank=True)
     price = models.PositiveIntegerField(
         default=0, help_text=('Price of the Event (leave it 0 if free)'))
     organized_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='host')
     location = models.CharField(max_length=100, null=True, blank=True)
-    limit = models.IntegerField(null=True, blank=True, help_text=(
+    limit = models.IntegerField(null=True, blank=True,default=0, help_text=(
         'Limit (leave it blank if no registration limit)'))
     count = models.IntegerField(default=0)
     upload_time = models.DateTimeField(auto_now_add=True)
     start_date = models.DateTimeField(null=True, blank=True)
+    end_date = models.DateTimeField(null=True, blank=True)
+    last_date_of_registration = models.DateTimeField(null=True, blank=True)
     offers_certification = models.BooleanField(default=False)
     event_open = models.BooleanField(default=True)
     registration_open = models.BooleanField(default=True)
@@ -39,6 +46,9 @@ class Event(models.Model):
         max_length=100, null=True, blank=True, help_text=('let he backend handle it'))
     cert_distributed = models.BooleanField(default=False)
     badge_distributed = models.BooleanField(default=False)
+    status = models.CharField(max_length=100, choices=EVENT_STATUS, default='pending')
+    approved_at = models.DateTimeField(null=True, blank=True)
+    rejected_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
@@ -50,10 +60,27 @@ class Event(models.Model):
         return len(self.reviews.all())
     
     @property
+    def registered_percentage(self):
+        if self.limit > 0:
+            registrations = self.participant.count()
+            percentage = (registrations / self.limit) * 100
+            return percentage
+        return 0
+    
+    @property
     def avg_rating(self):
         rate = self.reviews.aggregate(Avg('rating'))['rating__avg'] or 0
         star = int(rate) * '⭐'
         return star
+    
+    @property
+    def get_image_url(self):
+        if self.poster:
+            return self.poster.url
+        elif self.poster_url:
+            return self.poster_url
+        else:
+            return settings.DEFAULT_EVENT_IMAGE_URL
     
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -148,39 +175,6 @@ class EventResult(models.Model):
     
     class Meta:
         verbose_name = '4. Event Result'
-    
-
-@receiver(post_save, sender=EventResult)
-def resultAnounced(sender, instance, created, **kwargs):
-    if instance.result_announced:
-        emails = User.objects.values_list("email", flat=True)
-        event_result_anouncement(emails, instance.event)
-
-@receiver(post_save, sender=EventSubmission)
-def generate_ticket(sender, instance, created, **kwargs):
-    if created:
-        ticket = EventTicket.objects.create(
-            user=instance.user, submission_uid=instance.uid, event=instance.event)
-        ticket_issued_email(instance,ticket)
-        print('Ticket Created!')
-
-
-@receiver(post_save, sender=Event)
-def new_event_anouncement(sender, instance, created, **kwargs):
-    if instance.event_open:
-        if instance.notify:
-            emails = User.objects.values_list("email", flat=True)
-            event_announcement_task.delay(list(emails), instance.id)
-            instance.notify = False
-            instance.save()
-
-
-@receiver(post_delete, sender=EventSubmission)
-def event_submission_deleted(sender, instance, **kwargs):
-    instance.event.count -= 1
-    instance.event.save()
-
-
 
 class EventCordinator(models.Model):
     uid = models.CharField(max_length=100, default=uuid.uuid4, null=True,blank=True)
@@ -195,3 +189,36 @@ class EventCordinator(models.Model):
     class Meta:
         verbose_name = '5. Event Cordinator'
         unique_together = ('user', 'event')
+    
+
+@receiver(post_save, sender=EventResult)
+def resultAnounced(sender, instance, created, **kwargs):
+    if instance.result_announced:
+        emails = User.objects.values_list("email", flat=True)
+        # event_result_anouncement(emails, instance.event)
+
+@receiver(post_save, sender=EventSubmission)
+def generate_ticket(sender, instance, created, **kwargs):
+    if created:
+        instance.event.count += 1
+        instance.event.save()
+        ticket = EventTicket.objects.create(
+            user=instance.user, submission_uid=instance.uid, event=instance.event)
+        ticket_issued_email.delay(instance.email,instance.event.title,ticket.uid)
+        print('Ticket Created!')
+
+
+@receiver(post_save, sender=Event)
+def new_event_anouncement(sender, instance, created, **kwargs):
+    if instance.event_open and instance.notify:
+            emails = User.objects.values_list("email", flat=True)
+            event_announcement_task.delay(list(emails), instance.id)
+            instance.notify = False
+            instance.save()
+
+
+@receiver(post_delete, sender=EventSubmission)
+def event_submission_deleted(sender, instance, **kwargs):
+    instance.event.count -= 1
+    instance.event.save()
+

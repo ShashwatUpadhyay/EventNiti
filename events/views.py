@@ -18,26 +18,22 @@ from openpyxl.styles import PatternFill
 import io
 from django.core.paginator import Paginator
 india_timezone = pytz.timezone('Asia/Kolkata')
+import logging 
+from django.contrib.admin.views.decorators import staff_member_required
+logger = logging.getLogger(__name__)
 
 def is_cordinator(request,event):
-    for event in event.cordinators.all():
-        if request.user == event.user:
-            return True
-    return False
+    return event.cordinators.filter(user=request.user).exists()
 
 def is_event_host(request,event): 
-    return event.organized_by == request.user
+    return event.organized_by == request.user or request.user.is_superuser
     
 def registered_in_event(request,event):
-    submissions = event.participant.all
-    for user in submissions:
-        if submissions.user == request.user:
-            return True
-    return False
+    return event.participant.filter(user=request.user).exists()
 
 def events(request):
-    event = models.Event.objects.filter(event_open=True,event_over = False).order_by('start_date').order_by('-registration_open')
-    over_event = models.Event.objects.filter(event_open=True,event_over = True).order_by('start_date')
+    event = models.Event.objects.filter(event_open=True,event_over = False,status='approved').order_by('start_date','-registration_open')
+    over_event = models.Event.objects.filter(event_open=True,event_over = True,status='approved').order_by('-start_date')
     
     p = Paginator(event,3)
     page = request.GET.get('page')
@@ -48,34 +44,36 @@ def events(request):
 @login_required(login_url='login')
 def event(request, slug):
     try:
-        event = models.Event.objects.get(slug= slug)
+        event = models.Event.objects.get(slug= slug,status='approved')
     except Exception as e:
         return redirect('home')
-    registered = False
-    if models.EventSubmission.objects.filter(user=request.user, event=event).exists():
-        registered = True
-    return render(request, 'event.html',{'event':event,'registered':registered})
+    return render(request, 'event.html',{'event':event,'registered': registered_in_event(request,event)})
 
 @login_required(login_url='login')
 def eventregister(request, slug):
     user_obj = None
     event=None
+    logger.info(f'User {request.user.username} is attempting to register for event with slug: {slug}')
     try:
         user_obj = UserExtra.objects.get(user=request.user)
     except Exception as e:
         print(e)
     try:
-        event = models.Event.objects.get(slug= slug)
+        event = models.Event.objects.get(slug= slug,status='approved')
+        msg = False
         if  event.event_over:
             messages.error(request, "Event is Over!")
-            return redirect('event',slug =slug)
+            msg = True
         if not event.registration_open:
             messages.error(request, "Registration is Closed!")
-            return redirect('event', slug =slug)
+            msg = True
         if models.EventSubmission.objects.filter(user=request.user, event=event).exists():
             messages.error(request, "Rejected!")
+            msg = True
+        if msg:
             return redirect('event', slug =slug)
     except Exception as e:
+        logger.error(f'Error fetching event with slug {slug}: {e}')
         messages.error(request, f"Error: {e}   ")  
         return redirect('home')
     
@@ -93,19 +91,64 @@ def eventregister(request, slug):
         course = request.POST.get('course')
         section = request.POST.get('section')
         year = request.POST.get('year')
+        logger.debug(f'Form data received: uuid={uuid}, full_name={full_name}, email={email}, course={course}, section={section}, year={year}')
         if event.price > 0:
             submission , _ = models.TemporaryEventSubmission.objects.get_or_create(uu_id=uuid,full_name = full_name,year=year,email = email,user=request.user,course = course,section = section,event = event)
+            logger.info(f'Temporary submission created for user {request.user.username} for event {event.title}')
             return redirect('payment', slug=event.slug, token=submission.uid)
         else:
-            submission = models.EventSubmission.objects.create(uu_id=uuid,full_name = full_name,year=year,email = email,user=request.user,course = course,section = section,event = event)
-            event.count = event.count + 1
-            event.save()
-        
+            models.EventSubmission.objects.create(uu_id=uuid,full_name = full_name,year=year,email = email,user=request.user,course = course,section = section,event = event)
+            logger.info(f'Free event submission created for user {full_name} for event {event.title}')
+
+        logger.info(f'User {request.user.username} successfully registered for event {event.title}')
         messages.success(request,f"Submission Successful in {event.title} event")
         return redirect('events')
 
     return render(request, 'eventregister.html',{'event':event, 'user_obj':user_obj})
 
+@login_required(login_url='login')
+def create_event(request):
+    if not request.user.groups.filter(name__in=['HOST']).exists() and not request.user.is_staff:
+        return redirect('events')
+    
+    if request.method == "POST":
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        start_date = request.POST.get('start_date')
+        location = request.POST.get('location')
+        end_date = request.POST.get('end_date')
+        last_date_of_registration = request.POST.get('last_date_of_registration')
+        poster = request.FILES.get('poster')
+        limit = request.POST.get('limit')
+        price = request.POST.get('price')
+        offers_certification = request.POST.get('offers_certification')
+        notify = request.POST.get('notify')
+        registration_open = request.POST.get('registration_open')
+        event_open = request.POST.get('event_open')
+        print(title,description,start_date,location,end_date,last_date_of_registration,poster,limit,price,offers_certification,notify,registration_open,event_open)
+        try:
+            models.Event.objects.create(
+                title=title, 
+                description=description, 
+                organized_by=request.user,
+                start_date=start_date, 
+                location=location, 
+                end_date=end_date, 
+                last_date_of_registration=last_date_of_registration, 
+                poster=poster, 
+                limit=limit, 
+                price=price, 
+                offers_certification=True if offers_certification=='on' else False, 
+                notify=True if notify=='on' else False, 
+                registration_open=True if registration_open=='on' else False, 
+                event_open=True if event_open=='on' else False,
+                )
+            messages.success(request, "Event sent to admin for approval")
+        except Exception as e:
+            print(e)
+            messages.error(request, f"Error: {e}   ")  
+            return redirect('create_event')
+    return render(request, 'events/create_event.html')
 
 def eventTicket(request, uid):
     ticket = None
@@ -333,7 +376,7 @@ def edit_event(request, slug):
 
 @login_required(login_url='login')
 def add_coordinators(request,slug):
-    users = User.objects.exclude(username = request.user.username)
+    users = User.objects.filter(groups__name__icontains='COORDINATOR').exclude(username = request.user.username)
     event = get_object_or_404(models.Event , slug=slug)
     if not is_event_host(request,event):
         return redirect('events')
@@ -358,3 +401,4 @@ def remove_coordinator(request,uid):
 
 def live_polling_qna(request):
     return render(request, 'events/live_poll_qna.html')
+

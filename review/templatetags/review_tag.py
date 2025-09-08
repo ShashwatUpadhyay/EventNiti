@@ -31,3 +31,7 @@ def times(number):
 def review_count(event):
     review = event.reviews.all()
     return len(review)
+
+@register.filter
+def event_reviewed(event,user):
+    return event.reviews.filter(user=user).exists()

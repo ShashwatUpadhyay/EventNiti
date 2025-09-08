@@ -1,0 +1,381 @@
+{% extends "index.html" %}
+{% load static %}
+{% block title %}Create New Event{% endblock title %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 py-20 pt-[150px] overflow-hidden">
+    <div class="absolute inset-0 opacity-20">
+        <div class="absolute top-20 left-10 w-32 h-32 bg-blue-400 rounded-full animate-pulse"></div>
+        <div class="absolute bottom-20 right-10 w-48 h-48 bg-purple-400 rounded-full animate-pulse delay-1000"></div>
+        <div class="absolute top-1/2 left-1/2 w-20 h-20 bg-blue-500 rounded-full animate-ping delay-2000"></div>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center text-white">
+        <div class="flex items-center justify-center mb-6">
+            <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+            </div>
+        </div>
+        <h1 class="text-5xl font-bold mb-4 drop-shadow-lg">Create New Event</h1>
+        <p class="text-xl text-white/90 max-w-2xl mx-auto">Design and launch your next amazing event experience</p>
+    </div>
+</section>
+
+<!-- Form Section -->
+<section class="py-20 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        {% if messages %}
+        <div class="mb-8">
+            {% for message in messages %}
+            <div class="{% if message.tags == 'error' %}bg-red-100 border-red-500 text-red-700{% else %}bg-green-100 border-green-500 text-green-700{% endif %} border-l-4 p-4 rounded-r-lg mb-4">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
+            <form method="POST" enctype="multipart/form-data" class="space-y-8">
+                {% csrf_token %}
+                
+                <!-- Basic Information -->
+                <div class="border-b border-gray-200 pb-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                        <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
+                            <span class="text-white font-bold text-sm">1</span>
+                        </div>
+                        Basic Information
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Event Title *</label>
+                            <input type="text" name="title" required 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                   placeholder="Enter event title">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Start Date & Time *</label>
+                            <input type="datetime-local" name="start_date" required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                            <input type="text" name="location" 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                            placeholder="Event location or 'Online'">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">End Date & Time*</label>
+                            <input type="datetime-local" name="end_date" required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Registration Close Date & Time*</label>
+                            <input type="datetime-local" name="last_date_of_registration" required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event Details -->
+                <div class="border-b border-gray-200 pb-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                        <div class="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center mr-3">
+                            <span class="text-white font-bold text-sm">2</span>
+                        </div>
+                        Event Details
+                    </h2>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Description *</label>
+                            <div class="border border-gray-300 rounded-xl focus-within:ring-2 focus-within:ring-purple-500 focus-within:border-transparent transition-all">
+                                <!-- Toolbar -->
+                                <div class="px-3 py-2 border-b border-gray-200 space-y-2">
+                                    <!-- Row 1: Headings & Format -->
+                                    <div class="flex items-center space-x-1">
+                                        <select onchange="formatHeading(this.value)" class="text-sm border border-gray-300 rounded px-2 py-1">
+                                            <option value="">Normal</option>
+                                            <option value="h1">Heading 1</option>
+                                            <option value="h2">Heading 2</option>
+                                            <option value="h3">Heading 3</option>
+                                            <option value="h4">Heading 4</option>
+                                        </select>
+                                        <div class="w-px h-6 bg-gray-300 mx-1"></div>
+                                        <button type="button" onclick="formatText('bold')" class="p-2 text-gray-500 rounded hover:text-gray-900 hover:bg-gray-100" title="Bold">
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M5 4v3h5.5c.83 0 1.5.67 1.5 1.5S11.33 10 10.5 10H5v6H3V4h7.5C12.43 4 14 5.57 14 7.5S12.43 11 10.5 11H5z"/>
+                                            </svg>
+                                        </button>
+                                        <button type="button" onclick="formatText('italic')" class="p-2 text-gray-500 rounded hover:text-gray-900 hover:bg-gray-100" title="Italic">
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M8 4h8v2h-2.5l-3 8H13v2H5v-2h2.5l3-8H8V4z"/>
+                                            </svg>
+                                        </button>
+                                        <button type="button" onclick="formatText('underline')" class="p-2 text-gray-500 rounded hover:text-gray-900 hover:bg-gray-100" title="Underline">
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M10 2C7.79 2 6 3.79 6 6v6c0 2.21 1.79 4 4 4s4-1.79 4-4V6c0-2.21-1.79-4-4-4zM8 6c0-1.1.9-2 2-2s2 .9 2 2v6c0 1.1-.9 2-2 2s-2-.9-2-2V6zM4 18h12v2H4v-2z"/>
+                                            </svg>
+                                        </button>
+                                        <input type="color" onchange="changeTextColor(this.value)" class="w-8 h-8 border border-gray-300 rounded cursor-pointer" title="Text Color">
+                                    </div>
+                                    <!-- Row 2: Lists & Alignment -->
+                                    <div class="flex items-center space-x-1">
+                                        <button type="button" onclick="formatText('insertUnorderedList')" class="p-2 text-gray-500 rounded hover:text-gray-900 hover:bg-gray-100" title="Bullet List">
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M3 4a1 1 0 100 2 1 1 0 000-2zM6 5h11a1 1 0 110 2H6a1 1 0 110-2zM3 9a1 1 0 100 2 1 1 0 000-2zM6 10h11a1 1 0 110 2H6a1 1 0 110-2zM3 14a1 1 0 100 2 1 1 0 000-2zM6 15h11a1 1 0 110 2H6a1 1 0 110-2z"/>
+                                            </svg>
+                                        </button>
+                                        <button type="button" onclick="formatText('insertOrderedList')" class="p-2 text-gray-500 rounded hover:text-gray-900 hover:bg-gray-100" title="Numbered List">
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M3 4h1v1H3V4zM6 4h11a1 1 0 110 2H6a1 1 0 110-2zM3 9h1v1H3V9zM6 9h11a1 1 0 110 2H6a1 1 0 110-2zM3 14h1v1H3v-1zM6 14h11a1 1 0 110 2H6a1 1 0 110-2z"/>
+                                            </svg>
+                                        </button>
+                                        <div class="w-px h-6 bg-gray-300 mx-1"></div>
+                                        <button type="button" onclick="formatText('justifyLeft')" class="p-2 text-gray-500 rounded hover:text-gray-900 hover:bg-gray-100" title="Align Left">
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M2 4h16v2H2V4zm0 4h10v2H2V8zm0 4h16v2H2v-2zm0 4h10v2H2v-2z"/>
+                                            </svg>
+                                        </button>
+                                        <button type="button" onclick="formatText('justifyCenter')" class="p-2 text-gray-500 rounded hover:text-gray-900 hover:bg-gray-100" title="Align Center">
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M2 4h16v2H2V4zm3 4h10v2H5V8zm-3 4h16v2H2v-2zm3 4h10v2H5v-2z"/>
+                                            </svg>
+                                        </button>
+                                        <button type="button" onclick="formatText('justifyRight')" class="p-2 text-gray-500 rounded hover:text-gray-900 hover:bg-gray-100" title="Align Right">
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M2 4h16v2H2V4zm6 4h10v2H8V8zm-6 4h16v2H2v-2zm6 4h10v2H8v-2z"/>
+                                            </svg>
+                                        </button>
+                                        <button type="button" onclick="formatText('justifyFull')" class="p-2 text-gray-500 rounded hover:text-gray-900 hover:bg-gray-100" title="Justify">
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M2 4h16v2H2V4zm0 4h16v2H2V8zm0 4h16v2H2v-2zm0 4h16v2H2v-2z"/>
+                                            </svg>
+                                        </button>
+                                        <div class="w-px h-6 bg-gray-300 mx-1"></div>
+                                        <button type="button" onclick="insertLink()" class="p-2 text-gray-500 rounded hover:text-gray-900 hover:bg-gray-100" title="Insert Link">
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z"/>
+                                            </svg>
+                                        </button>
+                                        <button type="button" onclick="insertImage()" class="p-2 text-gray-500 rounded hover:text-gray-900 hover:bg-gray-100" title="Insert Image">
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- Editor -->
+                                <div id="editor" contenteditable="true" 
+                                     class="min-h-[150px] px-4 py-3 focus:outline-none text-gray-900"
+                                     placeholder="Describe your event in detail..."
+                                     style="empty-cells: show;"></div>
+                                <textarea name="description" id="description-input" class="hidden" required></textarea>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Event Poster</label>
+                            <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-purple-400 transition-colors">
+                                <input type="file" name="poster" accept="image/*" class="hidden" id="poster-upload">
+                                <label for="poster-upload" class="cursor-pointer">
+                                    <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                    </svg>
+                                    <p class="text-gray-600">Click to upload event poster</p>
+                                    <p class="text-sm text-gray-400">PNG, JPG up to 10MB</p>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Registration Settings -->
+                <div class="border-b border-gray-200 pb-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                        <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
+                            <span class="text-white font-bold text-sm">3</span>
+                        </div>
+                        Registration Settings
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Registration Limit</label>
+                            <input type="number" name="limit" min="0" value="0"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                                   placeholder="Leave empty for unlimited">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Event Price (₹)</label>
+                            <input type="number" name="price" min="0" value="0"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                                   placeholder="0 for free event">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event Options -->
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                        <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center mr-3">
+                            <span class="text-white font-bold text-sm">4</span>
+                        </div>
+                        Event Options
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="flex items-center p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
+                            <input type="checkbox" name="offers_certification" id="certification" 
+                                   class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                            <label for="certification" class="ml-3 text-sm font-medium text-gray-700">
+                                Offers Digital Certificate
+                            </label>
+                        </div>
+                        
+                        <div class="flex items-center p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
+                            <input type="checkbox" name="notify" id="notify" checked
+                                   class="w-5 h-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500">
+                            <label for="notify" class="ml-3 text-sm font-medium text-gray-700">
+                                Send Email Notifications
+                            </label>
+                        </div>
+                        
+                        <div class="flex items-center p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
+                            <input type="checkbox" name="registration_open" id="registration" checked
+                                   class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                            <label for="registration" class="ml-3 text-sm font-medium text-gray-700">
+                                Open Registration Immediately
+                            </label>
+                        </div>
+                        
+                        <div class="flex items-center p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
+                            <input type="checkbox" name="event_open" id="event_open" checked
+                                   class="w-5 h-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500">
+                            <label for="event_open" class="ml-3 text-sm font-medium text-gray-700">
+                                Make Event Public
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 pt-8">
+                    <button type="submit" 
+                            class="flex-1 bg-gradient-to-r from-blue-500 via-purple-500 to-blue-600 text-white py-4 px-8 rounded-2xl font-bold text-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]">
+                        Create Event
+                    </button>
+                    <a href="{% url 'my_hosted_events' %}" 
+                       class="flex-1 bg-gray-100 text-gray-700 py-4 px-8 rounded-2xl font-medium text-lg text-center hover:bg-gray-200 transition-colors">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+// File upload preview
+document.getElementById('poster-upload').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const label = e.target.nextElementSibling;
+        label.innerHTML = `
+            <svg class="w-12 h-12 text-purple-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <p class="text-purple-600 font-medium">${file.name}</p>
+            <p class="text-sm text-gray-400">File selected successfully</p>
+        `;
+    }
+});
+
+// Rich Text Editor Functions
+function formatText(command) {
+    document.execCommand(command, false, null);
+    document.getElementById('editor').focus();
+}
+
+function formatHeading(tag) {
+    if (tag) {
+        document.execCommand('formatBlock', false, tag);
+    } else {
+        document.execCommand('formatBlock', false, 'div');
+    }
+    document.getElementById('editor').focus();
+}
+
+function changeTextColor(color) {
+    document.execCommand('foreColor', false, color);
+    document.getElementById('editor').focus();
+}
+
+function insertLink() {
+    const url = prompt('Enter URL:');
+    if (url) {
+        document.execCommand('createLink', false, url);
+    }
+    document.getElementById('editor').focus();
+}
+
+function insertImage() {
+    const url = prompt('Enter image URL:');
+    if (url) {
+        document.execCommand('insertImage', false, url);
+    }
+    document.getElementById('editor').focus();
+}
+
+// Sync editor content with hidden textarea
+const editor = document.getElementById('editor');
+const hiddenInput = document.getElementById('description-input');
+
+editor.addEventListener('input', function() {
+    hiddenInput.value = editor.innerHTML;
+});
+
+// Placeholder functionality
+editor.addEventListener('focus', function() {
+    if (editor.innerHTML === '' || editor.innerHTML === '<br>') {
+        editor.innerHTML = '';
+    }
+});
+
+editor.addEventListener('blur', function() {
+    if (editor.innerHTML === '' || editor.innerHTML === '<br>') {
+        editor.innerHTML = '';
+    }
+    hiddenInput.value = editor.innerHTML;
+});
+
+// Form submission handler
+document.querySelector('form').addEventListener('submit', function() {
+    hiddenInput.value = editor.innerHTML;
+});
+
+// Add CSS for editor content
+const style = document.createElement('style');
+style.textContent = `
+    #editor h1 { font-size: 2em; font-weight: bold; margin: 0.5em 0; }
+    #editor h2 { font-size: 1.5em; font-weight: bold; margin: 0.5em 0; }
+    #editor h3 { font-size: 1.25em; font-weight: bold; margin: 0.5em 0; }
+    #editor h4 { font-size: 1.1em; font-weight: bold; margin: 0.5em 0; }
+    #editor ul { list-style-type: disc; margin-left: 1.5em; }
+    #editor ol { list-style-type: decimal; margin-left: 1.5em; }
+    #editor li { margin: 0.25em 0; }
+    #editor a { color: #3b82f6; text-decoration: underline; }
+    #editor img { max-width: 100%; height: auto; margin: 0.5em 0; }
+`;
+document.head.appendChild(style);
+</script>
+
+{% endblock %}

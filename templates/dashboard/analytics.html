@@ -24,12 +24,12 @@
 
 <!-- Key Metrics Cards -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white">
+    <div class="bg-gradient-to-r from-red-500 to-red-600 rounded-xl p-6 text-white">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-blue-100 text-sm">Total Events</p>
+                <p class="text-red-100 text-sm">Total Events</p>
                 <p class="text-3xl font-bold">{{ event_analytics|length }}</p>
-                <p class="text-blue-100 text-sm mt-1">
+                <p class="text-red-100 text-sm mt-1">
                     <i class="fas fa-arrow-up mr-1"></i>12% vs last month
                 </p>
             </div>
@@ -39,12 +39,12 @@
         </div>
     </div>
 
-    <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white">
+    <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-green-100 text-sm">Total Registrations</p>
+                <p class="text-blue-100 text-sm">Total Registrations</p>
                 <p class="text-3xl font-bold">{{ reg_analytics|length }}</p>
-                <p class="text-green-100 text-sm mt-1">
+                <p class="text-blue-100 text-sm mt-1">
                     <i class="fas fa-arrow-up mr-1"></i>8% vs last month
                 </p>
             </div>
@@ -54,12 +54,12 @@
         </div>
     </div>
 
-    <div class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl p-6 text-white">
+    <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-purple-100 text-sm">Blog Views</p>
+                <p class="text-green-100 text-sm">Blog Views</p>
                 <p class="text-3xl font-bold">{{ blog_stats.total_views|default:0 }}</p>
-                <p class="text-purple-100 text-sm mt-1">
+                <p class="text-green-100 text-sm mt-1">
                     <i class="fas fa-arrow-up mr-1"></i>15% vs last month
                 </p>
             </div>
@@ -69,12 +69,12 @@
         </div>
     </div>
 
-    <div class="bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl p-6 text-white">
+    <div class="bg-gradient-to-r from-red-600 to-red-700 rounded-xl p-6 text-white">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-orange-100 text-sm">User Growth</p>
+                <p class="text-red-100 text-sm">User Growth</p>
                 <p class="text-3xl font-bold">{{ user_growth|length }}</p>
-                <p class="text-orange-100 text-sm mt-1">
+                <p class="text-red-100 text-sm mt-1">
                     <i class="fas fa-arrow-up mr-1"></i>5% vs last month
                 </p>
             </div>
@@ -86,23 +86,29 @@
 </div>
 
 <!-- Charts Row -->
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
     <!-- Events & Registrations Chart -->
+    {% comment %} {% include "dashboard/daily_event_registration_chart.html" with event=event %}
+    {% include "dashboard/daily_event_created_chart.html" with event=event %}
+    {% include "dashboard/event_registration_chart.html" with event=event %} {% endcomment %}
+
     <div class="bg-white rounded-xl shadow-sm p-6">
         <div class="flex items-center justify-between mb-6">
             <h3 class="text-lg font-semibold text-gray-900">Events vs Registrations</h3>
             <div class="flex items-center space-x-4">
                 <div class="flex items-center space-x-2">
-                    <span class="w-3 h-3 bg-blue-500 rounded-full"></span>
+                    <span class="w-3 h-3 bg-red-500 rounded-full"></span>
                     <span class="text-sm text-gray-600">Events</span>
                 </div>
                 <div class="flex items-center space-x-2">
-                    <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                    <span class="w-3 h-3 bg-blue-500 rounded-full"></span>
                     <span class="text-sm text-gray-600">Registrations</span>
                 </div>
             </div>
         </div>
-        <canvas id="eventsRegistrationsChart" height="300"></canvas>
+        <div style="height: 300px; position: relative;">
+            <canvas id="eventsRegistrationsChart"></canvas>
+        </div>
     </div>
 
     <!-- Blog Performance Chart -->
@@ -111,16 +117,46 @@
             <h3 class="text-lg font-semibold text-gray-900">Blog Performance</h3>
             <div class="flex items-center space-x-4">
                 <div class="flex items-center space-x-2">
-                    <span class="w-3 h-3 bg-purple-500 rounded-full"></span>
+                    <span class="w-3 h-3 bg-green-500 rounded-full"></span>
                     <span class="text-sm text-gray-600">Views</span>
                 </div>
                 <div class="flex items-center space-x-2">
-                    <span class="w-3 h-3 bg-pink-500 rounded-full"></span>
+                    <span class="w-3 h-3 bg-red-600 rounded-full"></span>
                     <span class="text-sm text-gray-600">Likes</span>
                 </div>
             </div>
         </div>
-        <canvas id="blogPerformanceChart" height="300"></canvas>
+        <div style="height: 300px; position: relative;">
+            <canvas id="blogPerformanceChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Event Status Distribution Chart -->
+    <div class="bg-white rounded-xl shadow-sm p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-semibold text-gray-900">Event Status Distribution</h3>
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2">
+                    <span class="w-3 h-3 bg-red-500 rounded-full"></span>
+                    <span class="text-sm text-gray-600">Active</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="w-3 h-3 bg-blue-500 rounded-full"></span>
+                    <span class="text-sm text-gray-600">Upcoming</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                    <span class="text-sm text-gray-600">Completed</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="w-3 h-3 bg-red-600 rounded-full"></span>
+                    <span class="text-sm text-gray-600">Cancelled</span>
+                </div>
+            </div>
+        </div>
+        <div style="height: 300px; position: relative;">
+            <canvas id="eventStatusChart"></canvas>
+        </div>
     </div>
 </div>
 
@@ -162,11 +198,13 @@
         <div class="flex items-center justify-between mb-6">
             <h3 class="text-lg font-semibold text-gray-900">User Growth</h3>
             <div class="flex items-center space-x-2">
-                <span class="w-3 h-3 bg-orange-500 rounded-full"></span>
+                <span class="w-3 h-3 bg-red-600 rounded-full"></span>
                 <span class="text-sm text-gray-600">New Users</span>
             </div>
         </div>
-        <canvas id="userGrowthChart" height="300"></canvas>
+        <div style="height: 300px; position: relative;">
+            <canvas id="userGrowthChart"></canvas>
+        </div>
     </div>
 </div>
 
@@ -236,16 +274,16 @@ new Chart(eventsRegCtx, {
         datasets: [{
             label: 'Events',
             data: Array.from({length: 30}, (_, i) => Math.floor(Math.random() * 5)),
-            borderColor: '#3B82F6',
-            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            borderColor: '#EF4444',
+            backgroundColor: 'rgba(239, 68, 68, 0.1)',
             borderWidth: 2,
             fill: false,
             tension: 0.4
         }, {
             label: 'Registrations',
             data: Array.from({length: 30}, (_, i) => Math.floor(Math.random() * 20)),
-            borderColor: '#10B981',
-            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            borderColor: '#3B82F6',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
             borderWidth: 2,
             fill: false,
             tension: 0.4
@@ -254,6 +292,7 @@ new Chart(eventsRegCtx, {
     options: {
         responsive: true,
         maintainAspectRatio: false,
+        animation: false,
         plugins: {
             legend: {
                 display: false
@@ -288,13 +327,13 @@ new Chart(blogCtx, {
         datasets: [{
             label: 'Views',
             data: Array.from({length: 30}, (_, i) => Math.floor(Math.random() * 100)),
-            backgroundColor: '#8B5CF6',
+            backgroundColor: '#10B981',
             borderRadius: 4,
             borderSkipped: false,
         }, {
             label: 'Likes',
             data: Array.from({length: 30}, (_, i) => Math.floor(Math.random() * 50)),
-            backgroundColor: '#EC4899',
+            backgroundColor: '#DC2626',
             borderRadius: 4,
             borderSkipped: false,
         }]
@@ -302,6 +341,7 @@ new Chart(blogCtx, {
     options: {
         responsive: true,
         maintainAspectRatio: false,
+        animation: false,
         plugins: {
             legend: {
                 display: false
@@ -336,8 +376,8 @@ new Chart(userCtx, {
         datasets: [{
             label: 'New Users',
             data: Array.from({length: 30}, (_, i) => Math.floor(Math.random() * 10)),
-            borderColor: '#F59E0B',
-            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+            borderColor: '#DC2626',
+            backgroundColor: 'rgba(220, 38, 38, 0.1)',
             borderWidth: 2,
             fill: true,
             tension: 0.4
@@ -346,6 +386,7 @@ new Chart(userCtx, {
     options: {
         responsive: true,
         maintainAspectRatio: false,
+        animation: false,
         plugins: {
             legend: {
                 display: false
@@ -363,6 +404,74 @@ new Chart(userCtx, {
                     display: false
                 }
             }
+        }
+    }
+});
+
+// Event Status Distribution Chart
+const eventStatusCtx = document.getElementById('eventStatusChart').getContext('2d');
+new Chart(eventStatusCtx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Active Events', 'Upcoming Events', 'Completed Events', 'Cancelled Events'],
+        datasets: [{
+            data: [
+                Math.floor(Math.random() * 15) + 5,  // Active: 5-20
+                Math.floor(Math.random() * 20) + 10, // Upcoming: 10-30
+                Math.floor(Math.random() * 30) + 20, // Completed: 20-50
+                Math.floor(Math.random() * 5) + 1    // Cancelled: 1-6
+            ],
+            backgroundColor: [
+                '#EF4444', // Red for Active
+                '#3B82F6', // Blue for Upcoming
+                '#10B981', // Green for Completed
+                '#DC2626'  // Dark Red for Cancelled
+            ],
+            borderWidth: 3,
+            borderColor: '#ffffff',
+            hoverBorderWidth: 4,
+            hoverBorderColor: '#ffffff'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
+        cutout: '60%',
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    padding: 20,
+                    usePointStyle: true,
+                    pointStyle: 'circle',
+                    font: {
+                        size: 12,
+                        weight: '500'
+                    },
+                    color: '#374151'
+                }
+            },
+            tooltip: {
+                backgroundColor: '#1F2937',
+                titleColor: '#F9FAFB',
+                bodyColor: '#F9FAFB',
+                borderColor: '#374151',
+                borderWidth: 1,
+                cornerRadius: 8,
+                displayColors: true,
+                callbacks: {
+                    label: function(context) {
+                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        const percentage = ((context.parsed * 100) / total).toFixed(1);
+                        return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+                    }
+                }
+            }
+        },
+        interaction: {
+            intersect: false,
+            mode: 'index'
         }
     }
 });

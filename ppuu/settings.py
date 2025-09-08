@@ -189,7 +189,7 @@ MEDIA_URL = '/media/' #url
 MEDIA_ROOT = BASE_DIR / 'media' # for production
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = env("EMAIL_HOST")
 EMAIL_PORT = 587
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
@@ -252,3 +252,5 @@ LOGGING = {
 
 RAZOR_KEY_ID = env("RAZOR_KEY_ID")
 RAZOR_KEY_SECRET = env("RAZOR_KEY_SECRET")
+
+DEFAULT_EVENT_IMAGE_URL='https://fulbrightscholars.org/themes/custom/de_theme/src/img/default/event_default.svg'

@@ -138,15 +138,7 @@ Payment | {{ event.title }} | {{ company_name }}
                     <!-- Event Summary -->
                     <div class="payment-summary">
                         <div class="flex items-center mb-4">
-                            {% if event.poster %}
-                            <img src="{{ event.poster.url }}" alt="{{ event.title }}" class="w-16 h-16 rounded-lg object-cover mr-4">
-                            {% else %}
-                            <div class="w-16 h-16 rounded-lg bg-gradient-to-r from-indigo-100 to-purple-100 flex items-center justify-center mr-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                            </div>
-                            {% endif %}
+                            <img src="{{ event.get_image_url }}" alt="{{ event.title }}" class="w-16 h-16 rounded-lg object-cover mr-4">
                             <div>
                                 <h3 class="font-bold text-lg text-gray-800">{{ event.title }}</h3>
                                 <p class="text-gray-600">{{ event.start_date|date:"F d, Y" }} • {{ event.location|default:"Virtual Event" }}</p>

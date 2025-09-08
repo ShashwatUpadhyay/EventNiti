@@ -16,11 +16,11 @@ Reviews - {{ event.title }} | {{ company_name }}
 
   <!-- Back Button -->
   <div class="max-w-4xl mx-auto mb-6">
-    <a href="{% url 'events' %}" class="inline-flex items-center text-sm text-blue-600 hover:underline">
+    <a href="{% if request.GET.back %}{{request.GET.back}}{% else %}{% url 'events' %}{% endif %}" class="inline-flex items-center text-sm text-blue-600 hover:underline">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
       </svg>
-      Back to Events
+      Back
     </a>
   </div>
 
@@ -28,7 +28,7 @@ Reviews - {{ event.title }} | {{ company_name }}
   <div class="max-w-4xl mx-auto space-y-6">
     {% if reviews %}
       {% for review in reviews %}
-        <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
+        <div {% if request.user.is_authenticated and request.user == review.user %}id='my-review'{% endif %} class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
           <div class="flex justify-between items-center mb-2">
             <h3 class="text-lg font-semibold text-gray-900">
               {{ review.user.get_full_name }} 

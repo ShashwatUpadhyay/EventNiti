@@ -11,6 +11,11 @@ from blog.models import Blog, BlogCategory, BlogAnalytics
 from account.models import User
 from .models import DashboardMetrics, ActivityLog
 import json
+from django.contrib import messages
+import logging
+logger = logging.getLogger(__name__)
+
+
 
 @staff_member_required
 def dashboard_home(request):
@@ -30,11 +35,14 @@ def dashboard_home(request):
     
     # Analytics data for charts
     last_30_days = [today - timedelta(days=i) for i in range(30)]
+    
     daily_registrations = []
     daily_events = []
     
     for day in reversed(last_30_days):
-        reg_count = EventSubmission.objects.filter(id__gt=0).count()  # Simplified for now
+        start = timezone.make_aware(datetime.combine(day, datetime.min.time()))
+        end = timezone.make_aware(datetime.combine(day, datetime.max.time()))
+        reg_count = EventSubmission.objects.filter(created_at__range=(start, end)).count()  # Simplified for now
         event_count = Event.objects.filter(upload_time__date=day).count()
         daily_registrations.append(reg_count if reg_count else 0)
         daily_events.append(event_count if event_count else 0)
@@ -52,7 +60,7 @@ def dashboard_home(request):
         total_likes=Sum('likes'),
         total_shares=Sum('shares')
     )
-    
+
     context = {
         'total_events': total_events,
         'total_blogs': total_blogs,
@@ -96,9 +104,34 @@ def events_management(request):
     events = paginator.get_page(page)
     
     return render(request, 'dashboard/events_management.html', {
+        'pending_approval_exist' : Event.objects.filter(status='pending').exists(),
         'events': events,
         'status_filter': status_filter,
         'search': search
+    })
+
+@staff_member_required
+def event_approvals(request):
+    pending_events = Event.objects.filter(status='pending').select_related('organized_by').order_by('-upload_time')
+    approved_events = Event.objects.filter(status='approved').select_related('organized_by').order_by('-upload_time')
+    rejected_events = Event.objects.filter(status='rejected').select_related('organized_by').order_by('-upload_time')
+    
+    paginator = Paginator(pending_events, 20)
+    page = request.GET.get('page')
+    pending_events = paginator.get_page(page)
+    
+    pending_count = len(pending_events)
+    approved_count = len(approved_events)
+    rejected_count = len(rejected_events)
+    
+    return render(request, 'dashboard/event_approvals.html', {
+        'pending_events': pending_events,
+        'approved_events': approved_events,
+        'rejected_events': rejected_events,
+        'pending_count': pending_count,
+        'approved_count': approved_count,
+        'rejected_count': rejected_count,
+        'total_count': pending_count + approved_count + rejected_count,
     })
 
 @staff_member_required
@@ -269,3 +302,36 @@ def quick_stats_api(request):
     }
     
     return JsonResponse(stats)
+
+@staff_member_required(login_url='login')
+def approve_event(request):
+    if request.method == "POST":
+        if not request.user.is_superuser:
+            messages.error(request, "You are not authorized to perform this action.")
+            return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
+        uid = request.POST.get('uid')
+        action = request.POST.get('action')
+        print(uid, action,request.POST.dict())
+        try:
+            event = Event.objects.get(uid=uid)
+            if action == 'approve':
+                event.status = 'approved'
+                event.approved_at = timezone.now()
+                event.save()
+                logger.info(f"Event {event.title} (ID: {event.id}) approved by {request.user.username}")
+                return JsonResponse({'status': 'success', 'message': 'Event Approved'})
+            elif action == 'reject':
+                event.status = 'rejected'
+                event.rejected_at = timezone.now()
+                event.save()
+                logger.info(f"Event {event.title} (ID: {event.id}) rejected by {request.user.username}")
+                return JsonResponse({'status': 'success', 'message': 'Event Rejected'})
+            else:
+                logger.error(f"Invalid Action: {action}")
+                return JsonResponse({'status': 'error', 'message': 'Invalid Action'})
+        except Exception as e:
+            print(e)
+            logger.error(f"Error in approve_event: {e}")
+            return JsonResponse({'status': 'error', 'message': str(e)})
+        
+    return redirect('events')

@@ -21,24 +21,6 @@ def verifyUser(email,uid):
     except Exception as e:  
         print(e)
 
-def event_anouncement(emails,instance):
-    try:
-        for email in emails:
-            send_mail(
-                    f'Join {instance.title}',
-                    f'Join {instance.title}',
-                    settings.EMAIL_HOST_USER,
-                    [email],
-                    fail_silently=False,
-                    html_message=f"""<p>
-                        <h1>We are thrilled to announce the we organizing {instance.title} event</h1>
-                        <h4>Click the link below to register in event</h4>
-                        <button><a href='{settings.DOMAIN_NAME}events/{instance.slug}/'>OPEN</a></button>
-                    </p>"""
-                )
-    except Exception as e:
-        print(e)
-
 @shared_task
 def event_announcement(emails, id):
     from events.models import Event    
@@ -124,18 +106,3 @@ def ticket_issued_email(instance,ticket):
     except Exception as e:
         print(e)
     
-def certificate_issued_email(instance):
-    try:
-        send_mail(
-                'Congratulations!! You got Certificate from PPUU',
-                'You received a Certificate from PPUU',
-                settings.EMAIL_HOST_USER,
-                [instance.user.email],
-                fail_silently=False,
-                html_message=f"""<p>
-                    <h1>Received {instance.event.title} {instance.certificate_for} Certificate</h1>
-                    <a href='{settings.DOMAIN_NAME}certificate/{instance.hash}'><button>OPEN</button></a>
-                </p>"""
-            )
-    except Exception as e:
-        print(e)
