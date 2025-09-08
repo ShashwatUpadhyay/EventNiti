@@ -402,3 +402,32 @@ def remove_coordinator(request,uid):
 def live_polling_qna(request):
     return render(request, 'events/live_poll_qna.html')
 
+@login_required(login_url='login')
+def update_description(request):
+    if request.method == "POST":
+        event_uid = request.POST.get('event_id')
+        description = request.POST.get('description')
+        event_ = get_object_or_404(models.Event , uid=event_uid)
+        if not is_event_host(request,event_):
+            messages.error(request, "Access Denied!")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        event_.description = description
+        event_.save()
+        messages.success(request, "Description Updated Successfully!")
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    return redirect('events')
+
+@login_required(login_url='login')
+def update_enrolled_description(request):
+    if request.method == "POST":
+        event_uid = request.POST.get('event_id')
+        enrolled_description = request.POST.get('enrolled_description')
+        event_ = get_object_or_404(models.Event , uid=event_uid)
+        if not is_event_host(request,event_):
+            messages.error(request, "Access Denied!")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        event_.enrolled_description = enrolled_description
+        event_.save()
+        messages.success(request, "Additional Description Updated Successfully!")
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    return redirect('events')

@@ -32,8 +32,9 @@
             </div>
             <!-- Form Section -->
             <div class="px-6 py-4">
-                <form method="POST" class="space-y-6">
+                <form method="POST" class="space-y-6" action="{% url 'update_enrolled_description' %}"> 
                     {% csrf_token %}
+                    <input type="hidden" name="event_id" value="{{ event.uid }}">
                     <div class="space-y-2">
                         <label for="enrolled_description" class="block text-sm font-medium text-gray-700 flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -41,8 +42,8 @@
                             </svg>
                             Additional Info for Attendees (Use HTML + Tailwind CSS for formatting)
                         </label>
-                        <textarea id="enrolled_description" name="enrolled_description" rows="4" required
-                            class="block w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 shadow-sm transition duration-150">{{ event.enrolled_description }}</textarea>
+                        <textarea id="enrolled_description" name="enrolled_description" rows="4" required placeholder="Additional information visible to enrolled users"
+                            class="block w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 shadow-sm transition duration-150">{{ event.enrolled_description|default:'' }}</textarea>
                     </div>
                     <div class="flex justify-end space-x-3">
                         <button type="button" id="cancelEditEnrolledDesc" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 focus:outline-none">
