@@ -200,7 +200,11 @@
                                     <div class="flex items-center justify-between">
                                         <div>
                                             <p class="font-semibold text-lg">{{ coordinator.user.get_full_name }}</p>
+                                            {% if user.is_authenticated %}
                                             <p class="text-sm text-gray-500">{{coordinator.user.user_extra.phone|default:''}} - {{ coordinator.user.email }}</p>
+                                            {% else %}
+                                            {% comment %} <p class="text-sm text-gray-500">Login to view contact information <a href='{% url "login" %}'>Login</a></p> {% endcomment %}
+                                            {% endif %}
                                         </div>
                                         <div class="bg-indigo-100 text-indigo-700 text-sm font-medium px-3 py-1 rounded-full">
                                             {{ coordinator.role|default:"Coordinator" }}

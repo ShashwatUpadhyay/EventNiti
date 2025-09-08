@@ -12,6 +12,7 @@ from account.models import User
 from .models import DashboardMetrics, ActivityLog
 import json
 from django.contrib import messages
+from ppuu.tasks import event_announcement_task
 import logging
 logger = logging.getLogger(__name__)
 
@@ -318,6 +319,10 @@ def approve_event(request):
                 event.status = 'approved'
                 event.approved_at = timezone.now()
                 event.save()
+                
+                emails = User.objects.values_list("email", flat=True)
+                event_announcement_task.delay(list(emails), event.id)
+                
                 logger.info(f"Event {event.title} (ID: {event.id}) approved by {request.user.username}")
                 return JsonResponse({'status': 'success', 'message': 'Event Approved'})
             elif action == 'reject':
