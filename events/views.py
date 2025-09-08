@@ -29,7 +29,10 @@ def is_event_host(request,event):
     return event.organized_by == request.user or request.user.is_superuser
     
 def registered_in_event(request,event):
-    return event.participant.filter(user=request.user).exists()
+    if request.user.is_authenticated:
+        return event.participant.filter(user=request.user).exists()
+    else: 
+        return False
 
 def events(request):
     event = models.Event.objects.filter(event_open=True,event_over = False,status='approved').order_by('start_date','-registration_open')
@@ -41,7 +44,7 @@ def events(request):
     
     return render(request, 'events.html',{'event':event,'over_event':over_event})
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def event(request, slug):
     try:
         event = models.Event.objects.get(slug= slug,status='approved')

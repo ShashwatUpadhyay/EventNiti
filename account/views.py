@@ -30,6 +30,7 @@ def loginpage(request):
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
+        n = request.GET.get('next')
         
         if not User.objects.filter(username = username).exists():
             messages.success(request, "Username Doesn't exists!")
@@ -43,6 +44,8 @@ def loginpage(request):
                 return redirect('login') 
             login(request,user_obj)
             logger.info(f'[{current_time}] {user_obj.get_full_name()} logged in')
+            if n:
+                return redirect(n)
             return redirect('home')
         except:
             messages.error(request, "Invalid Credential")

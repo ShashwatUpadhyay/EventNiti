@@ -211,10 +211,7 @@ def generate_ticket(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Event)
 def new_event_anouncement(sender, instance, created, **kwargs):
     if instance.event_open and instance.notify:
-            emails = User.objects.values_list("email", flat=True)
-            event_announcement_task.delay(list(emails), instance.id)
-            instance.notify = False
-            instance.save()
+            pass
 
 
 @receiver(post_delete, sender=EventSubmission)
