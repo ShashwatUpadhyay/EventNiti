@@ -200,11 +200,30 @@
                                     <div class="flex items-center justify-between">
                                         <div>
                                             <p class="font-semibold text-lg">{{ coordinator.user.get_full_name }}</p>
-                                            {% if user.is_authenticated %}
-                                            <p class="text-sm text-gray-500">{{coordinator.user.user_extra.phone|default:''}} - {{ coordinator.user.email }}</p>
-                                            {% else %}
-                                            {% comment %} <p class="text-sm text-gray-500">Login to view contact information <a href='{% url "login" %}'>Login</a></p> {% endcomment %}
+                                            <div class="flex gap-3 mt-2">
+                                                {% if user.is_authenticated %}
+                                                {% if coordinator.user.user_extra.phone %}
+                                                    <a href="https://wa.me/{{ coordinator.user.user_extra.phone|default:'' }}" 
+                                                    target="_blank"
+                                                    class="inline-flex items-center gap-2 px-2 py-1 text-white bg-green-500 rounded-xl shadow-md transition transform hover:scale-105 hover:bg-green-600">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                                                        <path d="M12 .5C5.649.5.5 5.649.5 12c0 2.113.55 4.15 1.594 5.95L.5 23.5l5.693-1.574A11.43 11.43 0 0 0 12 23.5c6.351 0 11.5-5.149 11.5-11.5S18.351.5 12 .5Zm0 21a9.46 9.46 0 0 1-5.023-1.45l-.355-.22-3.365.93.924-3.284-.23-.376A9.452 9.452 0 0 1 2.5 12c0-5.238 4.262-9.5 9.5-9.5s9.5 4.262 9.5 9.5-4.262 9.5-9.5 9.5Zm5.22-7.021c-.293-.146-1.732-.855-2.002-.952-.27-.098-.465-.146-.66.146-.195.293-.757.952-.927 1.146-.17.195-.342.22-.635.073-.293-.146-1.238-.457-2.36-1.454-.872-.777-1.46-1.734-1.633-2.027-.171-.293-.018-.451.128-.598.132-.131.293-.342.439-.513.146-.17.195-.293.293-.488.098-.195.049-.366-.024-.513-.073-.146-.66-1.586-.904-2.17-.237-.57-.478-.492-.66-.5l-.561-.01c-.195 0-.512.073-.78.366s-1.025 1-1.025 2.438 1.049 2.828 1.195 3.027c.146.195 2.064 3.15 5.006 4.414.7.302 1.246.482 1.671.617.701.223 1.339.191 1.844.116.562-.084 1.732-.707 1.976-1.391.243-.684.243-1.27.17-1.391-.073-.122-.268-.195-.562-.341Z"/>
+                                                    </svg>
+                                                    WhatsApp
+                                                    </a>
+                                                {% endif %}
+                                                {% if coordinator.user.email %}
+                                                <a href="mailto:{{ coordinator.user.email }}" 
+                                                target="_blank"
+                                                class="inline-flex items-center gap-2 px-2 py-1 text-white bg-blue-500 rounded-xl shadow-md transition transform hover:scale-105 hover:bg-blue-600">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M20 4H4c-1.103 0-2 .897-2 2v12c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2zm0 2-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/>
+                                                </svg>
+                                                Email
+                                            </a>
                                             {% endif %}
+                                            {% endif %}
+                                                </div>
                                         </div>
                                         <div class="bg-indigo-100 text-indigo-700 text-sm font-medium px-3 py-1 rounded-full">
                                             {{ coordinator.role|default:"Coordinator" }}
