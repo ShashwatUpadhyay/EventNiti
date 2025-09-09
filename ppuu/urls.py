@@ -36,6 +36,7 @@ urlpatterns = [
     path('payment/', include('payment.urls')),
     path('previous-year-question-paper/', include('question_papers.urls')),
     path('dashboard/', include('dashboard.urls')),
+    path('chat/', include('chat.urls')),
     path('sw.js', TemplateView.as_view(template_name='sw.js', content_type='application/javascript'), name='sw'),
     path('offline/', TemplateView.as_view(template_name='offline.html'), name='offline'),
 ] + debug_toolbar_urls()
