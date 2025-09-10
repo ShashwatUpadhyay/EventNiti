@@ -5,10 +5,12 @@ from django.conf import settings
 from events.models import Event
 from django.utils import timezone
 import json
+import logging 
+logger = logging.getLogger(__name__)
 
 # Configure Gemini API
 genai.configure(api_key=settings.GEMINI_API_KEY)
-model = genai.GenerativeModel('gemini-2.5-pro')
+model = genai.GenerativeModel('gemini-2.0-flash')
 
 @csrf_exempt
 def chat_response(request):
@@ -55,7 +57,7 @@ def chat_response(request):
             
             User: {user_message}
             """)
-            
+            logger.info(f"Chat response generated for: {request.user}")
             return JsonResponse({
                 'success': True,
                 'response': response.text
@@ -63,6 +65,7 @@ def chat_response(request):
             
         except Exception as e:
             print(e)
+            logger.error(f"Error in chat_response: {e}")
             return JsonResponse({
                 'success': False,
                 'response': 'Sorry, I encountered an error. Please try again.'
