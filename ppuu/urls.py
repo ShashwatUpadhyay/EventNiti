@@ -34,7 +34,6 @@ urlpatterns = [
     path('review/', include('review.urls')),
     path('contact/', include('contact.urls')),
     path('payment/', include('payment.urls')),
-    path('previous-year-question-paper/', include('question_papers.urls')),
     path('dashboard/', include('dashboard.urls')),
     path('chat/', include('chat.urls')),
     path('sw.js', TemplateView.as_view(template_name='sw.js', content_type='application/javascript'), name='sw'),

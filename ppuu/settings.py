@@ -68,7 +68,6 @@ INSTALLED_APPS = [
     'events',
     'memories',
     'blog',
-    'question_papers',
     'badge',
     'review',
     'contact',
