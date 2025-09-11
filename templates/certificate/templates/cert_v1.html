@@ -1,0 +1,182 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block title %}
+Certificate of Achievement - {{ certi_obj.event.title }}
+{% endblock title %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600&display=swap');
+
+.watermark-bg {
+    background-image: url('{% static "images/en2.png" %}');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 250px 250px;
+    position: relative;
+}
+.watermark-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('{% static "images/en2.png" %}');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 250px 250px;
+    opacity: 0.04;
+    z-index: 1;
+}
+.certificate-content {
+    position: relative;
+    z-index: 2;
+}
+.cert-border {
+    border: 12px solid;
+    border-image: linear-gradient(45deg, #1e40af, #3b82f6, #60a5fa) 1;
+}
+@media print {
+    body * { visibility: hidden; }
+    #certificate, #certificate * { visibility: visible; }
+    #certificate { position: absolute; top: 0; left: 0; width: 100%; }
+    .no-print { display: none !important; }
+}
+</style>
+{% endblock head_extra %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-6 px-4 pt-[120px]">
+    <div class="max-w-5xl mx-auto">
+        
+        <!-- Certificate Container -->
+        <div id="certificate" class="bg-white shadow-xl cert-border watermark-bg" style="aspect-ratio: 1.414/1; min-height: 600px;">
+            <div class="certificate-content p-10">
+                
+                <!-- Header -->
+                <div class="text-center border-b-2 border-blue-600 pb-6 mb-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <img src="{% static 'images/en2.png' %}" alt="Logo" class="w-20 h-20">
+                        <div class="text-center flex-1">
+                            <h1 class="text-4xl font-bold text-blue-800 mb-2" style="font-family: 'Playfair Display', serif;">CERTIFICATE</h1>
+                            <h2 class="text-xl text-blue-600 font-medium" style="font-family: 'Inter', sans-serif;">OF COMPLETION</h2>
+                        </div>
+                        <div class="w-20 h-20 border-2 border-blue-300 p-1 bg-white">
+                            <img src="data:image/png;base64,{{qr_code_base64}}" alt="QR Code" class="w-full h-full">
+                        </div>
+                    </div>
+                    <div class="w-32 h-1 bg-blue-600 mx-auto"></div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="text-center mb-10">
+                    <p class="text-lg text-gray-700 mb-8" style="font-family: 'Inter', sans-serif;">This is to certify that</p>
+                    
+                    <div class="mb-8">
+                        <h3 class="text-4xl font-bold text-gray-900 mb-4" style="font-family: 'Playfair Display', serif;">
+                            {{ certi_obj.user.first_name }} {{ certi_obj.user.last_name }}
+                        </h3>
+                        <div class="w-96 h-0.5 bg-blue-400 mx-auto"></div>
+                    </div>
+                    
+                    <p class="text-lg text-gray-700 mb-6 max-w-3xl mx-auto leading-relaxed" style="font-family: 'Inter', sans-serif;">
+                        has successfully completed the requirements and demonstrated proficiency in
+                        <span class="font-semibold text-blue-700">{{ certi_obj.event.title }}</span>
+                        and is hereby awarded this certificate in recognition of this achievement.
+                    </p>
+                    
+                    <div class="inline-block bg-blue-50 border border-blue-200 px-8 py-4">
+                        <p class="text-blue-800 font-semibold text-lg">{{ certi_obj.certificate_for.title }}</p>
+                        <p class="text-blue-600 text-sm mt-1">Issued on {{ certi_obj.issue_date|date:"F j, Y" }}</p>
+                    </div>
+                </div>
+
+                <!-- Footer with Signatures -->
+                <div class="flex justify-between items-end pt-8 border-t border-gray-300">
+                    <div class="text-center">
+                        <div class="w-48 h-16 mb-3 flex items-end justify-center">
+                            <img src="{% static 'images/en2.png' %}" alt="Signature" class="w-32 h-12 opacity-70">
+                        </div>
+                        <div class="w-48 h-0.5 bg-gray-400 mb-2"></div>
+                        <p class="text-sm font-semibold text-gray-800">Event Coordinator</p>
+                        <p class="text-xs text-gray-600">{{ certi_obj.event.organized_by.get_full_name }}</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="w-24 h-24 bg-blue-100 flex items-center justify-center border-4 border-blue-600 mb-4">
+                            <img src="{% static 'images/en2.png' %}" alt="Official Seal" class="w-16 h-16">
+                        </div>
+                        <p class="text-xs text-gray-600">Official Seal</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="w-48 h-16 mb-3 flex items-end justify-center">
+                            <img src="{% static 'images/en2.png' %}" alt="Director Signature" class="w-32 h-12 opacity-70">
+                        </div>
+                        <div class="w-48 h-0.5 bg-gray-400 mb-2"></div>
+                        <p class="text-sm font-semibold text-gray-800">Director</p>
+                        <p class="text-xs text-gray-600">Event Niti Platform</p>
+                    </div>
+                </div>
+                
+                <!-- Certificate ID -->
+                <div class="text-center mt-8 pt-4 border-t border-gray-200">
+                    <p class="text-xs text-gray-500">
+                        Certificate ID: <span class="font-mono text-blue-600">{{ certi_obj.hash }}</span>
+                    </p>
+                    <p class="text-xs text-gray-500 mt-1">
+                        Verify at: <a href="{% url 'certificate' certi_obj.hash %}" class="text-blue-600 hover:underline">
+                            {{ request.get_host }}{% url 'certificate' certi_obj.hash %}
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="text-center mt-8 space-x-4 no-print">
+            <button id="download-btn" 
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 font-semibold shadow-lg transition-all duration-200">
+                <i class="fas fa-download mr-2"></i>Download Certificate
+            </button>
+            
+            {% if linkedin_url %}
+            <a href="{{ linkedin_url }}" target="_blank"
+               class="bg-blue-800 hover:bg-blue-900 text-white px-8 py-3 font-semibold shadow-lg transition-all duration-200 inline-block">
+                <i class="fab fa-linkedin mr-2"></i>Share on LinkedIn
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById("download-btn").addEventListener("click", async () => {
+    const element = document.getElementById("certificate");
+    
+    try {
+        const canvas = await html2canvas(element, {
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: '#ffffff',
+            width: element.offsetWidth,
+            height: element.offsetHeight
+        });
+
+        const imgData = canvas.toDataURL("image/png", 1.0);
+        const link = document.createElement("a");
+        link.href = imgData;
+        link.download = "{{ certi_obj.user.first_name }}_{{ certi_obj.user.last_name }}_Certificate.png";
+        link.click();
+    } catch (error) {
+        console.error("Error generating certificate:", error);
+    }
+});
+</script>
+
+{% endblock content %}
