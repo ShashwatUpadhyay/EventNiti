@@ -69,7 +69,7 @@ def certificate(request,hash):
         return HttpResponse(f'No certificate with code: {hash}')
     dt = datetime.fromisoformat(str(certi_obj.issue_date))
     linkedin_url = generate_certificate_link(certi_obj.user, certi_obj.certificate_for.title, certi_obj,dt)  
-    return render(request ,'certificate/templates/cert_v1.html', {'certi_obj':certi_obj,'linkedin_url':linkedin_url,'qr_code_base64': generate_qr_code_base64(f'{settings.DOMAIN_NAME}certificate/{certi_obj.hash}')})
+    return render(request ,'certificate/certificate_showcase.html', {'certi_obj':certi_obj,'linkedin_url':linkedin_url,'qr_code_base64': generate_qr_code_base64(f'{settings.DOMAIN_NAME}certificate/{certi_obj.hash}')})
 
 @login_required(login_url='login')
 def certificates(request):

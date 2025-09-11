@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate of Achievement</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Open+Sans:wght@400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        .certificate {
+            width: 800px;
+            height: 600px;
+            background: linear-gradient(135deg, #f5f1e8 0%, #ede4d3 100%);
+            position: relative;
+            font-family: 'Open Sans', sans-serif;
+            overflow: hidden;
+        }
+        
+        .corner-top-left {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-top: 80px solid #2c3e50;
+            border-right: 120px solid transparent;
+        }
+        
+        .corner-top-right {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-top: 40px solid #f39c12;
+            border-left: 200px solid transparent;
+        }
+        
+        .corner-bottom-left {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-bottom: 60px solid #2c3e50;
+            border-right: 150px solid transparent;
+        }
+        
+        .corner-bottom-right {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-bottom: 80px solid #2c3e50;
+            border-left: 120px solid transparent;
+        }
+        
+        .content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 90%;
+        }
+        
+        .company-logo {
+            width: 250px;
+            height: 60px;
+            {% comment %} background: #2c3e50; {% endcomment %}
+            {% comment %} border-radius: 50%; {% endcomment %}
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .company-logo::before {
+            content: '';
+            width: 30px;
+            height: 30px;
+            background: #f39c12;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+        
+        .company-name {
+            font-size: 12px;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+        
+        .certificate-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            letter-spacing: 3px;
+        }
+        
+        .certificate-subtitle {
+            font-size: 16px;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+        
+        .presented-to {
+            font-size: 14px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        
+        .recipient-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            color: #f39c12;
+            margin-bottom: 5px;
+            font-style: italic;
+        }
+        
+        .university-name {
+            font-size: 14px;
+            color: #2c3e50;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        
+        .description {
+            font-size: 14px;
+            color: #2c3e50;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .date-conducted {
+            font-size: 14px;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+        
+        .laurel {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 30px;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 10 L60 30 L80 25 L70 45 L90 50 L70 55 L80 75 L60 70 L50 90 L40 70 L20 75 L30 55 L10 50 L30 45 L20 25 L40 30 Z" fill="%23f39c12"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        .signatures {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .signature {
+            text-align: center;
+            font-size: 12px;
+            color: #2c3e50;
+        }
+        
+        .signature-name {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        
+        .signature-title {
+            font-size: 10px;
+            color: #666;
+        }
+    </style>
+</head>
+{% load static %}
+<body>
+    <div class="certificate">
+        <div class="corner-top-left"></div>
+        <div class="corner-top-right"></div>
+        <div class="corner-bottom-left"></div>
+        <div class="corner-bottom-right"></div>
+        
+        <div class="content">
+            <div class="company-logo">
+                <img src='{% static 'images/en2.png' %}' />
+            </div>
+            {% comment %} <div class="company-name">{{ company_name }}</div> {% endcomment %}
+            
+            <h1 class="certificate-title">CERTIFICATE</h1>
+            <div class="certificate-subtitle">OF {{ certi_obj.certificate_for.title|upper }}</div>
+            
+            <div class="presented-to">THIS CERTIFICATE IS PRESENTED TO</div>
+            <div class="recipient-name">{{ certi_obj.user.get_full_name }}</div>
+            <div class="university-name">{{ certi_obj.event.organized_by.get_full_name|default:'From United University' }}</div>
+            
+            <div class="description">
+                has been awarded a Certificate of {{ certi_obj.certificate_for.title }} for their valuable contribution and active participation in {{ certi_obj.event.title }}, organized on {{ certi_obj.issue_date|date:'M d, Y' }}. This recognition reflects their dedication, commitment, and outstanding involvement throughout the event.
+            </div>
+            
+            {% comment %} <div class="date-conducted">
+                {{ date_conducted|default:"Conducted From 1st August - 31th October, 2022" }}
+            </div> {% endcomment %}
+            
+            <div class="laurel"></div>
+            
+            <div class="signatures">
+                <div class="signature">
+                    <div class="signature-name">{{ left_signatory|default:"AARON LOEB" }}</div>
+                    <div class="signature-title">{{ left_title|default:"Head of Department" }}</div>
+                </div>
+                <div class="signature">
+                    <div class="signature-name">{{ right_signatory|default:"TEDDY YU" }}</div>
+                    <div class="signature-title">{{ right_title|default:"Company CEO" }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
