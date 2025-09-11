@@ -80,7 +80,7 @@ def eventregister(request, slug):
         messages.error(request, f"Error: {e}   ")  
         return redirect('home')
     
-    if event.limit and event.count >= event.limit:
+    if event.limit and event.registration_count >= event.limit:
         event.registration_open = False
         event.text_status = 'Registration Full'
         event.save()    

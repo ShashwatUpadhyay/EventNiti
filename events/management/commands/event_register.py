@@ -14,7 +14,7 @@ class Command(BaseCommand):
             event = Event.objects.filter(event_open=True,registration_open=True,event_over = False,status='approved').order_by('?').first()
             user = User.objects.filter(is_active=True).order_by('?').first()
             limit = event.limit if event.limit else 1000
-            if event.count < limit:
+            if event.registration_count < limit:
                 if not EventSubmission.objects.filter(user=user,event=event).exists():
                     submission = EventSubmission.objects.create(
                         user=user,

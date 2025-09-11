@@ -27,7 +27,7 @@
                         📍 {{ event.location|default:'TBA' }}
                     </span>
                     <span class="bg-white bg-opacity-20 text-white px-4 py-2 rounded-full text-sm font-medium">
-                        👥 {{ event.count }} registered
+                        👥 {{ event.registration_count }} registered
                     </span>
                 </div>
             </div>
@@ -299,7 +299,7 @@
                             </svg>
                         </div>
                         <h3 class="text-sm font-medium text-gray-500 mb-1">Participants</h3>
-                        <p class="text-sm font-semibold text-gray-900">{{ event.count }} registered</p>
+                        <p class="text-sm font-semibold text-gray-900">{{ event.registration_count }} registered</p>
                         <a href="{% url 'registeredStudentList' event.slug %}" class="mt-2 inline-flex items-center text-blue-600 text-xs font-medium hover:text-blue-800">
                             View list
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">

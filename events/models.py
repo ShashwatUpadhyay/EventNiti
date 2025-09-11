@@ -60,6 +60,10 @@ class Event(models.Model):
         return len(self.reviews.all())
     
     @property
+    def registration_count(self):
+        return self.participant.count()
+    
+    @property
     def registered_percentage(self):
         if self.limit > 0:
             registrations = self.participant.count()
@@ -200,8 +204,6 @@ def resultAnounced(sender, instance, created, **kwargs):
 @receiver(post_save, sender=EventSubmission)
 def generate_ticket(sender, instance, created, **kwargs):
     if created:
-        instance.event.count += 1
-        instance.event.save()
         ticket = EventTicket.objects.create(
             user=instance.user, submission_uid=instance.uid, event=instance.event)
         ticket_issued_email.delay(instance.email,instance.event.title,ticket.uid)
@@ -216,6 +218,5 @@ def new_event_anouncement(sender, instance, created, **kwargs):
 
 @receiver(post_delete, sender=EventSubmission)
 def event_submission_deleted(sender, instance, **kwargs):
-    instance.event.count -= 1
-    instance.event.save()
+    pass
 

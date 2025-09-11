@@ -53,7 +53,7 @@ def chat_response(request):
                         Description : {mark_safe(event.description)} \n
                         Start Date : ({event.start_date.strftime('%b %d')}  \n
                         End Date : {event.end_date.strftime('%b %d')}) \n
-                        Registration Last Date : {event.last_date_of_registration.strftime('%b %d')}) \n
+                        Registration Last Date : {event.last_date_of_registration.strftime('%b %d') if event.last_date_of_registration else ''}) \n
                         Price : {event.price if event.price else 'Free'} \n
                         organized_by : {event.organized_by.get_full_name()} \n 
                         Organizer Phone : {event.organized_by.user_extra.phone} \n
@@ -73,7 +73,7 @@ def chat_response(request):
                         Description : {mark_safe(event.description)} \n
                         Start Date : ({event.start_date.strftime('%b %d')}  \n
                         End Date : {event.end_date.strftime('%b %d')}) \n
-                        Registration Last Date : {event.last_date_of_registration.strftime('%b %d')}) \n
+                        Registration Last Date : {event.last_date_of_registration.strftime('%b %d') if event.last_date_of_registration else ''}) \n
                         Price : {event.price if event.price else 'Free'} \n
                         organized_by : {event.organized_by.get_full_name()} \n 
                         Organizer Phone : {event.organized_by.user_extra.phone} \n

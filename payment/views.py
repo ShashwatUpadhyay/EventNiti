@@ -89,8 +89,6 @@ def paymenthandler(request, slug, token):
                         'event': event,
                     }
                     submission = EventSubmission.objects.create(**data)
-                    event.count = event.count + 1
-                    event.save()
                     Payment.objects.create(
                         user=tempSub.user,
                         event=event,
