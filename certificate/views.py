@@ -24,15 +24,15 @@ def get_cert(event,user):
     except:
         return ' - '
 
-def generate_certificate_link(student,certif_name, certi, dt):
+def generate_certificate_link(student,certif_name, certi, dt, protocol,domain='event.swtu.in'):
     base_url = f"https://www.linkedin.com/profile/add?startTask={certif_name}"
     cert_name = f'{certif_name} Certificate'
-    org_id = "103420170"  
+    org_id = "107088438"  
     issue_year = dt.year
     issue_month = dt.month
     exp_year = ""
     exp_month = ""
-    cert_url = f"{DOMAIN_NAME}certificates/{certi.hash}"
+    cert_url = f"{protocol}://{domain}/certificate/{certi.hash}"
     cert_id = certi.hash
 
     linkedin_url = f"{base_url}&name={cert_name}&organizationId={org_id}" \
@@ -68,7 +68,10 @@ def certificate(request,hash):
     except Exception as e:
         return HttpResponse(f'No certificate with code: {hash}')
     dt = datetime.fromisoformat(str(certi_obj.issue_date))
-    linkedin_url = generate_certificate_link(certi_obj.user, certi_obj.certificate_for.title, certi_obj,dt)  
+    domain = request.get_host()
+    protocol = request.scheme
+    linkedin_url = generate_certificate_link(certi_obj.user, certi_obj.certificate_for.title, certi_obj,dt,protocol,domain)  
+    print(linkedin_url)
     return render(request ,'certificate/certificate_showcase.html', {'certi_obj':certi_obj,'linkedin_url':linkedin_url,'qr_code_base64': generate_qr_code_base64(f'{settings.DOMAIN_NAME}certificate/{certi_obj.hash}')})
 
 @login_required(login_url='login')
