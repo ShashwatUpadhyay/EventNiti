@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-8">
-    <div class="container mx-auto px-4">
+    <div class="container mx-auto px-4 mt-[70px]">
         <!-- Header -->
         <div class="text-center mb-8">
             <h1 class="text-4xl font-bold text-gray-800 mb-2">Certificate of Achievement</h1>
@@ -57,23 +57,23 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div>
                     <span class="font-medium text-gray-600">Recipient:</span>
-                    <span class="text-gray-800">{{ recipient_name|default:"Samira Hadid" }}</span>
+                    <span class="text-gray-800">{{ certi_obj.user.get_full_name|default:'-' }}</span>
                 </div>
                 <div>
                     <span class="font-medium text-gray-600">Institution:</span>
-                    <span class="text-gray-800">{{ university_name|default:"Fauget University" }}</span>
+                    <span class="text-gray-800">From {{ certi_obj.event.organized_by.get_full_name|default:'United University' }}</span>
                 </div>
                 <div>
                     <span class="font-medium text-gray-600">Achievement:</span>
-                    <span class="text-gray-800">{{ achievement|default:"Internship Program Completion" }}</span>
+                    <span class="text-gray-800">{{ certi_obj.certificate_for.title }} Certificate</span>
                 </div>
                 <div>
                     <span class="font-medium text-gray-600">Date:</span>
-                    <span class="text-gray-800">{{ date_conducted|default:"1st August - 31th October, 2022" }}</span>
+                    <span class="text-gray-800">{{ certi_obj.issue_date|date:'M d, Y' }}</span>
                 </div>
                 <div class="md:col-span-2">
                     <span class="font-medium text-gray-600">Certificate ID:</span>
-                    <span class="text-gray-800 font-mono">{{ certificate_id|default:"CERT-2022-001" }}</span>
+                    <span class="text-gray-800 font-mono">{{ certi_obj.hash }}</span>
                 </div>
             </div>
         </div>

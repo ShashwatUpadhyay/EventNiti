@@ -209,7 +209,7 @@
             
             <div class="presented-to">THIS CERTIFICATE IS PRESENTED TO</div>
             <div class="recipient-name">{{ certi_obj.user.get_full_name }}</div>
-            <div class="university-name">{{ certi_obj.event.organized_by.get_full_name|default:'From United University' }}</div>
+            <div class="university-name">From {{ certi_obj.event.organized_by.get_full_name|default:'United University' }}</div>
             
             <div class="description">
                 has been awarded a Certificate of {{ certi_obj.certificate_for.title }} for their valuable contribution and active participation in {{ certi_obj.event.title }}, organized on {{ certi_obj.issue_date|date:'M d, Y' }}. This recognition reflects their dedication, commitment, and outstanding involvement throughout the event.
