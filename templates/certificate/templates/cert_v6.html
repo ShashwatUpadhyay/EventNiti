@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Certificate</title>
+    {% load static %}
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        .certificate {
+            width: 800px;
+            height: 600px;
+            background: linear-gradient(135deg, #1a365d 0%, #2d3748 50%, #1a202c 100%);
+            position: relative;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+        }
+        
+        .border-frame {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border: 3px solid #d4af37;
+            border-radius: 12px;
+        }
+        
+        .corner-ornaments {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        
+        .corner-top-left, .corner-top-right, .corner-bottom-left, .corner-bottom-right {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #ffd700 30%, #d4af37 70%);
+            clip-path: polygon(0 0, 100% 0, 0 100%);
+        }
+        
+        .corner-top-left { top: 15px; left: 15px; }
+        .corner-top-right { top: 15px; right: 15px; transform: rotate(90deg); }
+        .corner-bottom-left { bottom: 15px; left: 15px; transform: rotate(-90deg); }
+        .corner-bottom-right { bottom: 15px; right: 15px; transform: rotate(180deg); }
+        
+        .inner-certificate {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            right: 40px;
+            bottom: 40px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 8px;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+            padding: 40px;
+            overflow: hidden;
+        }
+        
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.03;
+            font-size: 120px;
+            font-weight: 900;
+            color: #1a365d;
+            z-index: 1;
+        }
+        
+        .content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            max-width: 100%;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #d4af37, #ffd700);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+        }
+        
+        .company-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a365d;
+            letter-spacing: 3px;
+        }
+        
+        .certificate-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 56px;
+            font-weight: 900;
+            color: #1a365d;
+            margin-bottom: 8px;
+            letter-spacing: 4px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .certificate-subtitle {
+            font-size: 20px;
+            color: #4a5568;
+            font-weight: 300;
+            letter-spacing: 6px;
+            margin-bottom: 40px;
+        }
+        
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0;
+            max-width: 100%;
+        }
+        
+        .presented-text {
+            font-size: 16px;
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+        
+        .recipient-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 64px;
+            color: #d4af37;
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .name-underline {
+            width: 400px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+            margin: 0 auto 35px;
+        }
+        
+        .achievement-badge {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .achievement-badge img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+        }
+        
+        .description {
+            font-size: 14px;
+            color: #4a5568;
+            line-height: 1.6;
+            max-width: 500px;
+            margin: 0 auto 25px;
+            font-weight: 400;
+            text-align: center;
+        }
+        
+        .event-details {
+            background: linear-gradient(135deg, #f7fafc, #edf2f7);
+            padding: 20px 30px;
+            border-radius: 8px;
+            border-left: 4px solid #d4af37;
+            margin: 25px auto;
+            max-width: 500px;
+        }
+        
+        .event-title {
+            font-weight: 600;
+            color: #1a365d;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        .event-date {
+            color: #4a5568;
+            font-size: 14px;
+        }
+        
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            margin-top: 30px;
+            padding: 0 20px;
+        }
+        
+        .signature {
+            text-align: center;
+            font-size: 14px;
+            color: #1a365d;
+            width: 180px;
+        }
+        
+        .signature-image {
+            width: 120px;
+            height: 40px;
+            margin: 0 auto 8px;
+            background: url('{% static "images/dummy_singnature.jpeg" %}') no-repeat center;
+            background-size: contain;
+            border-bottom: 2px solid #d4af37;
+        }
+        
+        .signature-name {
+            font-weight: 600;
+            margin-bottom: 3px;
+            font-size: 13px;
+        }
+        
+        .signature-title {
+            font-size: 11px;
+            color: #4a5568;
+            font-weight: 400;
+        }
+        
+        .certificate-id {
+            position: absolute;
+            bottom: 15px;
+            right: 20px;
+            font-size: 10px;
+            color: #a0aec0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .seal {
+            position: absolute;
+            bottom: 80px;
+            right: 60px;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, #d4af37, #b8860b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            border: 3px solid #ffd700;
+        }
+        
+        .seal-text {
+            color: white;
+            font-size: 10px;
+            font-weight: 600;
+            text-align: center;
+            line-height: 1.2;
+        }
+    </style>
+</head>
+{% load static %}
+<body>
+    <div class="certificate">
+        <div class="border-frame"></div>
+        <div class="corner-ornaments">
+            <div class="corner-top-left"></div>
+            <div class="corner-top-right"></div>
+            <div class="corner-bottom-left"></div>
+            <div class="corner-bottom-right"></div>
+        </div>
+        
+        <div class="inner-certificate">
+            <div class="watermark">EVENT NITI</div>
+            
+            <div class="content">
+                <div class="header">
+                    <div class="logo-section">
+                        <div class="logo">
+                            <img src="{% static 'images/en2.png' %}" alt="Logo" style="width: 40px; height: 40px; filter: brightness(0) invert(1);">
+                        </div>
+                        <div class="company-name">EVENT NITI</div>
+                    </div>
+                    
+                    <h1 class="certificate-title">CERTIFICATE</h1>
+                    <div class="certificate-subtitle">OF {{ certi_obj.certificate_for.title|upper }}</div>
+                </div>
+                
+                <div class="main-content">
+                    <div class="presented-text">This certificate is proudly presented to</div>
+                    <div class="recipient-name">{{ certi_obj.user.get_full_name }}</div>
+                    <div class="name-underline"></div>
+                    
+                    <div class="achievement-badge">
+                        <img src="{% static 'images/badge_.png' %}" alt="Achievement Badge">
+                    </div>
+                    
+                    <div class="description">
+                        In recognition of outstanding {{ certi_obj.certificate_for.title|lower }} and exceptional dedication demonstrated through active participation in our prestigious event. This achievement reflects commitment to excellence and professional growth.
+                    </div>
+                    
+                    <div class="event-details">
+                        <div class="event-title">{{ certi_obj.event.title }}</div>
+                        <div class="event-date">Organized by {{ certi_obj.event.organized_by.get_full_name|default:'Event Niti' }} • {{ certi_obj.issue_date|date:'F d, Y' }}</div>
+                    </div>
+                </div>
+                
+                <div class="footer">
+                    <div class="signature">
+                        <div class="signature-image"></div>
+                        <div class="signature-name">{{ left_signatory|default:"Dr. Rajesh Kumar" }}</div>
+                        <div class="signature-title">{{ left_title|default:"HOD of Department" }}</div>
+                    </div>
+                    <div class="signature">
+                        <div class="signature-image"></div>
+                        <div class="signature-name">{{ right_signatory|default:"Prof. Anita Sharma" }}</div>
+                        <div class="signature-title">{{ right_title|default:"Vice Chancellor" }}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="seal">
+                <div class="seal-text">OFFICIAL<br>SEAL</div>
+            </div>
+            
+            <div class="certificate-id">ID: {{ certi_obj.hash|slice:":8"|upper }}</div>
+        </div>
+    </div>
+</body>
+</html>

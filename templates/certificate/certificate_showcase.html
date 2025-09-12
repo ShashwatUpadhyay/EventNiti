@@ -15,7 +15,7 @@
         <div class="flex justify-center mb-8">
             <div class="bg-white rounded-2xl shadow-2xl p-8 transform hover:scale-105 transition-transform duration-300">
                 <div id="certificate-container">
-                    {% include 'certificate/templates/cert_v2.html' %}
+                    {% include 'certificate/templates/cert_v5.html' %}
                 </div>
             </div>
         </div>
@@ -172,7 +172,7 @@ function copyLink() {
 
 function printCertificate() {
     const certificate = document.getElementById('certificate-container');
-    const printWindow = window.open('', '_blank');
+    const printWindow = window.open('');
     
     printWindow.document.write(`
         <html>
