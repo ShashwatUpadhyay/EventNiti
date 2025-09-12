@@ -36,4 +36,7 @@ class Command(BaseCommand):
         for i in range(len(certificate_categories)):
             CertificateFor.objects.get_or_create(title=certificate_categories[i])
             self.stdout.write(self.style.SUCCESS(f'Certificate {certificate_categories[i]} created successfully'))
+        for i in range(len(blog_categories)):
+            BlogCategory.objects.get_or_create(name=blog_categories[i],color=blog_category_colors[i])
+            self.stdout.write(self.style.SUCCESS(f'Blog Category {blog_categories[i]} created successfully'))
         self.stdout.write(self.style.SUCCESS('Base Data Created Successfully'))
