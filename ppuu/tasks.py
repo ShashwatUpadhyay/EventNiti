@@ -1,6 +1,7 @@
 from celery import shared_task
 from . import settings
 from django.core.mail import EmailMultiAlternatives,send_mail
+from account.models import UserExtra
 import logging
 logger = logging.getLogger(__name__)
 
@@ -22,15 +23,29 @@ def event_announcement_task(emails, id):
             <p style="margin-top: 20px;">Thank you for your interest!</p>
         </div>
         """
-        email = EmailMultiAlternatives(
-            subject=subject,
-            body=text_content,
-            from_email=settings.EMAIL_HOST_USER,
-            to=[],  # Keep "To" empty to avoid showing a main recipient
-            bcc=emails[1:],  # Add all recipients in BCC
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
+        print(settings.EMAIL_HOST_USER)
+        for email in emails:
+            if UserExtra.objects.filter(user__email=email,is_verified=True).exists():
+                send_mail(
+                    subject=subject,
+                    message=text_content,
+                    from_email=settings.EMAIL_HOST_USER,
+                    recipient_list=[email],
+                    fail_silently=False,
+                    html_message=html_content,
+                )
+            else:
+                logger.info(f'User {email} is not verified. Skipping email sending for event {instance.title}.')
+
+        # email = EmailMultiAlternatives(
+        #     subject=subject,
+        #     body=text_content,
+        #     from_email=settings.EMAIL_HOST_USER,
+        #     to=[],  # Keep "To" empty to avoid showing a main recipient
+        #     bcc=emails[1:],  # Add all recipients in BCC
+        # )
+        # email.attach_alternative(html_content, "text/html")
+        # email.send()
         logger.info(f'Event announcement email sent for event {instance.title} to {len(emails)} recipients.')
     except Exception as e:
         logger.error(f'Failed to send event announcement email for event {instance.title}. Error: {e}')
