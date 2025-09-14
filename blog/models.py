@@ -166,6 +166,7 @@ class BlogComment(models.Model):
         return f'Comment by {self.user.username} on {self.blog.title}'
     
     class Meta:
+        verbose_name = '2. Blog Comment'
         ordering = ['-created_at']
 
 class BlogLike(models.Model):
