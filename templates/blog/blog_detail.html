@@ -16,8 +16,28 @@
 {% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gray-50 pt-[80px]">
-    <!-- Hero Section -->
+<div class="min-h-screen bg-gray-50 pt-[80px] ">
+{% block extra_head %}
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="{% static 'js/blog-enhanced.js' %}"></script>
+
+<style>
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+  }
+  
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+</style>
+
+<!-- Social Media Meta Tags -->
+{% for key, value in social_meta.items %}
+<meta property="{{ key }}" content="{{ value }}">
+{% endfor %}
+{% endblock %}    <!-- Hero Section -->
     <div class="bg-white border-b">
         <div class="container mx-auto px-4 py-8">
             <nav class="flex items-center gap-2 text-sm text-gray-500 mb-6">
