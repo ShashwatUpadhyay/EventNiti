@@ -202,7 +202,7 @@
                 <div class="recipient-name">{{ certi_obj.user.get_full_name }}</div>
                 
                 <div class="description">
-                    For participating in the {{ certi_obj.event.title }} organized by {{ certi_obj.event.organized_by.get_full_name|default:'Event Niti' }} in {{ certi_obj.issue_date|date:'F Y' }}
+                    For participating in the {{ certi_obj.event.title }} organized by {{ certi_obj.event.organized_by.get_full_name|default:'{{ company_name }}' }} in {{ certi_obj.issue_date|date:'F Y' }}
                 </div>
                 
                 <div class="signatures">

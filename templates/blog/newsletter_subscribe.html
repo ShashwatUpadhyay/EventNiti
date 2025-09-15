@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 {% load static %}
 
-{% block title %}Newsletter Subscription - Event Niti{% endblock %}
+{% block title %}Newsletter Subscription - {{ company_name }}{% endblock %}
 
 {% block extra_head %}
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -17,7 +17,7 @@
                 <div class="w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
                     <i class="fas fa-envelope text-3xl text-white"></i>
                 </div>
-                <h1 class="text-3xl font-bold text-gray-900 mb-4">Stay Updated with Event Niti</h1>
+                <h1 class="text-3xl font-bold text-gray-900 mb-4">Stay Updated with {{ company_name }}</h1>
                 <p class="text-lg text-gray-600">Get the latest blog posts, event updates, and exclusive content delivered to your inbox</p>
             </div>
 

@@ -199,7 +199,7 @@ Payment | {{ event.title }} | {{ company_name }}
       currency: "{{ currency }}",
       
       // Your/store name.
-      name: "Event Niti", 
+      name: "{{ company_name }}", 
       
       // Pass the `id` obtained in the response of Step 1
       order_id: "{{ razorpay_order_id }}", 

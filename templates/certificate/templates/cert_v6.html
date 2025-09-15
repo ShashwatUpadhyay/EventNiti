@@ -299,7 +299,7 @@
         </div>
         
         <div class="inner-certificate">
-            <div class="watermark">EVENT NITI</div>
+            <div class="watermark">{{ company_name|upper }}</div>
             
             <div class="content">
                 <div class="header">
@@ -307,7 +307,7 @@
                         <div class="logo">
                             <img src="{% static 'images/en2.png' %}" alt="Logo" style="width: 40px; height: 40px; filter: brightness(0) invert(1);">
                         </div>
-                        <div class="company-name">EVENT NITI</div>
+                        <div class="company-name">{{ company_name|upper }}</div>
                     </div>
                     
                     <h1 class="certificate-title">CERTIFICATE</h1>
@@ -329,7 +329,7 @@
                     
                     <div class="event-details">
                         <div class="event-title">{{ certi_obj.event.title }}</div>
-                        <div class="event-date">Organized by {{ certi_obj.event.organized_by.get_full_name|default:'Event Niti' }} • {{ certi_obj.issue_date|date:'F d, Y' }}</div>
+                        <div class="event-date">Organized by {{ certi_obj.event.organized_by.get_full_name|default:'{{ company_name }}' }} • {{ certi_obj.issue_date|date:'F d, Y' }}</div>
                     </div>
                 </div>
                 

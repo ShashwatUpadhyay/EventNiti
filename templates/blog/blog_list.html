@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 {% load static %}
 
-{% block title %}Blog - Event Niti{% endblock %}
+{% block title %}Blog - {{ company_name }}{% endblock %}
 
 {% block extra_head %}
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -14,7 +14,7 @@
     <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
         <div class="container mx-auto px-4 py-16">
             <div class="text-center">
-                <h1 class="text-4xl md:text-6xl font-bold mb-4">Event Niti Blog</h1>
+                <h1 class="text-4xl md:text-6xl font-bold mb-4">{{ company_name }} Blog</h1>
                 <p class="text-xl md:text-2xl mb-8 opacity-90">Discover stories, insights, and updates from our community</p>
                 
                 <!-- Search Bar -->

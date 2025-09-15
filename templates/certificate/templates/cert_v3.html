@@ -176,7 +176,7 @@
         
         <div class="company-info">
             <div class="company-logo"></div>
-            <div class="company-name">EVENT NITI</div>
+            <div class="company-name">{{ company_name }}</div>
         </div>
         
         <div class="date-info">
@@ -202,7 +202,7 @@
             <div class="underline"></div>
             
             <div class="description">
-                This certificate is awarded in recognition of outstanding {{ certi_obj.certificate_for.title|lower }} and active participation in {{ certi_obj.event.title }}, organized by {{ certi_obj.event.organized_by.get_full_name|default:'Event Niti' }} on {{ certi_obj.issue_date|date:'F d, Y' }}. This achievement reflects dedication, commitment, and excellence throughout the event.
+                This certificate is awarded in recognition of outstanding {{ certi_obj.certificate_for.title|lower }} and active participation in {{ certi_obj.event.title }}, organized by {{ certi_obj.event.organized_by.get_full_name|default:'{{ company_name }}' }} on {{ certi_obj.issue_date|date:'F d, Y' }}. This achievement reflects dedication, commitment, and excellence throughout the event.
             </div>
             
             <div class="signatures">

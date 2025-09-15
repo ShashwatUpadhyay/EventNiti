@@ -2,7 +2,7 @@
 {% load static %}
 {% load blog_extras %}
 
-{% block title %}{{ blog.title }} - Event Niti Blog{% endblock %}
+{% block title %}{{ blog.title }} - {{ company_name }} Blog{% endblock %}
 
 {% block extra_head %}
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -290,7 +290,7 @@
                         {% if blog.user.profile.bio %}
                         {{ blog.user.profile.bio }}
                         {% else %}
-                        Passionate writer sharing insights and stories with the Event Niti community.
+                        Passionate writer sharing insights and stories with the {{ company_name }} community.
                         {% endif %}
                     </p>
                 </div>

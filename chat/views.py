@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.utils.safestring import mark_safe
 import json
 import re
+from ppuu.settings import COMPANY_NAME
 import logging 
 logger = logging.getLogger(__name__)
 
@@ -85,7 +86,7 @@ def chat_response(request):
             
             # Generate response using Gemini
             response = model.generate_content(f"""
-            You are a helpful assistant for Event Niti, a university event hosting and management platform.
+            You are a helpful assistant for {COMPANY_NAME}, a university event hosting and management platform.
             Keep responses concise and friendly with excitement tone and with humour. Help with event-related queries.
             
             Context:
