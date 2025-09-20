@@ -181,7 +181,7 @@
                 <div class="recipient-name">{{ certi_obj.user.get_full_name }}</div>
                 
                 <div class="company-info">
-                    Is an active member of the {{ certi_obj.event.organized_by.get_full_name|default:'{{ company_name }}' }} for the year {{ certi_obj.issue_date|date:'Y' }}
+                    Is an active member of the {{ certi_obj.event.organized_by.get_full_name|default:'' }} for the year {{ certi_obj.issue_date|date:'Y' }}
                 </div>
                 
                 <div class="description">
