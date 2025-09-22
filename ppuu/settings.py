@@ -265,3 +265,7 @@ RAZOR_KEY_SECRET = env("RAZOR_KEY_SECRET")
 GEMINI_API_KEY = env("GEMINI_API_KEY", default="")
 
 DEFAULT_EVENT_IMAGE_URL='https://fulbrightscholars.org/themes/custom/de_theme/src/img/default/event_default.svg'
+
+
+AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID", default='')
+AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY", default='')
