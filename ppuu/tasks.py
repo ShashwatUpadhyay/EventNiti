@@ -23,13 +23,13 @@ def event_announcement_task(emails, id):
             <p style="margin-top: 20px;">Thank you for your interest!</p>
         </div>
         """
-        print(settings.EMAIL_HOST_USER)
+        print('event@swtu.in')
         for email in emails:
             if UserExtra.objects.filter(user__email=email,is_verified=True).exists():
                 send_mail(
                     subject=subject,
                     message=text_content,
-                    from_email=settings.EMAIL_HOST_USER,
+                    from_email='event@swtu.in',
                     recipient_list=[email],
                     fail_silently=False,
                     html_message=html_content,
@@ -40,7 +40,7 @@ def event_announcement_task(emails, id):
         # email = EmailMultiAlternatives(
         #     subject=subject,
         #     body=text_content,
-        #     from_email=settings.EMAIL_HOST_USER,
+        #     from_email='event@swtu.in',
         #     to=[],  # Keep "To" empty to avoid showing a main recipient
         #     bcc=emails[1:],  # Add all recipients in BCC
         # )
@@ -57,7 +57,7 @@ def ticket_issued_email(instance_email, event_title ,ticket_uid):
         send_mail(
                 'Ticket Issued',
                 'You received a ticket from PPUU',
-                settings.EMAIL_HOST_USER,
+                'event@swtu.in',
                 [instance_email],
                 fail_silently=False,
                 html_message=f"""<p>
@@ -85,7 +85,7 @@ def event_result_anouncement(emails, instance):
         email = EmailMultiAlternatives(
             subject=subject,
             body=text_content,
-            from_email=settings.EMAIL_HOST_USER,
+            from_email='event@swtu.in',
             to=[],  # Keep "To" empty to avoid showing a main recipient
             bcc=emails[1:],  # Add all recipients in BCC
         )
@@ -101,7 +101,7 @@ def certificate_issued_email(instance):
         send_mail(
                 'Congratulations!! You got Certificate from PPUU',
                 'You received a Certificate from PPUU',
-                settings.EMAIL_HOST_USER,
+                'event@swtu.in',
                 [instance['email']],
                 fail_silently=False,
                 html_message=f"""<p>
