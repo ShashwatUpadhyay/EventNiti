@@ -2,6 +2,8 @@ import boto3
 from botocore.exceptions import ClientError
 from django.conf import settings
 
+from django.core.mail.backends.base import BaseEmailBackend
+from django.core.mail import EmailMessage
 
 ses_client = boto3.client('ses', region_name='ap-south-1')
 
@@ -11,6 +13,32 @@ ses_client = boto3.client('ses', region_name='ap-south-1')
 #     )
 # except:
 #     print('Email is not verified.')
+
+# class SESEmailBackend(BaseEmailBackend):
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.client = boto3.client('ses', region_name='ap-south-1')  # change region
+
+#     def send_messages(self, email_messages):
+#         num_sent = 0
+#         for message in email_messages:
+#             try:
+#                 response = self.client.send_email(
+#                     Source=message.from_email,
+#                     Destination={"ToAddresses": message.to},
+#                     Message={
+#                         "Subject": {"Data": message.subject},
+#                         "Body": {
+#                             "Text": {"Data": message.body},
+#                             "Html": {"Data": message.body},
+#                         },
+#                     },
+#                 )
+#                 num_sent += 1
+#             except Exception as e:
+#                 if not self.fail_silently:
+#                     raise
+#         return num_sent
 
 
 def send_ses_email(recipient, subject, body_text, body_html=None):
